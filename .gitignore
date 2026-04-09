@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+db.sqlite3
+local_settings.py
+
+# Logs:
+*.log
+
+# Others:
+.DS_Store
