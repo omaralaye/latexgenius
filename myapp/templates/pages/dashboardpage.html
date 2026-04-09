@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - LaTeX Genius{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex justify-between items-end mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Your Projects</h1>
+            <p class="text-slate-500 mt-1">Manage and organize your LaTeX documents.</p>
+        </div>
+        <a href="{% url 'editor' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+            <i class="fas fa-plus"></i> New Project
+        </a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Total Projects</p>
+                    <p class="text-2xl font-bold text-slate-900">12</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Recent Activity</p>
+                    <p class="text-2xl font-bold text-slate-900">2h ago</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Shared with me</p>
+                    <p class="text-2xl font-bold text-slate-900">4</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project List -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Name</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Last Modified</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Members</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Status</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-slate-700 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50 transition-colors group">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <div>
+                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Physics Research Paper</a>
+                                    <p class="text-xs text-slate-500">main.tex</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600">Oct 24, 2024</td>
+                        <td class="px-6 py-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
+                                <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-7 h-7 rounded-full border-2 border-white">
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-100">Compiled</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <div>
+                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Mathematics Thesis</a>
+                                    <p class="text-xs text-slate-500">thesis.tex</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600">Oct 22, 2024</td>
+                        <td class="px-6 py-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">Draft</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <div>
+                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Resume 2024</a>
+                                    <p class="text-xs text-slate-500">cv.tex</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600">Oct 15, 2024</td>
+                        <td class="px-6 py-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-100">Compiled</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-200">
+            <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">View all projects &rarr;</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
