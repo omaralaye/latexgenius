@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Editor - LaTeX Genius{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-[calc(100vh-64px)] overflow-hidden">
+    <!-- Toolbar -->
+    <div class="bg-white border-b border-slate-200 px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 pr-4 border-r border-slate-200">
+                <span class="text-sm font-semibold text-slate-700">Physics Research Paper</span>
+                <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Save"><i class="fas fa-save"></i></button>
+                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Undo"><i class="fas fa-undo"></i></button>
+                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Redo"><i class="fas fa-redo"></i></button>
+            </div>
+            <div class="h-6 w-px bg-slate-200 mx-1"></div>
+            <div class="flex items-center gap-1">
+                <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i> Compile
+                </button>
+                <button class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-md text-sm font-medium hover:bg-slate-200 transition-colors flex items-center gap-2">
+                    <i class="fas fa-download"></i> PDF
+                </button>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex -space-x-2">
+                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-8 h-8 rounded-full border-2 border-white">
+                <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-8 h-8 rounded-full border-2 border-white">
+                <button class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-bold hover:bg-slate-200"><i class="fas fa-plus"></i></button>
+            </div>
+            <button class="text-slate-600 hover:text-slate-900"><i class="fas fa-cog"></i></button>
+        </div>
+    </div>
+
+    <!-- Main Editor Area -->
+    <div class="flex-grow flex overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-64 bg-slate-50 border-r border-slate-200 flex flex-col hidden md:flex">
+            <div class="p-4 border-b border-slate-200">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">File Outline</h3>
+            </div>
+            <div class="p-2 flex-grow overflow-y-auto">
+                <ul class="space-y-1">
+                    <li>
+                        <button class="w-full text-left px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-md">
+                            <i class="fas fa-file-code mr-2"></i> main.tex
+                        </button>
+                    </li>
+                    <li>
+                        <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
+                            <i class="fas fa-file-image mr-2"></i> figure1.png
+                        </button>
+                    </li>
+                    <li>
+                        <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
+                            <i class="fas fa-database mr-2"></i> references.bib
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Code Editor -->
+        <div class="flex-grow flex flex-col bg-white">
+            <div class="flex-grow relative font-mono text-sm overflow-hidden">
+                <div class="absolute inset-0 p-4 overflow-y-auto">
+                    <div class="flex">
+                        <div class="w-12 text-slate-300 text-right pr-4 select-none">
+                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
+                        </div>
+                        <div class="flex-grow outline-none whitespace-pre">
+<span class="text-purple-600">\documentclass</span>{article}
+<span class="text-purple-600">\usepackage</span>{amsmath}
+<span class="text-purple-600">\usepackage</span>[utf8]{inputenc}
+
+<span class="text-purple-600">\title</span>{Physics Research Paper}
+<span class="text-purple-600">\author</span>{John Doe}
+<span class="text-purple-600">\date</span>{October 2024}
+
+<span class="text-purple-600">\begin</span>{document}
+
+<span class="text-purple-600">\maketitle</span>
+
+<span class="text-purple-600">\section</span>{Introduction}
+LaTeX is a high-quality typesetting system; it includes
+features designed for the production of technical and
+scientific documentation.
+
+<span class="text-purple-600">\section</span>{Equation}
+Here is a beautiful equation:
+<span class="text-purple-600">\begin</span>{equation}
+    E = mc^2
+<span class="text-purple-600">\end</span>{equation}
+
+<span class="text-purple-600">\end</span>{document}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Pane -->
+        <div class="w-1/2 bg-slate-200 p-4 hidden lg:flex flex-col">
+            <div class="bg-white flex-grow shadow-lg rounded overflow-hidden flex flex-col">
+                <div class="bg-slate-100 border-b border-slate-200 px-4 py-2 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">PDF Preview</span>
+                    <div class="flex items-center gap-2">
+                        <button class="p-1 hover:bg-slate-200 rounded text-slate-500"><i class="fas fa-search-minus"></i></button>
+                        <span class="text-xs text-slate-500 font-medium">100%</span>
+                        <button class="p-1 hover:bg-slate-200 rounded text-slate-500"><i class="fas fa-search-plus"></i></button>
+                    </div>
+                </div>
+                <div class="flex-grow p-8 bg-white overflow-y-auto">
+                    <div class="max-w-xl mx-auto">
+                        <h1 class="text-2xl font-serif text-center mb-2">Physics Research Paper</h1>
+                        <p class="text-center font-serif mb-4">John Doe</p>
+                        <p class="text-center font-serif text-sm mb-8">October 2024</p>
+
+                        <h2 class="text-lg font-bold font-serif mb-3">1 Introduction</h2>
+                        <p class="font-serif leading-relaxed mb-6">
+                            LaTeX is a high-quality typesetting system; it includes features designed for the production of technical and scientific documentation.
+                        </p>
+
+                        <h2 class="text-lg font-bold font-serif mb-3">2 Equation</h2>
+                        <p class="font-serif leading-relaxed mb-4">
+                            Here is a beautiful equation:
+                        </p>
+                        <div class="py-4 text-center italic font-serif text-lg">
+                            E = mc²
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
