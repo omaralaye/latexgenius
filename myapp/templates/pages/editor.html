@@ -8,7 +8,7 @@
     <div class="bg-white border-b border-slate-200 px-4 py-2 flex items-center justify-between">
         <div class="flex items-center gap-4">
             <div class="flex items-center gap-2 pr-4 border-r border-slate-200">
-                <span class="text-sm font-semibold text-slate-700">Physics Research Paper</span>
+                <span class="text-sm font-semibold text-slate-700">{{ project.title }}</span>
                 <i class="fas fa-chevron-down text-xs text-slate-400"></i>
             </div>
             <div class="flex items-center gap-2">
@@ -28,8 +28,10 @@
         </div>
         <div class="flex items-center gap-4">
             <div class="flex -space-x-2">
-                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-8 h-8 rounded-full border-2 border-white">
-                <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-8 h-8 rounded-full border-2 border-white">
+                <img src="https://ui-avatars.com/api/?name={{ project.owner.username }}" class="w-8 h-8 rounded-full border-2 border-white" title="{{ project.owner.username }}">
+                {% for collaborator in project.collaborators.all %}
+                <img src="https://ui-avatars.com/api/?name={{ collaborator.username }}" class="w-8 h-8 rounded-full border-2 border-white" title="{{ collaborator.username }}">
+                {% endfor %}
                 <button class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-bold hover:bg-slate-200"><i class="fas fa-plus"></i></button>
             </div>
             <button class="text-slate-600 hover:text-slate-900"><i class="fas fa-cog"></i></button>
@@ -47,17 +49,7 @@
                 <ul class="space-y-1">
                     <li>
                         <button class="w-full text-left px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-md">
-                            <i class="fas fa-file-code mr-2"></i> main.tex
-                        </button>
-                    </li>
-                    <li>
-                        <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
-                            <i class="fas fa-file-image mr-2"></i> figure1.png
-                        </button>
-                    </li>
-                    <li>
-                        <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
-                            <i class="fas fa-database mr-2"></i> references.bib
+                            <i class="fas fa-file-code mr-2"></i> {{ project.filename }}
                         </button>
                     </li>
                 </ul>
@@ -72,32 +64,7 @@
                         <div class="w-12 text-slate-300 text-right pr-4 select-none">
                             1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
                         </div>
-                        <div class="flex-grow outline-none whitespace-pre">
-<span class="text-purple-600">\documentclass</span>{article}
-<span class="text-purple-600">\usepackage</span>{amsmath}
-<span class="text-purple-600">\usepackage</span>[utf8]{inputenc}
-
-<span class="text-purple-600">\title</span>{Physics Research Paper}
-<span class="text-purple-600">\author</span>{John Doe}
-<span class="text-purple-600">\date</span>{October 2024}
-
-<span class="text-purple-600">\begin</span>{document}
-
-<span class="text-purple-600">\maketitle</span>
-
-<span class="text-purple-600">\section</span>{Introduction}
-LaTeX is a high-quality typesetting system; it includes
-features designed for the production of technical and
-scientific documentation.
-
-<span class="text-purple-600">\section</span>{Equation}
-Here is a beautiful equation:
-<span class="text-purple-600">\begin</span>{equation}
-    E = mc^2
-<span class="text-purple-600">\end</span>{equation}
-
-<span class="text-purple-600">\end</span>{document}
-                        </div>
+                        <div class="flex-grow outline-none whitespace-pre">{{ project.content }}</div>
                     </div>
                 </div>
             </div>
@@ -116,22 +83,9 @@ Here is a beautiful equation:
                 </div>
                 <div class="flex-grow p-8 bg-white overflow-y-auto">
                     <div class="max-w-xl mx-auto">
-                        <h1 class="text-2xl font-serif text-center mb-2">Physics Research Paper</h1>
-                        <p class="text-center font-serif mb-4">John Doe</p>
-                        <p class="text-center font-serif text-sm mb-8">October 2024</p>
-
-                        <h2 class="text-lg font-bold font-serif mb-3">1 Introduction</h2>
-                        <p class="font-serif leading-relaxed mb-6">
-                            LaTeX is a high-quality typesetting system; it includes features designed for the production of technical and scientific documentation.
-                        </p>
-
-                        <h2 class="text-lg font-bold font-serif mb-3">2 Equation</h2>
-                        <p class="font-serif leading-relaxed mb-4">
-                            Here is a beautiful equation:
-                        </p>
-                        <div class="py-4 text-center italic font-serif text-lg">
-                            E = mc²
-                        </div>
+                        <p class="text-center text-slate-400 italic">Preview of compiled PDF would appear here.</p>
+                        <hr class="my-4">
+                        <pre class="font-serif whitespace-pre-wrap">{{ project.content }}</pre>
                     </div>
                 </div>
             </div>
