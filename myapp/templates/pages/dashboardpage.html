@@ -1,114 +1,214 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - LaTeX Genius{% endblock %}
+{% block title %}TexPrecision Dashboard{% endblock %}
 
-{% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex justify-between items-end mb-8">
+{% block extra_head %}
+<style>
+    body { background-color: #f7f9fb; }
+</style>
+{% endblock %}
+
+{% block layout %}
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-100 p-4 gap-2 border-r-0 z-50">
+    <div class="flex items-center gap-3 mb-8 px-4">
+        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-sm">terminal</span>
+        </div>
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Your Projects</h1>
-            <p class="text-slate-500 mt-1">Manage and organize your LaTeX documents.</p>
+            <h2 class="font-headline text-lg font-black text-indigo-900">LaTeXGenius</h2>
+            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">V2.4.0</p>
         </div>
-        <a href="{% url 'editor' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
-            <i class="fas fa-plus"></i> New Project
+    </div>
+    <nav class="flex flex-col gap-1 flex-grow">
+        <a class="flex items-center gap-3 bg-white text-indigo-700 rounded-lg px-4 py-3 shadow-sm border-l-4 border-indigo-600 transition-all translate-x-1 duration-200" href="{% url 'dashboard' %}">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-body text-sm font-medium">Dashboard</span>
         </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all" href="{% url 'editor' %}">
+            <span class="material-symbols-outlined">terminal</span>
+            <span class="font-body text-sm font-medium">Editor</span>
+        </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all" href="{% url 'templates' %}">
+            <span class="material-symbols-outlined">library_books</span>
+            <span class="font-body text-sm font-medium">Templates</span>
+        </a>
+    </nav>
+    <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
+        <div class="bg-indigo-50 rounded-xl p-4 mb-4">
+            <p class="text-xs font-bold text-indigo-700 mb-1">PRO FEATURES</p>
+            <p class="text-[11px] text-slate-600 mb-3 leading-tight">Unlock unlimited compiles and custom PDF themes.</p>
+            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:opacity-90 transition-opacity">Upgrade to Pro</button>
+        </div>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 transition-all" href="#">
+            <span class="material-symbols-outlined">help_outline</span>
+            <span class="font-body text-sm font-medium">Help</span>
+        </a>
+        <div class="px-4 py-3">
+             <div id="user-button"></div>
+        </div>
     </div>
+</aside>
 
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Total Projects</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ total_projects }}</p>
+<!-- Main Canvas -->
+<main class="md:ml-64 min-h-screen">
+    <!-- TopAppBar -->
+    <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant/5">
+        <div class="flex items-center gap-4">
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900">TexPrecision</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="{% url 'editor' %}" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-semibold text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
+                <span class="material-symbols-outlined text-sm">add</span>
+                New Project
+            </a>
+            <div class="flex items-center gap-2 border-l border-slate-200 pl-4">
+                <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">settings</span>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
+                     <span class="material-symbols-outlined text-indigo-600">person</span>
                 </div>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Recent Activity</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ recent_activity }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-share-alt"></i>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Shared with me</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ shared_projects }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    </header>
 
-    <!-- Project List -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Name</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Last Modified</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Members</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-slate-700">Status</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-slate-700 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    {% for project in projects %}
-                    <tr class="hover:bg-slate-50 transition-colors group">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <div>
-                                    <a href="{% url 'editor_with_id' project.id %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">{{ project.title }}</a>
-                                    <p class="text-xs text-slate-500">{{ project.filename }}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-slate-600">{{ project.last_modified|date:"M d, Y" }}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex -space-x-2">
-                                <img src="https://ui-avatars.com/api/?name={{ project.owner.username }}" class="w-7 h-7 rounded-full border-2 border-white" title="{{ project.owner.username }}">
-                                {% for collaborator in project.collaborators.all %}
-                                <img src="https://ui-avatars.com/api/?name={{ collaborator.username }}" class="w-7 h-7 rounded-full border-2 border-white" title="{{ collaborator.username }}">
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            {% if project.status == 'compiled' %}
-                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-100">Compiled</span>
-                            {% else %}
-                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">Draft</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-slate-500">
-                            No projects found. <a href="{% url 'editor' %}" class="text-blue-600 hover:underline">Create your first project!</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <!-- Content Area -->
+    <div class="pt-24 px-8 pb-12 max-w-7xl mx-auto">
+        <!-- Dashboard Hero: Bento Style -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Stat 1: Welcome -->
+            <div class="md:col-span-2 p-8 rounded-xl bg-surface-container-lowest shadow-sm relative overflow-hidden flex flex-col justify-between h-[240px]">
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2">Welcome back, {{ user.first_name|default:user.username }}.</h2>
+                    <p class="text-on-surface-variant max-w-md leading-relaxed">Your technical workspace is ready. You have managed <span class="text-primary font-bold">{{ total_projects }} projects</span> this season.</p>
+                </div>
+                <div class="flex gap-4 relative z-10">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Project Capacity</span>
+                        <div class="h-1.5 w-32 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                            <div class="h-full bg-primary" style="width: {% widthratio total_projects 100 100 %}%"></div>
+                        </div>
+                        <span class="text-xs font-medium text-on-surface-variant mt-1">{{ total_projects }} / 100 projects</span>
+                    </div>
+                </div>
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDef7yCARkyP4T7qmSYcJXYUcyxcIgOH_zT_KqcpMxNN9LHHpMx8wKe5K-5QxGqBnyLmYaAuRYPl-H3BvRPW6paUJn1z-amYGF4hzIx4Xf6HHkhkCGm_fb2E1PD4qPhNyw9lUHnGVkFQJ0TmS1O68IwRKj616t2IZt49yMdR5cRPbaqHIJb3QzP3lfaxJXETbNNZvTFjpYHJOnXeenPFMZSHXg9i-2wBHyCe2vU8u8_gLE7XqWy8Na189YBoETUwY7eTbKl45ZVjg" class="absolute right-0 top-0 h-full w-1/3 object-cover opacity-10 pointer-events-none">
+            </div>
+            <!-- Stat 2: Active Instance -->
+            <div class="p-8 rounded-xl bg-primary text-on-primary shadow-lg flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="material-symbols-outlined text-3xl">memory</span>
+                        <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold uppercase">System: Online</span>
+                    </div>
+                    <p class="font-headline text-lg font-bold">Local Engine</p>
+                    <p class="text-primary-container text-xs">V3.1.2-beta active</p>
+                </div>
+                <div class="mt-4">
+                    <p class="text-2xl font-mono font-bold tracking-tighter">{{ recent_activity }}</p>
+                    <p class="text-[10px] uppercase font-bold tracking-widest opacity-70">Last Activity</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-slate-50 px-6 py-4 border-t border-slate-200">
-            <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700">View all projects &rarr;</a>
+
+        <!-- Main Content: Recent Documents & Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            <!-- Recent Documents List -->
+            <div class="lg:col-span-3 space-y-4">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        Recent Documents
+                        <span class="bg-surface-container-high px-2 py-0.5 rounded-full text-xs font-mono">{{ total_projects }}</span>
+                    </h3>
+                    <button class="text-xs font-bold text-primary hover:underline">View All Archive</button>
+                </div>
+                <!-- List Header -->
+                <div class="grid grid-cols-12 px-6 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                    <div class="col-span-6">Document Name</div>
+                    <div class="col-span-3 text-center">Status</div>
+                    <div class="col-span-3 text-right">Modified</div>
+                </div>
+
+                {% for project in projects %}
+                <a href="{% url 'editor_with_id' project.id %}" class="group grid grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-all cursor-pointer shadow-sm">
+                    <div class="col-span-6 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">{% if project.status == 'compiled' %}description{% else %}edit_note{% endif %}</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm group-hover:text-primary transition-colors">{{ project.title }}</p>
+                            <p class="text-[10px] font-mono text-slate-400 uppercase">{{ project.filename }}</p>
+                        </div>
+                    </div>
+                    <div class="col-span-3 flex justify-center">
+                        {% if project.status == 'compiled' %}
+                        <span class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-fixed-dim/20 text-tertiary-container rounded-full text-[10px] font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                            Compiled
+                        </span>
+                        {% else %}
+                        <span class="flex items-center gap-1.5 px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-[10px] font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                            Draft
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-span-3 text-right">
+                        <p class="text-xs font-medium">{{ project.last_modified|timesince }} ago</p>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="p-12 text-center bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant/30">
+                     <p class="text-on-surface-variant">No projects found. Create your first project to get started!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right Sidebar: Stats & Quick Actions -->
+            <div class="space-y-6">
+                <!-- Quick Actions -->
+                <div class="bg-surface-container-low p-6 rounded-xl">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Quick Actions</h4>
+                    <div class="space-y-2">
+                        <button class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
+                            <span class="material-symbols-outlined text-primary">cloud_upload</span>
+                            Upload .zip Archive
+                        </button>
+                        <button class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
+                            <span class="material-symbols-outlined text-primary">token</span>
+                            Generate API Key
+                        </button>
+                        <a href="{% url 'templates' %}" class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
+                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                            Template Library
+                        </a>
+                    </div>
+                </div>
+                <!-- Editorial Insight -->
+                <div class="relative rounded-xl overflow-hidden aspect-square flex flex-col justify-end p-6 group cursor-pointer">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5J56Vb7MaTamzj4HLvviGLEomFqUPJHn9RNHtxm0cyuFpb-7E-zrNHtnEYVaBbCFEDbjJ8xPA6fCb3ALYqsOL6MnpCCDXkjgIOHjbqEDy5aSyGZYg2ccq-RaTme-P3i0ZGuVbuRew4jU78munEQ392ViDhV3qSBSIRCaaCg1IO_Cd13vTFUVL9Da5YYrBOOJUR6ZlwkDEmgVzDVJLch8y6Oc8O5LZtFLm3l-8TOxW6XtdVzIpNKsfDY1c6fJHDFCzQZZKajZcPQ" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-white/70">Masterclass</span>
+                        <h4 class="text-white font-bold leading-tight mt-1">Mastering TikZ for Engineering Schematics</h4>
+                        <p class="text-white/60 text-[11px] mt-2 leading-relaxed">New guide by Dr. Sarah Chen on procedural drawing.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</main>
+
+<script>
+    window.addEventListener('load', async function () {
+        await Clerk.load();
+        const userButtonDiv = document.getElementById('user-button');
+        if (Clerk.user && userButtonDiv) {
+            Clerk.mountUserButton(userButtonDiv);
+        }
+    });
+</script>
 {% endblock %}

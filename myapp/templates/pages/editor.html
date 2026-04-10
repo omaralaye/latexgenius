@@ -1,95 +1,198 @@
 {% extends "base.html" %}
 
-{% block title %}Editor - LaTeX Genius{% endblock %}
+{% block title %}{{ project.title }} | LaTeX Editorial{% endblock %}
 
-{% block content %}
-<div class="flex flex-col h-[calc(100vh-64px)] overflow-hidden">
-    <!-- Toolbar -->
-    <div class="bg-white border-b border-slate-200 px-4 py-2 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2 pr-4 border-r border-slate-200">
-                <span class="text-sm font-semibold text-slate-700">{{ project.title }}</span>
-                <i class="fas fa-chevron-down text-xs text-slate-400"></i>
-            </div>
-            <div class="flex items-center gap-2">
-                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Save"><i class="fas fa-save"></i></button>
-                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Undo"><i class="fas fa-undo"></i></button>
-                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors" title="Redo"><i class="fas fa-redo"></i></button>
-            </div>
-            <div class="h-6 w-px bg-slate-200 mx-1"></div>
-            <div class="flex items-center gap-1">
-                <button class="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
-                    <i class="fas fa-sync-alt"></i> Compile
-                </button>
-                <button class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-md text-sm font-medium hover:bg-slate-200 transition-colors flex items-center gap-2">
-                    <i class="fas fa-download"></i> PDF
-                </button>
+{% block extra_head %}
+<style>
+    body { background-color: #f7f9fb; }
+    /* Custom scrollbar for a more editorial feel */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1e1e1e;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #444;
+    }
+</style>
+{% endblock %}
+
+{% block layout %}
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-100 p-4 gap-2 border-r border-outline-variant/10 z-50">
+    <div class="mb-8 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold">T</div>
+            <div>
+                <h1 class="font-headline text-lg font-black text-indigo-900 leading-tight">TexPrecision</h1>
+                <p class="text-[10px] uppercase tracking-widest text-outline">V2.4.0</p>
             </div>
         </div>
+    </div>
+    <nav class="flex flex-col gap-1">
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'dashboard' %}">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-body text-sm font-medium">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 bg-white text-indigo-700 rounded-lg px-4 py-3 shadow-sm border-l-4 border-indigo-600" href="{% url 'editor' %}">
+            <span class="material-symbols-outlined">terminal</span>
+            <span class="font-body text-sm font-medium">Editor</span>
+        </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'templates' %}">
+            <span class="material-symbols-outlined">library_books</span>
+            <span class="font-body text-sm font-medium">Templates</span>
+        </a>
+    </nav>
+    <div class="mt-auto flex flex-col gap-1">
+        <div class="bg-primary/5 p-4 rounded-xl mb-4">
+            <p class="text-xs font-bold text-primary mb-1">Upgrade to Pro</p>
+            <p class="text-[11px] text-on-surface-variant mb-3">Unlock advanced AI conversion & cloud storage.</p>
+            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:opacity-90 transition-opacity">Upgrade</button>
+        </div>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-2 hover:bg-slate-200/50 rounded-lg" href="#">
+            <span class="material-symbols-outlined text-sm">help_outline</span>
+            <span class="text-sm">Help</span>
+        </a>
+        <div class="px-4 py-2">
+             <div id="user-button"></div>
+        </div>
+    </div>
+</aside>
+
+<!-- Main Content Canvas -->
+<main class="md:ml-64 h-screen flex flex-col">
+    <!-- TopAppBar -->
+    <header class="bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant/10 z-40">
         <div class="flex items-center gap-4">
-            <div class="flex -space-x-2">
-                <img src="https://ui-avatars.com/api/?name={{ project.owner.username }}" class="w-8 h-8 rounded-full border-2 border-white" title="{{ project.owner.username }}">
-                {% for collaborator in project.collaborators.all %}
-                <img src="https://ui-avatars.com/api/?name={{ collaborator.username }}" class="w-8 h-8 rounded-full border-2 border-white" title="{{ collaborator.username }}">
-                {% endfor %}
-                <button class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-bold hover:bg-slate-200"><i class="fas fa-plus"></i></button>
+            <h2 class="text-xl font-bold tracking-tighter text-indigo-900">Editor</h2>
+            <div class="h-4 w-[1px] bg-outline-variant/30"></div>
+            <p class="text-sm font-medium text-on-surface-variant">{{ project.title }} ({{ project.filename }})</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="relative hidden sm:block">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+                <input class="pl-10 pr-4 py-1.5 bg-surface-container-highest/50 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20" placeholder="Search documentation..." type="text"/>
             </div>
-            <button class="text-slate-600 hover:text-slate-900"><i class="fas fa-cog"></i></button>
+            <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+             <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
+                 <span class="material-symbols-outlined text-indigo-600">person</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Utility Bar -->
+    <div class="bg-surface-container-low px-6 py-2 flex items-center justify-between border-b border-outline-variant/5">
+        <div class="flex items-center gap-2">
+            <button class="flex items-center gap-2 px-4 py-2 bg-white text-on-surface text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
+                <span class="material-symbols-outlined text-sm">upload_file</span>
+                Replace Source
+            </button>
+            <div class="h-6 w-[1px] mx-2 bg-outline-variant/30"></div>
+            <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
+                <span class="material-symbols-outlined text-sm">bolt</span>
+                Compile
+            </button>
+        </div>
+        <div class="flex items-center gap-2">
+            <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface text-sm font-medium rounded-lg hover:bg-surface-dim transition-all">
+                <span class="material-symbols-outlined text-sm">history</span>
+                Versions
+            </button>
+            <button class="flex items-center gap-2 px-4 py-2 bg-tertiary text-white text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
+                <span class="material-symbols-outlined text-sm">download</span>
+                Download .tex
+            </button>
         </div>
     </div>
 
-    <!-- Main Editor Area -->
-    <div class="flex-grow flex overflow-hidden">
-        <!-- Sidebar -->
-        <div class="w-64 bg-slate-50 border-r border-slate-200 flex flex-col hidden md:flex">
-            <div class="p-4 border-b border-slate-200">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">File Outline</h3>
+    <!-- Conversion Split View -->
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Left Side: Source Area -->
+        <section class="flex-1 flex flex-col bg-surface border-r border-outline-variant/10 overflow-hidden">
+            <div class="p-4 flex items-center justify-between bg-surface-container-lowest/40">
+                <span class="text-xs font-bold uppercase tracking-widest text-outline">Source Content</span>
+                <div class="flex gap-1">
+                    <button class="p-1 hover:bg-surface-container rounded transition-colors text-primary">
+                        <span class="material-symbols-outlined text-lg">description</span>
+                    </button>
+                    <button class="p-1 hover:bg-surface-container rounded transition-colors">
+                        <span class="material-symbols-outlined text-lg">table_chart</span>
+                    </button>
+                </div>
             </div>
-            <div class="p-2 flex-grow overflow-y-auto">
-                <ul class="space-y-1">
-                    <li>
-                        <button class="w-full text-left px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-md">
-                            <i class="fas fa-file-code mr-2"></i> {{ project.filename }}
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Code Editor -->
-        <div class="flex-grow flex flex-col bg-white">
-            <div class="flex-grow relative font-mono text-sm overflow-hidden">
-                <div class="absolute inset-0 p-4 overflow-y-auto">
-                    <div class="flex">
-                        <div class="w-12 text-slate-300 text-right pr-4 select-none">
-                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
+            <div class="flex-1 p-8 overflow-y-auto">
+                <div class="max-w-3xl mx-auto">
+                    <div class="mb-8 p-12 border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center text-center bg-surface-container-lowest/30 group hover:border-primary/40 transition-colors">
+                        <div class="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl text-primary">cloud_upload</span>
                         </div>
-                        <div class="flex-grow outline-none whitespace-pre">{{ project.content }}</div>
+                        <h3 class="text-lg font-bold text-on-surface mb-2">Source Document Processed</h3>
+                        <p class="text-sm text-outline mb-6">"{{ project.title }}" is ready for conversion.</p>
+                    </div>
+                    <!-- Content Mockup -->
+                    <div class="space-y-6 opacity-60 pointer-events-none">
+                        <div class="h-8 w-2/3 bg-surface-container-high rounded-full"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 w-full bg-surface-container-low rounded-full"></div>
+                            <div class="h-4 w-full bg-surface-container-low rounded-full"></div>
+                            <div class="h-4 w-4/5 bg-surface-container-low rounded-full"></div>
+                        </div>
+                        <div class="h-40 w-full bg-surface-container-high rounded-2xl flex items-center justify-center text-outline text-xs italic">
+                            [ Image Placeholder: Analysis Visual ]
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Preview Pane -->
-        <div class="w-1/2 bg-slate-200 p-4 hidden lg:flex flex-col">
-            <div class="bg-white flex-grow shadow-lg rounded overflow-hidden flex flex-col">
-                <div class="bg-slate-100 border-b border-slate-200 px-4 py-2 flex justify-between items-center">
-                    <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">PDF Preview</span>
-                    <div class="flex items-center gap-2">
-                        <button class="p-1 hover:bg-slate-200 rounded text-slate-500"><i class="fas fa-search-minus"></i></button>
-                        <span class="text-xs text-slate-500 font-medium">100%</span>
-                        <button class="p-1 hover:bg-slate-200 rounded text-slate-500"><i class="fas fa-search-plus"></i></button>
-                    </div>
+        <!-- Right Side: LaTeX Preview Area -->
+        <section class="flex-1 flex flex-col bg-[#1e1e1e] overflow-hidden">
+            <div class="p-4 flex items-center justify-between bg-black/30">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-400">LaTeX Source</span>
+                    <span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded border border-indigo-500/30">LIVE COMPILE</span>
                 </div>
-                <div class="flex-grow p-8 bg-white overflow-y-auto">
-                    <div class="max-w-xl mx-auto">
-                        <p class="text-center text-slate-400 italic">Preview of compiled PDF would appear here.</p>
-                        <hr class="my-4">
-                        <pre class="font-serif whitespace-pre-wrap">{{ project.content }}</pre>
-                    </div>
+                <div class="flex gap-2">
+                    <button class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
+                        <span class="material-symbols-outlined text-lg">content_copy</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
+                        <span class="material-symbols-outlined text-lg">fullscreen</span>
+                    </button>
                 </div>
             </div>
-        </div>
+            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar">
+                <pre class="text-sm leading-relaxed text-slate-300"><code>{{ project.content }}</code></pre>
+            </div>
+            <!-- Live Notification -->
+            <div class="px-6 py-3 bg-tertiary-container/20 border-t border-tertiary-container/30 flex items-center gap-3">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+                </span>
+                <p class="text-[11px] font-mono text-tertiary-fixed italic">Conversion successful: 0 errors, 0 warnings</p>
+            </div>
+        </section>
     </div>
-</div>
+</main>
+
+<script>
+    window.addEventListener('load', async function () {
+        await Clerk.load();
+        const userButtonDiv = document.getElementById('user-button');
+        if (Clerk.user && userButtonDiv) {
+            Clerk.mountUserButton(userButtonDiv);
+        }
+    });
+</script>
 {% endblock %}
