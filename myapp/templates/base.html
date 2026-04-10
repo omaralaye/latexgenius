@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LaTeX Genius{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{% block title %}The Engineering Editorial | LaTeX Conversion{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
     <!-- Clerk SDK -->
     <script
         async
@@ -14,35 +16,127 @@
         src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
         type="text/javascript"
     ></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary-container": "#57657a",
+                        "inverse-primary": "#bac3ff",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary": "#24389c",
+                        "on-tertiary-container": "#5debaf",
+                        "secondary-container": "#d5e3fc",
+                        "primary-fixed-dim": "#bac3ff",
+                        "tertiary": "#004e33",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#4355b9",
+                        "outline": "#757684",
+                        "on-primary-container": "#cacfff",
+                        "surface-container-high": "#e6e8ea",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed": "#d5e3fc",
+                        "inverse-surface": "#2d3133",
+                        "surface-container": "#eceef0",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c5d4",
+                        "on-primary-fixed-variant": "#293ca0",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#3f51b5",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fb",
+                        "primary-fixed": "#dee0ff",
+                        "on-surface-variant": "#454652",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f7f9fb",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed": "#00105c",
+                        "tertiary-container": "#006846",
+                        "surface-container-low": "#f2f4f6",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "secondary": "#515f74",
+                        "on-tertiary-fixed": "#002113",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #24389c 0%, #3f51b5 100%);
+        }
+        .glass-nav {
+            background: rgba(247, 249, 251, 0.8);
+            backdrop-filter: blur(24px);
+        }
+        .editorial-shadow {
+            box-shadow: 0 4px 6px -1px rgba(25, 28, 30, 0.04), 0 10px 15px -3px rgba(25, 28, 30, 0.08);
         }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+<body class="bg-surface font-body text-on-surface antialiased">
+    {% block layout %}
     {% include "components/navbar.html" %}
 
-    <main class="flex-grow">
+    <main>
         {% block content %}
         {% endblock %}
     </main>
 
     {% include "components/footer.html" %}
+    {% endblock %}
 
     <script>
         window.addEventListener('load', async function () {
             await Clerk.load();
 
             const userButtonDiv = document.getElementById('user-button');
+            const authLinks = document.getElementById('auth-links');
 
             if (Clerk.user) {
                 if (userButtonDiv) {
                     Clerk.mountUserButton(userButtonDiv);
                 }
+                if (authLinks) {
+                    authLinks.style.display = 'none';
+                }
+            } else {
+                if (userButtonDiv) {
+                    userButtonDiv.style.display = 'none';
+                }
             }
         });
     </script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>
