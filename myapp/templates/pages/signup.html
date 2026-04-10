@@ -1,11 +1,77 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up - LaTeX Genius{% endblock %}
+{% block title %}Sign Up | LaTeX Editorial{% endblock %}
 
-{% block content %}
-<div class="flex items-center justify-center min-h-[calc(100vh-160px)]">
-    <div id="sign-up"></div>
-</div>
+{% block extra_head %}
+<style>
+    .soft-inset-shadow {
+        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+    }
+</style>
+{% endblock %}
+
+{% block layout %}
+<main class="flex-grow flex items-center justify-center px-4 py-12 relative overflow-hidden min-h-screen">
+    <!-- Abstract Background Element -->
+    <div class="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] rounded-full bg-secondary-container/20 blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] left-[-5%] w-[30rem] h-[30rem] rounded-full bg-primary-container/10 blur-[100px] pointer-events-none"></div>
+
+    <div class="w-full max-w-lg z-10">
+        <!-- Header Branding -->
+        <div class="text-center mb-10">
+            <a href="{% url 'landing' %}">
+                <h1 class="font-headline font-extrabold text-3xl tracking-tighter text-primary mb-2">LaTeX Editorial</h1>
+            </a>
+            <p class="text-on-surface-variant font-medium tracking-tight">Precision typesetting for the modern engineer.</p>
+        </div>
+
+        <!-- Registration Card -->
+        <div class="bg-surface-container-lowest rounded-xl p-8 md:p-12 shadow-xl relative border border-outline-variant/10">
+            <div class="absolute top-0 left-0 w-1.5 h-16 bg-surface-tint rounded-tr-lg rounded-br-lg"></div>
+
+            <div class="mb-8">
+                <h2 class="font-headline font-bold text-2xl text-on-surface tracking-tight mb-1">Create Account</h2>
+                <p class="text-sm text-on-surface-variant">Join the community of engineering writers.</p>
+            </div>
+
+            <div id="sign-up"></div>
+
+            <div class="mt-10 text-center">
+                <p class="text-sm text-on-surface-variant">
+                    Already have an account?
+                    <a href="{% url 'login' %}" class="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1">Log In</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Supporting Editorial Copy -->
+        <div class="mt-8 grid grid-cols-3 gap-6">
+            <div class="text-center p-4">
+                <span class="material-symbols-outlined text-surface-tint mb-2">auto_awesome</span>
+                <p class="text-[10px] font-label font-bold uppercase tracking-widest text-outline">Smart Conversion</p>
+            </div>
+            <div class="text-center p-4">
+                <span class="material-symbols-outlined text-surface-tint mb-2">cloud_done</span>
+                <p class="text-[10px] font-label font-bold uppercase tracking-widest text-outline">Cloud Storage</p>
+            </div>
+            <div class="text-center p-4">
+                <span class="material-symbols-outlined text-surface-tint mb-2">history_edu</span>
+                <p class="text-[10px] font-label font-bold uppercase tracking-widest text-outline">Journal Templates</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="w-full py-8 border-t border-slate-200/10 bg-surface flex flex-col md:flex-row justify-between items-center px-8">
+    <div class="mb-4 md:mb-0">
+        <span class="font-body text-xs uppercase tracking-widest text-slate-400">© 2024 Engineering Editorial. Built for Precision.</span>
+    </div>
+    <div class="flex gap-8">
+        <a href="#" class="font-body text-xs uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Terms</a>
+        <a href="#" class="font-body text-xs uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Privacy</a>
+        <a href="#" class="font-body text-xs uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Documentation</a>
+    </div>
+</footer>
 
 <script>
     window.addEventListener('load', async function () {
@@ -14,6 +80,20 @@
         if (signUpDiv) {
             Clerk.mountSignUp(signUpDiv, {
                 signInUrl: '/login/',
+                appearance: {
+                    elements: {
+                        rootBox: "w-full",
+                        card: "shadow-none p-0 w-full bg-transparent",
+                        headerTitle: "hidden",
+                        headerSubtitle: "hidden",
+                        socialButtonsBlockButton: "rounded-xl bg-surface-container-low text-on-surface font-semibold text-sm py-3.5 border-none hover:bg-surface-container-high transition-colors",
+                        dividerRow: "my-10",
+                        dividerText: "text-xs font-label font-medium uppercase tracking-widest text-outline-variant",
+                        formButtonPrimary: "editorial-gradient text-on-primary font-headline font-bold py-4 rounded-xl shadow-lg hover:brightness-110 transition-all",
+                        formFieldInput: "bg-surface-container-highest border-none rounded-xl py-3.5 text-on-surface transition-all",
+                        footer: "hidden"
+                    }
+                }
             });
         }
     });
