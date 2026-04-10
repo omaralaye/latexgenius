@@ -22,65 +22,21 @@
 
         <!-- Template Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <!-- Template 1 -->
+            {% for template in templates %}
             <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all duration-300">
                 <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden border-b border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=400&q=80" alt="Academic Template" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img src="{{ template.image_url }}" alt="{{ template.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                         <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Use Template</button>
                         <button class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Preview</button>
                     </div>
                 </div>
                 <div class="p-4">
-                    <h3 class="font-bold text-slate-900">Modern Research Paper</h3>
-                    <p class="text-sm text-slate-500 mt-1">Academic Paper</p>
+                    <h3 class="font-bold text-slate-900">{{ template.name }}</h3>
+                    <p class="text-sm text-slate-500 mt-1">{{ template.category }}</p>
                 </div>
             </div>
-
-            <!-- Template 2 -->
-            <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all duration-300">
-                <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden border-b border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=400&q=80" alt="CV Template" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Use Template</button>
-                        <button class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Preview</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-slate-900">Elegant Professional CV</h3>
-                    <p class="text-sm text-slate-500 mt-1">CV & Resume</p>
-                </div>
-            </div>
-
-            <!-- Template 3 -->
-            <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all duration-300">
-                <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden border-b border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&w=400&q=80" alt="Presentation Template" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Use Template</button>
-                        <button class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Preview</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-slate-900">Clean Conference Slides</h3>
-                    <p class="text-sm text-slate-500 mt-1">Presentation</p>
-                </div>
-            </div>
-
-            <!-- Template 4 -->
-            <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all duration-300">
-                <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden border-b border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=400&q=80" alt="Thesis Template" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Use Template</button>
-                        <button class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Preview</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-slate-900">University Thesis Template</h3>
-                    <p class="text-sm text-slate-500 mt-1">Thesis</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 
         <div class="mt-16 text-center">
