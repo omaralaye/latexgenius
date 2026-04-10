@@ -1,11 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Sign In - LaTeX Genius{% endblock %}
+{% block title %}Login | LaTeX Editorial{% endblock %}
 
-{% block content %}
-<div class="flex items-center justify-center min-h-[calc(100vh-160px)]">
-    <div id="sign-in"></div>
-</div>
+{% block extra_head %}
+<style>
+    .soft-inset-focus:focus-within {
+        box-shadow: 0 0 0 3px rgba(36, 56, 156, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block layout %}
+<main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden min-h-screen">
+    <!-- Background Decorative Element -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-container blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-tertiary blur-[120px]"></div>
+    </div>
+    <!-- Login Container -->
+    <div class="w-full max-w-[440px] z-10">
+        <!-- Brand Anchor -->
+        <div class="text-center mb-10">
+            <a href="{% url 'landing' %}" class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container text-on-primary-container mb-6 shadow-xl shadow-primary/10">
+                <span class="material-symbols-outlined text-3xl">functions</span>
+            </a>
+            <h1 class="text-3xl font-extrabold tracking-tighter text-primary font-headline">LaTeX Editorial</h1>
+            <p class="text-on-surface-variant mt-2 font-medium">Precision typesetting for modern engineering.</p>
+        </div>
+        <!-- Login Card -->
+        <div class="bg-surface-container-lowest rounded-xl p-8 md:p-10 shadow-xl border border-outline-variant/10">
+            <div id="sign-in"></div>
+        </div>
+        <!-- Footer / Redirect -->
+        <p class="text-center mt-8 text-on-surface-variant text-sm font-medium">
+            New to the platform? <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4" href="{% url 'signup' %}">Create an account</a>
+        </p>
+    </div>
+</main>
+
+<footer class="w-full py-8 border-t border-slate-200/10 bg-surface">
+    <div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto">
+        <div class="text-primary font-body text-xs uppercase tracking-widest mb-4 md:mb-0">
+            © 2024 Engineering Editorial. Built for Precision.
+        </div>
+        <div class="flex gap-8">
+            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms</a>
+            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy</a>
+            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Documentation</a>
+        </div>
+    </div>
+</footer>
 
 <script>
     window.addEventListener('load', async function () {
@@ -14,6 +58,20 @@
         if (signInDiv) {
             Clerk.mountSignIn(signInDiv, {
                 signUpUrl: '/signup/',
+                appearance: {
+                    elements: {
+                        rootBox: "w-full",
+                        card: "shadow-none p-0 w-full bg-transparent",
+                        headerTitle: "hidden",
+                        headerSubtitle: "hidden",
+                        socialButtonsBlockButton: "rounded-lg border-none bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all",
+                        dividerRow: "my-6",
+                        dividerText: "text-[10px] uppercase tracking-widest text-on-surface-variant font-bold",
+                        formButtonPrimary: "editorial-gradient rounded-xl font-bold py-4 text-sm tracking-wide shadow-lg shadow-primary/20",
+                        formFieldInput: "bg-surface-container-low border-none rounded-xl py-3.5",
+                        footer: "hidden"
+                    }
+                }
             });
         }
     });

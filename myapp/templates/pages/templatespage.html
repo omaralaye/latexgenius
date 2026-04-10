@@ -1,47 +1,199 @@
 {% extends "base.html" %}
 
-{% block title %}Templates - LaTeX Genius{% endblock %}
+{% block title %}Template Selection | TexPrecision{% endblock %}
 
-{% block content %}
-<div class="bg-slate-50 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-slate-900 mb-4">Start with a Template</h1>
-            <p class="text-xl text-slate-600">Choose from hundreds of professional templates for any purpose.</p>
+{% block extra_head %}
+<style>
+    body {
+        background-color: #f7f9fb;
+    }
+</style>
+{% endblock %}
+
+{% block layout %}
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-100 p-4 gap-2 border-r border-transparent z-50">
+    <div class="flex items-center gap-3 mb-8 px-2 mt-2">
+        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+            <span class="material-symbols-outlined">terminal</span>
         </div>
-
-        <!-- Filter Tabs -->
-        <div class="flex flex-wrap justify-center gap-2 mb-10">
-            <button class="px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold shadow-md shadow-blue-200">All</button>
-            <button class="px-5 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-full text-sm font-semibold border border-slate-200">Academic Paper</button>
-            <button class="px-5 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-full text-sm font-semibold border border-slate-200">CV & Resume</button>
-            <button class="px-5 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-full text-sm font-semibold border border-slate-200">Presentation</button>
-            <button class="px-5 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-full text-sm font-semibold border border-slate-200">Thesis</button>
-            <button class="px-5 py-2 bg-white text-slate-600 hover:bg-slate-50 rounded-full text-sm font-semibold border border-slate-200">Poster</button>
-        </div>
-
-        <!-- Template Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {% for template in templates %}
-            <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all duration-300">
-                <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden border-b border-slate-200">
-                    <img src="{{ template.image_url }}" alt="{{ template.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Use Template</button>
-                        <button class="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Preview</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-slate-900">{{ template.name }}</h3>
-                    <p class="text-sm text-slate-500 mt-1">{{ template.category }}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="mt-16 text-center">
-            <button class="bg-white hover:bg-slate-50 text-slate-700 px-8 py-3 rounded-xl font-bold border border-slate-200 transition-all shadow-sm">Load More Templates</button>
+        <div>
+            <div class="font-headline text-lg font-black text-indigo-900">TexPrecision</div>
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">V2.4.0</div>
         </div>
     </div>
-</div>
+    <div class="flex flex-col gap-1">
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'dashboard' %}">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-body text-sm font-medium">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'editor' %}">
+            <span class="material-symbols-outlined">terminal</span>
+            <span class="font-body text-sm font-medium">Editor</span>
+        </a>
+        <a class="flex items-center gap-3 bg-white text-indigo-700 rounded-lg px-4 py-3 shadow-sm border-l-4 border-indigo-600 translate-x-1 duration-200" href="{% url 'templates' %}">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
+            <span class="font-body text-sm font-medium">Templates</span>
+        </a>
+    </div>
+    <div class="mt-auto flex flex-col gap-1">
+        <div class="bg-indigo-900 rounded-xl p-4 mb-4 text-white">
+            <p class="text-xs font-medium text-indigo-200 mb-2">PRO FEATURES ACTIVE</p>
+            <p class="text-sm font-headline font-bold mb-3">Upgrade to Pro</p>
+            <button class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 transition-colors rounded-lg text-xs font-bold">Get 1 Month Free</button>
+        </div>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 transition-all" href="#">
+            <span class="material-symbols-outlined">help_outline</span>
+            <span class="font-body text-sm font-medium">Help</span>
+        </a>
+        {% if user.is_authenticated %}
+        <div class="px-4 py-3">
+             <div id="user-button"></div>
+        </div>
+        {% endif %}
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="md:ml-64 pt-20 pb-12 px-6 md:px-12">
+    <!-- Top Nav Replacement for this layout -->
+    <header class="bg-slate-50/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant/5">
+        <div class="flex items-center gap-8">
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">TexPrecision</h1>
+            <nav class="hidden md:flex gap-6">
+                <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
+                <a class="text-indigo-700 font-bold border-b-2 border-indigo-600 px-3 py-1" href="{% url 'templates' %}">Templates</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <button class="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2 rounded-lg font-medium text-sm transition-transform active:scale-95">New Project</button>
+        </div>
+    </header>
+
+    <!-- Header Section -->
+    <header class="mb-12 mt-8 max-w-4xl">
+        <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">The Engineering Editorial</h2>
+        <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
+    </header>
+
+    <!-- Bento-Style Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for template in templates %}
+        <div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow border border-outline-variant/15 hover:-translate-y-1 transition-all duration-300">
+            <div class="h-64 overflow-hidden bg-surface-container-high relative">
+                <img src="{{ template.image_url }}" alt="{{ template.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+                <div class="mb-4">
+                    <span class="text-[10px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-2 py-1 rounded">{{ template.category }}</span>
+                    <h3 class="font-headline text-xl font-bold mt-3 text-on-surface">{{ template.name }}</h3>
+                </div>
+                <p class="text-on-surface-variant text-sm font-body mb-6 flex-grow leading-relaxed">Professional LaTeX template for your {{ template.name|lower }} project.</p>
+                <button class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-lg group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-primary-container group-hover:text-white transition-all duration-300">Select Template</button>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- Secondary Information Section -->
+    <section class="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-5">
+            <div class="bg-primary-container/10 p-8 rounded-2xl">
+                <h4 class="font-headline text-2xl font-bold text-primary mb-6">Engineered for Accuracy</h4>
+                <ul class="space-y-6">
+                    <li class="flex items-start gap-4">
+                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                            <span class="material-symbols-outlined text-primary">functions</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-on-surface mb-1">LaTeX Native Engine</p>
+                            <p class="text-sm text-on-surface-variant">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                            <span class="material-symbols-outlined text-primary">source</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-on-surface mb-1">Versioned Templates</p>
+                            <p class="text-sm text-on-surface-variant">Access legacy and updated versions of industry-standard document specifications.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-on-surface mb-1">Smart Formatting</p>
+                            <p class="text-sm text-on-surface-variant">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            <div class="bg-surface-container-low p-10 rounded-2xl border-l-8 border-primary">
+                <h5 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">The Curator's Note</h5>
+                <p class="font-headline text-2xl leading-tight text-on-surface italic">"Precision is not an afterthought; it is the infrastructure upon which technical credibility is built."</p>
+                <div class="mt-8 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full overflow-hidden grayscale">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRc_j-a-vwdkVznB6ziMlKL3BjB_aAcBtlmqQp8JYvX1lPsyX7oVWXU1BY3T33jSZYUsk1s2C9hM6zMlWb5wlgqxuL6pJTNSQfWcKDPvMeuBuhmu_6k35AnjgpGK7wgV7WXzGjDYYwgsuM-kdsw-P4zrrwhD972Z7omJAg3uqU4JRPWdK1Uo9TJo2HcLOu06XoHA8WDh3XTlFdI71me0kYUJsJNQtObcp8X8l8RiTm9jq7-MZtv2IBgmg0Izgq6Ls-ZW3e1BU32g" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <p class="text-on-surface font-bold">Arthur P. Vance</p>
+                        <p class="text-xs text-on-surface-variant">Lead Systems Architect, TexPrecision</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl editorial-shadow">
+                    <div class="text-4xl font-headline font-black text-primary mb-2">15k+</div>
+                    <p class="text-sm text-on-surface-variant font-medium">Research papers published using our standard journal template.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl editorial-shadow">
+                    <div class="text-4xl font-headline font-black text-tertiary mb-2">99.9%</div>
+                    <p class="text-sm text-on-surface-variant font-medium">Compilation success rate for complex LaTeX-heavy bibliographies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-transparent flex justify-around items-center py-3 px-4 z-50">
+    <a href="{% url 'dashboard' %}" class="flex flex-col items-center gap-1 text-slate-500">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-bold">Dashboard</span>
+    </a>
+    <a href="{% url 'editor' %}" class="flex flex-col items-center gap-1 text-slate-500">
+        <span class="material-symbols-outlined">terminal</span>
+        <span class="text-[10px] font-bold">Editor</span>
+    </a>
+    <a href="{% url 'templates' %}" class="flex flex-col items-center gap-1 text-indigo-700">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
+        <span class="text-[10px] font-bold">Templates</span>
+    </a>
+    <button class="flex flex-col items-center gap-1 text-slate-500">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-[10px] font-bold">Settings</span>
+    </button>
+</nav>
+
+<script>
+    window.addEventListener('load', async function () {
+        await Clerk.load();
+        const userButtonDiv = document.getElementById('user-button');
+        if (Clerk.user && userButtonDiv) {
+            Clerk.mountUserButton(userButtonDiv);
+        }
+    });
+</script>
 {% endblock %}
