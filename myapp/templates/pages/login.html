@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - LaTeX Genius{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[calc(100vh-160px)]">
+    <div id="sign-in"></div>
+</div>
+
+<script>
+    window.addEventListener('load', async function () {
+        await Clerk.load();
+        const signInDiv = document.getElementById('sign-in');
+        if (signInDiv) {
+            Clerk.mountSignIn(signInDiv, {
+                signUpUrl: '/signup/',
+            });
+        }
+    });
+</script>
+{% endblock %}

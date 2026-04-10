@@ -36,23 +36,10 @@
             await Clerk.load();
 
             const userButtonDiv = document.getElementById('user-button');
-            const signInBtn = document.getElementById('sign-in-btn');
-            const signUpBtn = document.getElementById('sign-up-btn');
-            const heroSignUpBtn = document.getElementById('hero-sign-up-btn');
 
             if (Clerk.user) {
                 if (userButtonDiv) {
                     Clerk.mountUserButton(userButtonDiv);
-                }
-            } else {
-                if (signInBtn) {
-                    signInBtn.addEventListener('click', () => Clerk.openSignIn());
-                }
-                if (signUpBtn) {
-                    signUpBtn.addEventListener('click', () => Clerk.openSignUp());
-                }
-                if (heroSignUpBtn) {
-                    heroSignUpBtn.addEventListener('click', () => Clerk.openSignUp());
                 }
             }
         });

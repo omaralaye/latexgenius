@@ -5,6 +5,12 @@ from .models import Template, Project
 def landing_page(request):
     return render(request, 'pages/landingpage.html')
 
+def login_page(request):
+    return render(request, 'pages/login.html')
+
+def signup_page(request):
+    return render(request, 'pages/signup.html')
+
 @login_required
 def dashboard_page(request):
     projects = Project.objects.filter(owner=request.user).order_by('-last_modified')

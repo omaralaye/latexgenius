@@ -17,7 +17,7 @@
                 {% if user.is_authenticated %}
                 <a href="{% url 'dashboard' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg shadow-blue-200">Go to Dashboard</a>
                 {% else %}
-                <button id="hero-sign-up-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg shadow-blue-200">Start Writing for Free</button>
+                <a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg shadow-blue-200">Start Writing for Free</a>
                 {% endif %}
                 <a href="{% url 'templates' %}" class="bg-white hover:bg-slate-50 text-slate-700 px-8 py-4 rounded-xl text-lg font-semibold transition-all border border-slate-200">Browse Templates</a>
             </div>
