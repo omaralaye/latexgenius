@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_clerk',
     'myapp',
 ]
 
@@ -46,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_clerk.middleware.ClerkMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -62,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'myapp.context_processors.clerk_settings',
             ],
         },
     },
@@ -119,3 +122,22 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+import os
+
+# Clerk Settings
+CLERK_PUBLISHABLE_KEY = os.environ.get('CLERK_PUBLISHABLE_KEY', 'pk_test_...')
+CLERK_SECRET_KEY = os.environ.get('CLERK_SECRET_KEY', 'sk_test_...')
+# The public key must be a valid PEM format. Replace with your actual Clerk public key.
+CLERK_JWT_PEM_PUBLIC_KEY = os.environ.get('CLERK_JWT_PEM_PUBLIC_KEY', """
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo76543210abcdefghijk
+lmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab
+cdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ012
+3456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRST
+UVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJK
+LMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789AB
+CDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxywIDA
+QAB
+-----END PUBLIC KEY-----
+""")
