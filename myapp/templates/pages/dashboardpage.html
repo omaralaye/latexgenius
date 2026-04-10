@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Total Projects</p>
-                    <p class="text-2xl font-bold text-slate-900">12</p>
+                    <p class="text-2xl font-bold text-slate-900">{{ total_projects }}</p>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Recent Activity</p>
-                    <p class="text-2xl font-bold text-slate-900">2h ago</p>
+                    <p class="text-2xl font-bold text-slate-900">{{ recent_activity }}</p>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Shared with me</p>
-                    <p class="text-2xl font-bold text-slate-900">4</p>
+                    <p class="text-2xl font-bold text-slate-900">{{ shared_projects }}</p>
                 </div>
             </div>
         </div>
@@ -65,76 +65,44 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
+                    {% for project in projects %}
                     <tr class="hover:bg-slate-50 transition-colors group">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <i class="fas fa-file-pdf text-red-500 text-xl"></i>
                                 <div>
-                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Physics Research Paper</a>
-                                    <p class="text-xs text-slate-500">main.tex</p>
+                                    <a href="{% url 'editor_with_id' project.id %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">{{ project.title }}</a>
+                                    <p class="text-xs text-slate-500">{{ project.filename }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-slate-600">Oct 24, 2024</td>
+                        <td class="px-6 py-4 text-sm text-slate-600">{{ project.last_modified|date:"M d, Y" }}</td>
                         <td class="px-6 py-4">
                             <div class="flex -space-x-2">
-                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
-                                <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-7 h-7 rounded-full border-2 border-white">
+                                <img src="https://ui-avatars.com/api/?name={{ project.owner.username }}" class="w-7 h-7 rounded-full border-2 border-white" title="{{ project.owner.username }}">
+                                {% for collaborator in project.collaborators.all %}
+                                <img src="https://ui-avatars.com/api/?name={{ collaborator.username }}" class="w-7 h-7 rounded-full border-2 border-white" title="{{ collaborator.username }}">
+                                {% endfor %}
                             </div>
                         </td>
                         <td class="px-6 py-4">
+                            {% if project.status == 'compiled' %}
                             <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-100">Compiled</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <div>
-                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Mathematics Thesis</a>
-                                    <p class="text-xs text-slate-500">thesis.tex</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-slate-600">Oct 22, 2024</td>
-                        <td class="px-6 py-4">
-                            <div class="flex -space-x-2">
-                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
+                            {% else %}
                             <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">Draft</span>
+                            {% endif %}
                         </td>
                         <td class="px-6 py-4 text-right">
                             <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
                         </td>
                     </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
-                                <div>
-                                    <a href="{% url 'editor' %}" class="text-sm font-bold text-slate-900 hover:text-blue-600">Resume 2024</a>
-                                    <p class="text-xs text-slate-500">cv.tex</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-slate-600">Oct 15, 2024</td>
-                        <td class="px-6 py-4">
-                            <div class="flex -space-x-2">
-                                <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-7 h-7 rounded-full border-2 border-white">
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-100">Compiled</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button class="text-slate-400 hover:text-slate-600"><i class="fas fa-ellipsis-h"></i></button>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-10 text-center text-slate-500">
+                            No projects found. <a href="{% url 'editor' %}" class="text-blue-600 hover:underline">Create your first project!</a>
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
