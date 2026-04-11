@@ -9,13 +9,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 
     <!-- Clerk SDK -->
-    <script
-        async
-        crossorigin="anonymous"
-        data-clerk-publishable-key="{{ CLERK_PUBLISHABLE_KEY }}"
-        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-        type="text/javascript"
-    ></script>
+    <script>
+        (function() {
+            const frontendApi = "{{ CLERK_PUBLISHABLE_KEY }}";
+            const script = document.createElement('script');
+            script.setAttribute('data-clerk-publishable-key', frontendApi);
+            script.async = true;
+            script.src = `https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`;
+            script.crossOrigin = "anonymous";
+            script.addEventListener('load', async function() {
+                const poll = setInterval(async () => {
+                    if (window.Clerk && window.Clerk.load) {
+                        clearInterval(poll);
+                        try {
+                            await window.Clerk.load();
+                            console.log('Clerk.load() successful');
+                            if (typeof initializeClerkFeatures === 'function') {
+                                initializeClerkFeatures();
+                            }
+                        } catch (err) {
+                            console.error('Clerk failed to load:', err);
+                        }
+                    }
+                }, 100);
+                setTimeout(() => clearInterval(poll), 10000);
+            });
+            document.head.appendChild(script);
+        })();
+    </script>
 
     <script id="tailwind-config">
         tailwind.config = {
@@ -117,15 +138,13 @@
     {% endblock %}
 
     <script>
-        window.addEventListener('load', async function () {
-            await Clerk.load();
-
+        function initializeClerkFeatures() {
             const userButtonDiv = document.getElementById('user-button');
             const authLinks = document.getElementById('auth-links');
 
-            if (Clerk.user) {
+            if (window.Clerk.user) {
                 if (userButtonDiv) {
-                    Clerk.mountUserButton(userButtonDiv);
+                    window.Clerk.mountUserButton(userButtonDiv);
                 }
                 if (authLinks) {
                     authLinks.style.display = 'none';
@@ -135,7 +154,7 @@
                     userButtonDiv.style.display = 'none';
                 }
             }
-        });
+        }
     </script>
     {% block extra_scripts %}{% endblock %}
 </body>

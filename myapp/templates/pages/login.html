@@ -52,11 +52,11 @@
 </footer>
 
 <script>
-    window.addEventListener('load', async function () {
-        await Clerk.load();
+    function initializeSignIn() {
+        if (!window.Clerk) return;
         const signInDiv = document.getElementById('sign-in');
         if (signInDiv) {
-            Clerk.mountSignIn(signInDiv, {
+            window.Clerk.mountSignIn(signInDiv, {
                 signUpUrl: '/signup/',
                 appearance: {
                     elements: {
@@ -74,6 +74,18 @@
                 }
             });
         }
-    });
+    }
+
+    if (window.Clerk && window.Clerk.loaded) {
+        initializeSignIn();
+    } else {
+        const oldInitializeClerkFeatures = window.initializeClerkFeatures;
+        window.initializeClerkFeatures = function() {
+            if (typeof oldInitializeClerkFeatures === 'function') {
+                oldInitializeClerkFeatures();
+            }
+            initializeSignIn();
+        };
+    }
 </script>
 {% endblock %}
