@@ -188,12 +188,24 @@
 </nav>
 
 <script>
-    window.addEventListener('load', async function () {
-        await Clerk.load();
+    function initializeTemplatesClerk() {
+        if (!window.Clerk) return;
         const userButtonDiv = document.getElementById('user-button');
-        if (Clerk.user && userButtonDiv) {
-            Clerk.mountUserButton(userButtonDiv);
+        if (window.Clerk.user && userButtonDiv) {
+            window.Clerk.mountUserButton(userButtonDiv);
         }
-    });
+    }
+
+    if (window.Clerk && window.Clerk.loaded) {
+        initializeTemplatesClerk();
+    } else {
+        const oldInitializeClerkFeatures = window.initializeClerkFeatures;
+        window.initializeClerkFeatures = function() {
+            if (typeof oldInitializeClerkFeatures === 'function') {
+                oldInitializeClerkFeatures();
+            }
+            initializeTemplatesClerk();
+        };
+    }
 </script>
 {% endblock %}
