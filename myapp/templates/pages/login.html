@@ -52,12 +52,15 @@
 </footer>
 
 <script>
-    window.addEventListener('load', async function () {
+    async function initSignIn() {
+        await waitForClerk();   // ← uses the global function from base.html
         await Clerk.load();
+
         const signInDiv = document.getElementById('sign-in');
         if (signInDiv) {
             Clerk.mountSignIn(signInDiv, {
                 signUpUrl: '/signup/',
+                afterSignInUrl: '/dashboard/',
                 appearance: {
                     elements: {
                         rootBox: "w-full",
@@ -74,6 +77,8 @@
                 }
             });
         }
-    });
+    }
+
+    initSignIn();
 </script>
 {% endblock %}
