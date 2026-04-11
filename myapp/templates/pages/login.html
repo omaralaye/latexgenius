@@ -4,77 +4,125 @@
 
 {% block extra_head %}
 <style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .editorial-gradient {
+        background: linear-gradient(135deg, #24389c 0%, #3f51b5 100%);
+    }
     .soft-inset-focus:focus-within {
         box-shadow: 0 0 0 3px rgba(36, 56, 156, 0.2);
+    }
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
     }
 </style>
 {% endblock %}
 
 {% block layout %}
-<main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden min-h-screen">
-    <!-- Background Decorative Element -->
-    <div class="absolute inset-0 pointer-events-none opacity-20">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-container blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-tertiary blur-[120px]"></div>
+<div class="bg-surface text-on-surface min-h-screen flex flex-col">
+<main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden">
+<!-- Background Decorative Element -->
+<div class="absolute inset-0 pointer-events-none opacity-20 dark:opacity-10">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-container blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-tertiary blur-[120px]"></div>
+</div>
+<!-- Login Container -->
+<div class="w-full max-w-[440px] z-10">
+<!-- Brand Anchor -->
+<div class="text-center mb-10">
+<a href="{% url 'landing' %}" class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container text-on-primary-container mb-6 shadow-xl shadow-primary/10">
+<span class="material-symbols-outlined text-3xl" data-icon="functions">functions</span>
+</a>
+<h1 class="text-3xl font-extrabold tracking-tighter text-primary">LaTeX Editorial</h1>
+<p class="text-on-surface-variant mt-2 font-medium">Precision typesetting for modern engineering.</p>
+</div>
+<!-- Login Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 md:p-10 shadow-[0_10px_15px_-3px_rgba(25,28,30,0.08),0_4px_6px_-1px_rgba(25,28,30,0.04)]">
+<div class="flex flex-col gap-6">
+<!-- Social Login -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface-container-low text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-all duration-200 active:scale-95">
+<img alt="Google Logo" class="w-5 h-5" data-alt="Official Google multicolored 'G' logo icon on white circular background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKWmt4CtFLZrstVnekWVX10NKe9nTE9ELi6334XyuE-cusVQ1leiIf_PVO8BJRCe6W7ZnfgiJ4oYky2QYSOdQ4YZAOZ5hx8j0KI3FemK2FppV3YR5M0fFU7Dy79tscepHM3qKFfqAkrJ3fo92-Ay5VsAajz1j5xAnYTHmcD8KfX-mNJ0MLWWysPHKAUzWh6j_s-4v8ae42i2yZmbtOuMqedswSHexBGqiQd4UV45dTPZ6Wp4dDCjVYU_IuxJ6tKmXByC2Eg1v5Jg"/>
+<span>Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface-container-low text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+<span>GitHub</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="flex items-center gap-4">
+<div class="h-[1px] flex-grow bg-surface-container-highest"></div>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Or continue with</span>
+<div class="h-[1px] flex-grow bg-surface-container-highest"></div>
+</div>
+
+{% if messages %}
+<div class="mb-4">
+    {% for message in messages %}
+    <div class="p-4 mb-2 text-sm text-error bg-error-container rounded-lg" role="alert">
+        {{ message }}
     </div>
-    <!-- Login Container -->
-    <div class="w-full max-w-[440px] z-10">
-        <!-- Brand Anchor -->
-        <div class="text-center mb-10">
-            <a href="{% url 'landing' %}" class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container text-on-primary-container mb-6 shadow-xl shadow-primary/10">
-                <span class="material-symbols-outlined text-3xl">functions</span>
-            </a>
-            <h1 class="text-3xl font-extrabold tracking-tighter text-primary font-headline">LaTeX Editorial</h1>
-            <p class="text-on-surface-variant mt-2 font-medium">Precision typesetting for modern engineering.</p>
-        </div>
-        <!-- Login Card -->
-        <div class="bg-surface-container-lowest rounded-xl p-8 md:p-10 shadow-xl border border-outline-variant/10">
-            <div id="sign-in"></div>
-        </div>
-        <!-- Footer / Redirect -->
-        <p class="text-center mt-8 text-on-surface-variant text-sm font-medium">
-            New to the platform? <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4" href="{% url 'signup' %}">Create an account</a>
-        </p>
-    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Input Fields -->
+<form action="{% url 'login' %}" class="flex flex-col gap-5" method="POST">
+{% csrf_token %}
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant ml-1" for="username">Work Email</label>
+<div class="relative group soft-inset-focus rounded-xl">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-xl" data-icon="mail">mail</span>
+</div>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-none rounded-xl focus:ring-0 text-on-surface placeholder:text-outline/50 transition-all" id="username" name="username" placeholder="engineer@latex.io" type="email" required/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center ml-1">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="password">Password</label>
+<a class="text-xs font-bold text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative group soft-inset-focus rounded-xl">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-xl" data-icon="lock">lock</span>
+</div>
+<input class="w-full pl-12 pr-12 py-3.5 bg-surface-container-low border-none rounded-xl focus:ring-0 text-on-surface placeholder:text-outline/50 transition-all" id="password" name="password" placeholder="••••••••" type="password" required/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- CTA -->
+<button class="mt-2 editorial-gradient text-on-primary py-4 rounded-xl font-bold text-sm tracking-wide shadow-lg shadow-primary/20 active:scale-95 transition-transform" type="submit">
+                            Sign In to Workspace
+                        </button>
+</form>
+</div>
+</div>
+<!-- Footer / Redirect -->
+<p class="text-center mt-8 text-on-surface-variant text-sm font-medium">
+                New to the platform? <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4" href="{% url 'signup' %}">Create an account</a>
+</p>
+</div>
 </main>
-
-<footer class="w-full py-8 border-t border-slate-200/10 bg-surface">
-    <div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto">
-        <div class="text-primary font-body text-xs uppercase tracking-widest mb-4 md:mb-0">
-            © 2024 Engineering Editorial. Built for Precision.
-        </div>
-        <div class="flex gap-8">
-            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms</a>
-            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy</a>
-            <a class="text-slate-400 font-body text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">Documentation</a>
-        </div>
-    </div>
+<!-- Shared Footer Anchor -->
+<footer class="w-full py-8 border-t border-slate-200/10 bg-[#f7f9fb] dark:bg-slate-950">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto">
+<div class="text-[#24389c] dark:text-[#3f51b5] font-['Inter'] text-xs uppercase tracking-widest mb-4 md:mb-0">
+                © 2024 Engineering Editorial. Built for Precision.
+            </div>
+<div class="flex gap-8">
+<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Terms</a>
+<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Privacy</a>
+<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Documentation</a>
+</div>
+</div>
 </footer>
-
-<script>
-    window.addEventListener('load', async function () {
-        await Clerk.load();
-        const signInDiv = document.getElementById('sign-in');
-        if (signInDiv) {
-            window.Clerk.mountSignIn(signInDiv, {
-                signUpUrl: '/signup/',
-                afterSignInUrl: '/dashboard/',
-                appearance: {
-                    elements: {
-                        rootBox: "w-full",
-                        card: "shadow-none p-0 w-full bg-transparent",
-                        headerTitle: "hidden",
-                        headerSubtitle: "hidden",
-                        socialButtonsBlockButton: "rounded-lg border-none bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all",
-                        dividerRow: "my-6",
-                        dividerText: "text-[10px] uppercase tracking-widest text-on-surface-variant font-bold",
-                        formButtonPrimary: "editorial-gradient rounded-xl font-bold py-4 text-sm tracking-wide shadow-lg shadow-primary/20",
-                        formFieldInput: "bg-surface-container-low border-none rounded-xl py-3.5",
-                        footer: "hidden"
-                    }
-                }
-            });
-        }
-    });
-</script>
+</div>
 {% endblock %}
