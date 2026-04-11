@@ -52,13 +52,11 @@
 </footer>
 
 <script>
-    async function initSignIn() {
-        await waitForClerk();   // ← uses the global function from base.html
+    window.addEventListener('load', async function () {
         await Clerk.load();
-
         const signInDiv = document.getElementById('sign-in');
         if (signInDiv) {
-            Clerk.mountSignIn(signInDiv, {
+            window.Clerk.mountSignIn(signInDiv, {
                 signUpUrl: '/signup/',
                 afterSignInUrl: '/dashboard/',
                 appearance: {
@@ -77,8 +75,6 @@
                 }
             });
         }
-    }
-
-    initSignIn();
+    });
 </script>
 {% endblock %}

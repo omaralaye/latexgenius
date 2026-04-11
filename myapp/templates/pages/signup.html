@@ -74,11 +74,11 @@
 </footer>
 
 <script>
-    window.addEventListener('load', async function () {
-        await Clerk.load();
+    function initializeSignUp() {
+        if (!window.Clerk) return;
         const signUpDiv = document.getElementById('sign-up');
         if (signUpDiv) {
-            Clerk.mountSignUp(signUpDiv, {
+            window.Clerk.mountSignUp(signUpDiv, {
                 signInUrl: '/login/',
                 appearance: {
                     elements: {
@@ -96,6 +96,18 @@
                 }
             });
         }
-    });
+    }
+
+    if (window.Clerk && window.Clerk.loaded) {
+        initializeSignUp();
+    } else {
+        const oldInitializeClerkFeatures = window.initializeClerkFeatures;
+        window.initializeClerkFeatures = function() {
+            if (typeof oldInitializeClerkFeatures === 'function') {
+                oldInitializeClerkFeatures();
+            }
+            initializeSignUp();
+        };
+    }
 </script>
 {% endblock %}
