@@ -9,12 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 
     <!-- Clerk SDK -->
+     <script>
+    window.__onClerkLoad = null;
+    </script>
     <script
-        async
         crossorigin="anonymous"
         data-clerk-publishable-key="{{ CLERK_PUBLISHABLE_KEY }}"
         src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
         type="text/javascript"
+        onload="window.__clerkReady && window.__clerkReady()"
     ></script>
 
     <script id="tailwind-config">
@@ -117,26 +120,47 @@
     {% endblock %}
 
     <script>
-        window.addEventListener('load', async function () {
-            await Clerk.load();
-
-            const userButtonDiv = document.getElementById('user-button');
-            const authLinks = document.getElementById('auth-links');
-
-            if (Clerk.user) {
-                if (userButtonDiv) {
-                    Clerk.mountUserButton(userButtonDiv);
-                }
-                if (authLinks) {
-                    authLinks.style.display = 'none';
-                }
+        function waitForClerk() {
+        return new Promise((resolve) => {
+            if (window.Clerk) {
+                resolve();
             } else {
-                if (userButtonDiv) {
-                    userButtonDiv.style.display = 'none';
-                }
+                window.__clerkReady = resolve;
             }
         });
+    }
+
+    async function initClerk() {
+        await waitForClerk();
+        await Clerk.load();
+
+        const userButtonDiv = document.getElementById('user-button');
+        const authLinks = document.getElementById('auth-links');
+
+        if (Clerk.user) {
+            if (userButtonDiv) Clerk.mountUserButton(userButtonDiv);
+            if (authLinks) authLinks.style.display = 'none';
+
+            // Sync JWT token to cookie for Django
+            async function syncToken() {
+                if (Clerk.session) {
+                    const token = await Clerk.session.getToken();
+                    document.cookie = `__session=${token}; path=/; SameSite=Lax`;
+                }
+            }
+            await syncToken();
+            setInterval(syncToken, 55000);
+
+        } else {
+            if (userButtonDiv) userButtonDiv.style.display = 'none';
+        }
+    }
+
+    initClerk();
     </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

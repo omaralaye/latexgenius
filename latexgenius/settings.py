@@ -48,7 +48,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_clerk.middleware.ClerkMiddleware',
-    'myapp.middleware.ClerkFixMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -115,7 +114,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -127,10 +126,10 @@ STATIC_URL = 'static/'
 import os
 
 # Clerk Settings
-CLERK_PUBLISHABLE_KEY = os.environ.get('CLERK_PUBLISHABLE_KEY', 'pk_test_...')
-CLERK_SECRET_KEY = os.environ.get('CLERK_SECRET_KEY', 'sk_test_...')
+CLERK_PUBLISHABLE_KEY = os.environ.get('pk_test_bW9yYWwtYXBoaWQtMTguY2xlcmsuYWNjb3VudHMuZGV2JA', 'pk_test_...')
+CLERK_SECRET_KEY = os.environ.get('sk_test_x9PDRxdwChJg9Z5RCRVpfSmIbdciXjK8kNJnSLi7nC', 'sk_test_...')
 # The public key must be a valid PEM format. Replace with your actual Clerk public key.
-CLERK_JWT_PEM_PUBLIC_KEY = os.environ.get('CLERK_JWT_PEM_PUBLIC_KEY', """
+CLERK_JWT_PEM_PUBLIC_KEY = os.environ.get('https://moral-aphid-18.clerk.accounts.dev/.well-known/jwks.json', """
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo76543210abcdefghijk
 lmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab
