@@ -1,15 +1,52 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate, logout, get_user_model
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
 from .models import Template, Project
+
+User = get_user_model()
 
 def landing_page(request):
     return render(request, 'pages/landingpage.html')
 
 def login_page(request):
-    return render(request, 'pages/login.html')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard')
+        else:
+            messages.error(request, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'pages/login.html', {'form': form})
 
 def signup_page(request):
+    if request.method == 'POST':
+        # Simple signup handling for demo, ideally use a custom form
+        # But we'll use the provided HTML fields: name (mapped to username for simplicity or first_name), email, password
+        username = request.POST.get('email')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        first_name = request.POST.get('name')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "User already exists.")
+        else:
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name)
+            login(request, user)
+            return redirect('dashboard')
+
     return render(request, 'pages/signup.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('landing')
 
 @login_required
 def dashboard_page(request):
