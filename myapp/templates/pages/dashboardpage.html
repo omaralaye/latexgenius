@@ -203,12 +203,24 @@
 </main>
 
 <script>
-    window.addEventListener('load', async function () {
-        await Clerk.load();
+    function initializeDashboardClerk() {
+        if (!window.Clerk) return;
         const userButtonDiv = document.getElementById('user-button');
-        if (Clerk.user && userButtonDiv) {
-            Clerk.mountUserButton(userButtonDiv);
+        if (window.Clerk.user && userButtonDiv) {
+            window.Clerk.mountUserButton(userButtonDiv);
         }
-    });
+    }
+
+    if (window.Clerk && window.Clerk.loaded) {
+        initializeDashboardClerk();
+    } else {
+        const oldInitializeClerkFeatures = window.initializeClerkFeatures;
+        window.initializeClerkFeatures = function() {
+            if (typeof oldInitializeClerkFeatures === 'function') {
+                oldInitializeClerkFeatures();
+            }
+            initializeDashboardClerk();
+        };
+    }
 </script>
 {% endblock %}
