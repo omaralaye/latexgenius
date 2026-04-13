@@ -54,22 +54,23 @@
 </aside>
 
 <!-- Main Canvas -->
-<main class="md:ml-64 min-h-screen">
+<main class="md:ml-64 min-h-screen flex flex-col">
     <!-- TopAppBar -->
-    <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant/5">
+    <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-4">
             <h1 class="text-xl font-bold tracking-tighter text-indigo-900">TexPrecision</h1>
         </div>
-        <div class="flex items-center gap-4">
-            <a href="{% url 'editor' %}" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-semibold text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
+        <div class="flex items-center gap-2 sm:gap-4">
+            <a href="{% url 'editor' %}" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
                 <span class="material-symbols-outlined text-sm">add</span>
-                New Project
+                <span class="hidden xs:inline">New Project</span>
+                <span class="xs:hidden">New</span>
             </a>
-            <div class="flex items-center gap-2 border-l border-slate-200 pl-4">
-                <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
-                    <span class="material-symbols-outlined">notifications</span>
+            <div class="flex items-center gap-1 sm:gap-2 border-l border-slate-200 pl-2 sm:pl-4">
+                <button class="p-1 sm:p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
                 </button>
-                <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                <button class="hidden sm:block p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
                     <span class="material-symbols-outlined">settings</span>
                 </button>
                 <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
@@ -80,11 +81,11 @@
     </header>
 
     <!-- Content Area -->
-    <div class="pt-24 px-8 pb-12 max-w-7xl mx-auto">
+    <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
         <!-- Dashboard Hero: Bento Style -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="flex flex-col lg:flex-row gap-6 mb-12">
             <!-- Stat 1: Welcome -->
-            <div class="md:col-span-2 p-8 rounded-xl bg-surface-container-lowest shadow-sm relative overflow-hidden flex flex-col justify-between h-[240px]">
+            <div class="flex-[2] p-8 rounded-xl bg-surface-container-lowest shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[240px]">
                 <div class="relative z-10">
                     <h2 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2">Welcome back, {{ user.first_name|default:user.username }}.</h2>
                     <p class="text-on-surface-variant max-w-md leading-relaxed">Your technical workspace is ready. You have managed <span class="text-primary font-bold">{{ total_projects }} projects</span> this season.</p>
@@ -118,9 +119,9 @@
         </div>
 
         <!-- Main Content: Recent Documents & Activity -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+        <div class="flex flex-col lg:flex-row gap-8 items-start">
             <!-- Recent Documents List -->
-            <div class="lg:col-span-3 space-y-4">
+            <div class="w-full lg:flex-[3] space-y-4">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-lg font-bold flex items-center gap-2">
                         Recent Documents
@@ -171,7 +172,7 @@
             </div>
 
             <!-- Right Sidebar: Stats & Quick Actions -->
-            <div class="space-y-6">
+            <div class="w-full lg:flex-1 space-y-6">
                 <!-- Quick Actions -->
                 <div class="bg-surface-container-low p-6 rounded-xl">
                     <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Quick Actions</h4>
