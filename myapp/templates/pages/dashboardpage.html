@@ -16,8 +16,8 @@
             <span class="material-symbols-outlined text-white text-sm">terminal</span>
         </div>
         <div>
-            <h2 class="font-headline text-lg font-black text-indigo-900">LaTeXGenius</h2>
-            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">V2.4.0</p>
+            <h2 class="font-headline text-lg font-black text-indigo-900">{{ app_settings.app_name|default:"LaTeXGenius" }}</h2>
+            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">{{ app_settings.app_version|default:"V2.4.0" }}</p>
         </div>
     </div>
     <nav class="flex flex-col gap-1 flex-grow">
@@ -58,7 +58,7 @@
     <!-- TopAppBar -->
     <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-4">
-            <h1 class="text-xl font-bold tracking-tighter text-indigo-900">TexPrecision</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900">{{ app_settings.app_name|default:"TexPrecision" }}</h1>
         </div>
         <div class="flex items-center gap-4">
             <a href="{% url 'editor' %}" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-semibold text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">

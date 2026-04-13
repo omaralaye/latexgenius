@@ -1,9 +1,9 @@
 <footer class="w-full border-t border-outline-variant/15 bg-surface-container-low">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-8 py-16 max-w-7xl mx-auto">
         <div class="md:col-span-1">
-            <div class="text-lg font-black text-slate-900 mb-4">The Engineering Editorial</div>
+            <div class="text-lg font-black text-slate-900 mb-4">{{ app_settings.app_name|default:"The Engineering Editorial" }}</div>
             <p class="font-body text-sm text-slate-500 leading-relaxed">
-                Setting the standard for technical precision. Document conversion built by engineers, for engineers.
+                {{ app_settings.footer_description|default:"Setting the standard for technical precision. Document conversion built by engineers, for engineers." }}
             </p>
         </div>
         <div>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="max-w-7xl mx-auto px-8 pb-8 flex flex-col md:flex-row justify-between items-center border-t border-outline-variant/5 pt-8">
-        <p class="font-body text-xs text-slate-400">© 2024 The Engineering Editorial. Precision in every equation.</p>
+        <p class="font-body text-xs text-slate-400">© 2024 {{ app_settings.app_name|default:"The Engineering Editorial" }}. Precision in every equation.</p>
         <div class="flex gap-6 mt-4 md:mt-0">
             <span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">terminal</span>
             <span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">data_object</span>

@@ -9,10 +9,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div class="lg:col-span-5 space-y-8">
                 <h1 class="text-6xl md:text-7xl font-headline font-extrabold tracking-tighter leading-none text-on-surface">
-                    Convert Any Document to <span class="text-primary italic">LaTeX</span> in Seconds
+                    {{ app_settings.hero_title|default:"Convert Any Document to LaTeX in Seconds" }}
                 </h1>
                 <p class="text-xl text-on-surface-variant leading-relaxed max-w-lg">
-                    Bridge the gap between draft and publication. Our AI-driven engine preserves complex equations, nested citations, and intricate layouts with editorial precision.
+                    {{ app_settings.hero_subtitle|default:"Bridge the gap between draft and publication. Our AI-driven engine preserves complex equations, nested citations, and intricate layouts with editorial precision." }}
                 </p>
                 <div class="flex items-center gap-4">
                     <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="editorial-gradient text-on-primary px-8 py-4 rounded-lg font-headline font-bold text-lg shadow-lg hover:opacity-90 active:scale-95 transition-all">
@@ -89,27 +89,15 @@
     <section class="bg-surface-container-low py-32">
         <div class="max-w-7xl mx-auto px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                {% for feature in features %}
                 <div class="space-y-4">
                     <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-primary">speed</span>
+                        <span class="material-symbols-outlined text-primary">{{ feature.icon }}</span>
                     </div>
-                    <h3 class="text-2xl font-headline font-bold">Real-time Preview</h3>
-                    <p class="text-on-surface-variant">Watch your source document transform into a compile-ready PDF in a live, split-pane environment with zero lag.</p>
+                    <h3 class="text-2xl font-headline font-bold">{{ feature.title }}</h3>
+                    <p class="text-on-surface-variant">{{ feature.description }}</p>
                 </div>
-                <div class="space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-tertiary">psychology</span>
-                    </div>
-                    <h3 class="text-2xl font-headline font-bold">AI-Powered Parsing</h3>
-                    <p class="text-on-surface-variant">Our custom neural network understands the semantics of your document, ensuring headers, lists, and tables map perfectly to LaTeX syntax.</p>
-                </div>
-                <div class="space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center">
-                        <span class="material-symbols-outlined text-primary-container">download_done</span>
-                    </div>
-                    <h3 class="text-2xl font-headline font-bold">One-Click Export</h3>
-                    <p class="text-on-surface-variant">Download a clean .zip package containing the .tex source, bibliography files, and high-resolution figures in one go.</p>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -117,42 +105,19 @@
     <!-- Template Section -->
     <section class="py-32 max-w-7xl mx-auto px-8">
         <div class="mb-16">
-            <h2 class="text-4xl font-headline font-extrabold tracking-tight">The Precision Templates</h2>
-            <p class="text-on-surface-variant mt-4 max-w-2xl">Standardize your output with high-performance templates designed for the world's leading journals and institutions.</p>
+            <h2 class="text-4xl font-headline font-extrabold tracking-tight">{{ app_settings.template_section_title|default:"The Precision Templates" }}</h2>
+            <p class="text-on-surface-variant mt-4 max-w-2xl">{{ app_settings.template_section_subtitle|default:"Standardize your output with high-performance templates designed for the world's leading journals and institutions." }}</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Card 1 -->
+            {% for template in templates %}
             <div class="group bg-surface-container-lowest rounded-xl p-6 transition-all duration-300 hover:surface-bright hover:-translate-y-2">
                 <div class="aspect-[3/4] bg-surface-container rounded-lg mb-6 overflow-hidden relative border border-outline-variant/15">
-                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALvqWctkNaGa8f9xghtCSee0YOFS5pLw0Eb7LFJCet3PlB-jFVOTRJEe0yWbGb3adtZM2qaZmy1Lu5nza6DGaY4bEUKaUnuugAYTb7Lx7YxPOf8TMQsTMWoj7XCEjcJI3ncuowQwwrrRwaq3vJUlhRA5c2zaFXggWCTOVuo5IYQQFc1bOvbgE9Nbhrg7SeevmewPFvsKgWHnP-TN0j4MfcvAOz6gXCrsqNpZ6Ox_Mzu7yZEsmfo3LOy5gDynk01j0I0LYZrADFzQ"/>
+                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="{{ template.image_url }}" alt="{{ template.name }}"/>
                 </div>
-                <h4 class="font-headline font-bold text-lg">Academic Paper</h4>
-                <p class="text-xs text-on-surface-variant mt-2">IEEE, ACM, and Nature compatible structures.</p>
+                <h4 class="font-headline font-bold text-lg">{{ template.name }}</h4>
+                <p class="text-xs text-on-surface-variant mt-2">Professional LaTeX template for your {{ template.name|lower }} project.</p>
             </div>
-            <!-- Card 2 -->
-            <div class="group bg-surface-container-lowest rounded-xl p-6 transition-all duration-300 hover:surface-bright hover:-translate-y-2">
-                <div class="aspect-[3/4] bg-surface-container rounded-lg mb-6 overflow-hidden relative border border-outline-variant/15">
-                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCspSbGMYfJG_mjVi6g8mBwmpWcm9Dz4VM_CrDh6cdcyVGzNXdPxYHCss_uJ5KM_5_TPXOCKg_gYd27FkODu2D27YNjDvI-qP1tOp50yjwS-Px1j6ghNN0B62tdqvA9QDcMywfdc6ajpNx2D29TjsrlBUwDvVCUbPqdd5oyeH9xt1xIuPOuz8IH-bso-Z9JZQMKuhidlxaoNqYEk7HedVIznJeggqGIWhXRYc3qAk_hnHKMw1y5HdQWSQSWVA5WVbm2RdrW2t9UUg"/>
-                </div>
-                <h4 class="font-headline font-bold text-lg">Modern Resume</h4>
-                <p class="text-xs text-on-surface-variant mt-2">ATS-optimized source code with aesthetic lift.</p>
-            </div>
-            <!-- Card 3 -->
-            <div class="group bg-surface-container-lowest rounded-xl p-6 transition-all duration-300 hover:surface-bright hover:-translate-y-2">
-                <div class="aspect-[3/4] bg-surface-container rounded-lg mb-6 overflow-hidden relative border border-outline-variant/15">
-                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXNW6n4PV9-9p9HqMrUrJiPW2bxB4UWBZrDf9SxhtVuwoASP4ladmvkOp-PgiIvOS-fzhnb6Swz6pY_v4Zy1_5lsRaxLRvC3E9RW0EuEz4ktno2LMxoJWuNNIePxTkHFg39r2IyWPxOJuwHWByv4t2aT2wG7mtHPRYXEAdSJxgNydzMntA_WumhW9BkiPibF60ZI1AbESAotXTNdIBAtzOWUA6YWwNi8dqTO54Qr0lqCizt9Obwo7pz9kfgrcdyhYjguQD9Hv4Wg"/>
-                </div>
-                <h4 class="font-headline font-bold text-lg">Presentation</h4>
-                <p class="text-xs text-on-surface-variant mt-2">Beamer-based slide decks for technical talks.</p>
-            </div>
-            <!-- Card 4 -->
-            <div class="group bg-surface-container-lowest rounded-xl p-6 transition-all duration-300 hover:surface-bright hover:-translate-y-2">
-                <div class="aspect-[3/4] bg-surface-container rounded-lg mb-6 overflow-hidden relative border border-outline-variant/15">
-                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSlYhbTt8w5ISmjQnVZQvmzkwYzyvX6peTtKQ9ZOkLDVdZYCXF0BHPuoFQEk5AfqgRmof8vGfFUsJCfNG0NH5snubgLPIpRMXJ0I8dnCNH2PEr86bhqHBOaQuhnUPdT4M7GTpShJpf2csof5TlceYkIbPA0O8oB3cycWdX3hqV4KuIo43qclpKNvuKrzzcBwbIZ4aIdQFqcjQYbJkZT5RHAley0hyiL71uwEvZDSLT0QnHgRSgle3SBfvDyJLZAoR2o2RLBBJK4w"/>
-                </div>
-                <h4 class="font-headline font-bold text-lg">Full Book</h4>
-                <p class="text-xs text-on-surface-variant mt-2">Robust front matter, index, and multi-chapter handling.</p>
-            </div>
+            {% endfor %}
         </div>
     </section>
 
