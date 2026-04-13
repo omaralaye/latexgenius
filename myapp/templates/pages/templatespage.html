@@ -79,15 +79,10 @@
 
     <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
         <!-- Header Section -->
-        <header class="mb-12 max-w-4xl">
-            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">The Engineering Editorial</h2>
-            <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
+        <header class="mb-12 mt-8 max-w-4xl">
+            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">{{ app_settings.template_section_title|default:"The Engineering Editorial" }}</h2>
+            <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed text-justify">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
         </header>
-    <!-- Header Section -->
-    <header class="mb-12 mt-8 max-w-4xl">
-        <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">{{ app_settings.template_section_title|default:"The Engineering Editorial" }}</h2>
-        <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
-    </header>
 
         <!-- Bento-Style Grid -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -102,7 +97,7 @@
                     <span class="text-[10px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-2 py-1 rounded">{{ template.category }}</span>
                     <h3 class="font-headline text-xl font-bold mt-3 text-on-surface">{{ template.name }}</h3>
                 </div>
-                <p class="text-on-surface-variant text-sm font-body mb-6 flex-grow leading-relaxed">Professional LaTeX template for your {{ template.name|lower }} project.</p>
+                <p class="text-on-surface-variant text-sm font-body mb-6 flex-grow leading-relaxed text-justify">Professional LaTeX template for your {{ template.name|lower }} project.</p>
                 <button class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-lg group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-primary-container group-hover:text-white transition-all duration-300">Select Template</button>
             </div>
         </div>
@@ -121,7 +116,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-on-surface mb-1">LaTeX Native Engine</p>
-                            <p class="text-sm text-on-surface-variant">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
+                            <p class="text-sm text-on-surface-variant text-justify">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
                         </div>
                     </li>
                     <li class="flex items-start gap-4">
@@ -130,7 +125,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-on-surface mb-1">Versioned Templates</p>
-                            <p class="text-sm text-on-surface-variant">Access legacy and updated versions of industry-standard document specifications.</p>
+                            <p class="text-sm text-on-surface-variant text-justify">Access legacy and updated versions of industry-standard document specifications.</p>
                         </div>
                     </li>
                     <li class="flex items-start gap-4">
@@ -139,7 +134,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-on-surface mb-1">Smart Formatting</p>
-                            <p class="text-sm text-on-surface-variant">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
+                            <p class="text-sm text-on-surface-variant text-justify">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
                         </div>
                     </li>
                 </ul>
@@ -149,7 +144,7 @@
             {% if testimonial %}
             <div class="bg-surface-container-low p-10 rounded-2xl border-l-8 border-primary">
                 <h5 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">The Curator's Note</h5>
-                <p class="font-headline text-2xl leading-tight text-on-surface italic">"{{ testimonial.quote }}"</p>
+                <p class="font-headline text-2xl leading-tight text-on-surface italic text-justify">"{{ testimonial.quote }}"</p>
                 <div class="mt-8 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden grayscale">
                         <img src="{{ testimonial.image_url }}" class="w-full h-full object-cover" alt="{{ testimonial.name }}">
@@ -165,7 +160,7 @@
                 {% for stat in stats %}
                 <div class="bg-white p-6 rounded-2xl editorial-shadow">
                     <div class="text-4xl font-headline font-black text-primary mb-2">{{ stat.value }}</div>
-                    <p class="text-sm text-on-surface-variant font-medium">{{ stat.description }}</p>
+                    <p class="text-sm text-on-surface-variant font-medium text-justify">{{ stat.description }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -193,26 +188,4 @@
         <span class="text-[10px] font-bold">Settings</span>
     </button>
 </nav>
-
-<script>
-    function initializeTemplatesClerk() {
-        if (!window.Clerk) return;
-        const userButtonDiv = document.getElementById('user-button');
-        if (window.Clerk.user && userButtonDiv) {
-            window.Clerk.mountUserButton(userButtonDiv);
-        }
-    }
-
-    if (window.Clerk && window.Clerk.loaded) {
-        initializeTemplatesClerk();
-    } else {
-        const oldInitializeClerkFeatures = window.initializeClerkFeatures;
-        window.initializeClerkFeatures = function() {
-            if (typeof oldInitializeClerkFeatures === 'function') {
-                oldInitializeClerkFeatures();
-            }
-            initializeTemplatesClerk();
-        };
-    }
-</script>
 {% endblock %}
