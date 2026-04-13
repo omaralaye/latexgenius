@@ -24,14 +24,14 @@
 
 {% block layout %}
 <div class="bg-surface text-on-surface min-h-screen flex flex-col">
-<main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden">
+<main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 relative overflow-hidden">
 <!-- Background Decorative Element -->
 <div class="absolute inset-0 pointer-events-none opacity-20 dark:opacity-10">
 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-container blur-[120px]"></div>
 <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-tertiary blur-[120px]"></div>
 </div>
 <!-- Login Container -->
-<div class="w-full max-w-[440px] z-10">
+<div class="w-full max-w-md z-10">
 <!-- Brand Anchor -->
 <div class="text-center mb-10">
 <a href="{% url 'landing' %}" class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container text-on-primary-container mb-6 shadow-xl shadow-primary/10">
@@ -113,14 +113,14 @@
 </main>
 <!-- Shared Footer Anchor -->
 <footer class="w-full py-8 border-t border-slate-200/10 bg-[#f7f9fb] dark:bg-slate-950">
-<div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto">
-<div class="text-[#24389c] dark:text-[#3f51b5] font-['Inter'] text-xs uppercase tracking-widest mb-4 md:mb-0">
+<div class="flex flex-col md:flex-row justify-between items-center px-4 sm:px-8 w-full max-w-7xl mx-auto gap-4">
+<div class="text-[#24389c] dark:text-[#3f51b5] font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest text-center md:text-left">
                 © 2024 Engineering Editorial. Built for Precision.
             </div>
-<div class="flex gap-8">
-<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Terms</a>
-<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Privacy</a>
-<a class="text-slate-400 font-['Inter'] text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Documentation</a>
+<div class="flex flex-wrap justify-center gap-4 sm:gap-8">
+<a class="text-slate-400 font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Terms</a>
+<a class="text-slate-400 font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Privacy</a>
+<a class="text-slate-400 font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest hover:text-[#24389c] dark:hover:text-white transition-colors" href="#">Docs</a>
 </div>
 </div>
 </footer>

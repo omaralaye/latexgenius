@@ -55,7 +55,7 @@
 </aside>
 
 <!-- Main Content -->
-<main class="md:ml-64 pt-20 pb-12 px-6 md:px-12">
+<main class="md:ml-64 min-h-screen flex flex-col">
     <!-- Top Nav Replacement for this layout -->
     <header class="bg-slate-50/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-8">
@@ -77,14 +77,15 @@
         </div>
     </header>
 
-    <!-- Header Section -->
-    <header class="mb-12 mt-8 max-w-4xl">
-        <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">The Engineering Editorial</h2>
-        <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
-    </header>
+    <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
+        <!-- Header Section -->
+        <header class="mb-12 max-w-4xl">
+            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">The Engineering Editorial</h2>
+            <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
+        </header>
 
-    <!-- Bento-Style Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Bento-Style Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {% for template in templates %}
         <div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow border border-outline-variant/15 hover:-translate-y-1 transition-all duration-300">
             <div class="h-64 overflow-hidden bg-surface-container-high relative">
@@ -165,6 +166,7 @@
             </div>
         </div>
     </section>
+    </div>
 </main>
 
 <!-- BottomNavBar (Mobile Only) -->

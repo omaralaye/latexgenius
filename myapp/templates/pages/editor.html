@@ -65,23 +65,23 @@
 </aside>
 
 <!-- Main Content Canvas -->
-<main class="md:ml-64 h-screen flex flex-col">
+<main class="md:ml-64 min-h-screen flex flex-col">
     <!-- TopAppBar -->
-    <header class="bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant/10 z-40">
+    <header class="bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant/10 z-40">
         <div class="flex items-center gap-4">
             <h2 class="text-xl font-bold tracking-tighter text-indigo-900">Editor</h2>
-            <div class="h-4 w-[1px] bg-outline-variant/30"></div>
-            <p class="text-sm font-medium text-on-surface-variant">{{ project.title }} ({{ project.filename }})</p>
+            <div class="h-4 w-[1px] bg-outline-variant/30 hidden sm:block"></div>
+            <p class="text-sm font-medium text-on-surface-variant hidden sm:block truncate max-w-[200px]">{{ project.title }}</p>
         </div>
-        <div class="flex items-center gap-3">
-            <div class="relative hidden sm:block">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="relative hidden lg:block">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
-                <input class="pl-10 pr-4 py-1.5 bg-surface-container-highest/50 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20" placeholder="Search documentation..." type="text"/>
+                <input class="pl-10 pr-4 py-1.5 bg-surface-container-highest/50 border-none rounded-full text-sm w-48 xl:w-64 focus:ring-2 focus:ring-primary/20" placeholder="Search..." type="text"/>
             </div>
             <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
                 <span class="material-symbols-outlined">notifications</span>
             </button>
-            <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+            <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors hidden sm:block">
                 <span class="material-symbols-outlined">settings</span>
             </button>
              <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
@@ -91,34 +91,36 @@
     </header>
 
     <!-- Utility Bar -->
-    <div class="bg-surface-container-low px-6 py-2 flex items-center justify-between border-b border-outline-variant/5">
+    <div class="bg-surface-container-low px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/5">
         <div class="flex items-center gap-2">
-            <button class="flex items-center gap-2 px-4 py-2 bg-white text-on-surface text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
+            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-on-surface text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
                 <span class="material-symbols-outlined text-sm">upload_file</span>
-                Replace Source
+                <span class="hidden xs:inline">Replace Source</span>
+                <span class="xs:hidden">Replace</span>
             </button>
-            <div class="h-6 w-[1px] mx-2 bg-outline-variant/30"></div>
-            <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
+            <div class="h-6 w-[1px] mx-1 bg-outline-variant/30"></div>
+            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">bolt</span>
                 Compile
             </button>
         </div>
         <div class="flex items-center gap-2">
-            <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface text-sm font-medium rounded-lg hover:bg-surface-dim transition-all">
+            <button class="hidden sm:flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface text-sm font-medium rounded-lg hover:bg-surface-dim transition-all">
                 <span class="material-symbols-outlined text-sm">history</span>
                 Versions
             </button>
-            <button class="flex items-center gap-2 px-4 py-2 bg-tertiary text-white text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
+            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-tertiary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">download</span>
-                Download .tex
+                <span class="hidden xs:inline">Download .tex</span>
+                <span class="xs:hidden">.tex</span>
             </button>
         </div>
     </div>
 
     <!-- Conversion Split View -->
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
         <!-- Left Side: Source Area -->
-        <section class="flex-1 flex flex-col bg-surface border-r border-outline-variant/10 overflow-hidden">
+        <section class="flex-1 flex flex-col bg-surface border-b md:border-b-0 md:border-r border-outline-variant/10 overflow-hidden">
             <div class="p-4 flex items-center justify-between bg-surface-container-lowest/40">
                 <span class="text-xs font-bold uppercase tracking-widest text-outline">Source Content</span>
                 <div class="flex gap-1">
@@ -156,7 +158,7 @@
         </section>
 
         <!-- Right Side: LaTeX Preview Area -->
-        <section class="flex-1 flex flex-col bg-[#1e1e1e] overflow-hidden">
+        <section class="flex-1 flex flex-col bg-[#1e1e1e] overflow-hidden min-h-[300px]">
             <div class="p-4 flex items-center justify-between bg-black/30">
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold uppercase tracking-widest text-slate-400">LaTeX Source</span>
