@@ -3,12 +3,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
-from .models import Template, Project
+from .models import Template, Project, AppSetting, Feature, Statistic, Testimonial
 
 User = get_user_model()
 
+def get_app_settings():
+    settings = AppSetting.objects.all()
+    return {s.key: s.value for s in settings}
+
 def landing_page(request):
-    return render(request, 'pages/landingpage.html')
+    features = Feature.objects.all()
+    templates = Template.objects.all()[:4] # Only show 4 templates on landing
+    context = {
+        'features': features,
+        'templates': templates,
+        'app_settings': get_app_settings(),
+    }
+    return render(request, 'pages/landingpage.html', context)
 
 def login_page(request):
     if request.method == 'POST':
@@ -71,6 +82,7 @@ def dashboard_page(request):
         'total_projects': total_projects,
         'recent_activity': recent_activity,
         'shared_projects': shared_projects,
+        'app_settings': get_app_settings(),
     }
     return render(request, 'pages/dashboardpage.html', context)
 
@@ -96,7 +108,12 @@ def editor_page(request, project_id=None):
 
 def templates_page(request):
     templates = Template.objects.all()
+    stats = Statistic.objects.all()
+    testimonial = Testimonial.objects.first()
     context = {
-        'templates': templates
+        'templates': templates,
+        'stats': stats,
+        'testimonial': testimonial,
+        'app_settings': get_app_settings(),
     }
     return render(request, 'pages/templatespage.html', context)
