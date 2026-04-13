@@ -18,8 +18,8 @@
             <span class="material-symbols-outlined">terminal</span>
         </div>
         <div>
-            <div class="font-headline text-lg font-black text-indigo-900">TexPrecision</div>
-            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">V2.4.0</div>
+            <div class="font-headline text-lg font-black text-indigo-900">{{ app_settings.app_name|default:"TexPrecision" }}</div>
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{{ app_settings.app_version|default:"V2.4.0" }}</div>
         </div>
     </div>
     <div class="flex flex-col gap-1">
@@ -59,7 +59,7 @@
     <!-- Top Nav Replacement for this layout -->
     <header class="bg-slate-50/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-8">
-            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">TexPrecision</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">{{ app_settings.app_name|default:"TexPrecision" }}</h1>
             <nav class="hidden md:flex gap-6">
                 <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
@@ -83,6 +83,11 @@
             <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">The Engineering Editorial</h2>
             <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
         </header>
+    <!-- Header Section -->
+    <header class="mb-12 mt-8 max-w-4xl">
+        <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">{{ app_settings.template_section_title|default:"The Engineering Editorial" }}</h2>
+        <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
+    </header>
 
         <!-- Bento-Style Grid -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -141,28 +146,28 @@
             </div>
         </div>
         <div class="lg:col-span-7 flex flex-col gap-6">
+            {% if testimonial %}
             <div class="bg-surface-container-low p-10 rounded-2xl border-l-8 border-primary">
                 <h5 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">The Curator's Note</h5>
-                <p class="font-headline text-2xl leading-tight text-on-surface italic">"Precision is not an afterthought; it is the infrastructure upon which technical credibility is built."</p>
+                <p class="font-headline text-2xl leading-tight text-on-surface italic">"{{ testimonial.quote }}"</p>
                 <div class="mt-8 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden grayscale">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRc_j-a-vwdkVznB6ziMlKL3BjB_aAcBtlmqQp8JYvX1lPsyX7oVWXU1BY3T33jSZYUsk1s2C9hM6zMlWb5wlgqxuL6pJTNSQfWcKDPvMeuBuhmu_6k35AnjgpGK7wgV7WXzGjDYYwgsuM-kdsw-P4zrrwhD972Z7omJAg3uqU4JRPWdK1Uo9TJo2HcLOu06XoHA8WDh3XTlFdI71me0kYUJsJNQtObcp8X8l8RiTm9jq7-MZtv2IBgmg0Izgq6Ls-ZW3e1BU32g" class="w-full h-full object-cover">
+                        <img src="{{ testimonial.image_url }}" class="w-full h-full object-cover" alt="{{ testimonial.name }}">
                     </div>
                     <div>
-                        <p class="text-on-surface font-bold">Arthur P. Vance</p>
-                        <p class="text-xs text-on-surface-variant">Lead Systems Architect, TexPrecision</p>
+                        <p class="text-on-surface font-bold">{{ testimonial.name }}</p>
+                        <p class="text-xs text-on-surface-variant">{{ testimonial.role }}</p>
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="grid grid-cols-2 gap-6">
+                {% for stat in stats %}
                 <div class="bg-white p-6 rounded-2xl editorial-shadow">
-                    <div class="text-4xl font-headline font-black text-primary mb-2">15k+</div>
-                    <p class="text-sm text-on-surface-variant font-medium">Research papers published using our standard journal template.</p>
+                    <div class="text-4xl font-headline font-black text-primary mb-2">{{ stat.value }}</div>
+                    <p class="text-sm text-on-surface-variant font-medium">{{ stat.description }}</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl editorial-shadow">
-                    <div class="text-4xl font-headline font-black text-tertiary mb-2">99.9%</div>
-                    <p class="text-sm text-on-surface-variant font-medium">Compilation success rate for complex LaTeX-heavy bibliographies.</p>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
