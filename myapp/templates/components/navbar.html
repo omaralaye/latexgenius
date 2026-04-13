@@ -1,6 +1,6 @@
 <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
-        <a href="{% url 'landing' %}" class="text-xl font-bold tracking-tighter text-primary font-headline">The Engineering Editorial</a>
+        <a href="{% url 'landing' %}" class="text-xl font-bold tracking-tighter text-primary font-headline">{{ app_settings.app_name|default:"The Engineering Editorial" }}</a>
         <div class="hidden md:flex gap-8 items-center">
             <a class="font-headline font-bold tracking-tight text-sm uppercase {% if request.resolver_match.url_name == 'landing' %}text-primary border-b-2 border-primary pb-1{% else %}text-slate-600 hover:text-primary transition-colors duration-200{% endif %}" href="{% url 'landing' %}">Features</a>
             <a class="font-headline font-bold tracking-tight text-sm uppercase {% if request.resolver_match.url_name == 'templates' %}text-primary border-b-2 border-primary pb-1{% else %}text-slate-600 hover:text-primary transition-colors duration-200{% endif %}" href="{% url 'templates' %}">Templates</a>

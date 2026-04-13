@@ -10,6 +10,47 @@ class Template(models.Model):
     def __str__(self):
         return self.name
 
+class AppSetting(models.Model):
+    key = models.CharField(max_length=50, unique=True)
+    value = models.TextField()
+    description = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.key
+
+class Feature(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, help_text="Material symbol name")
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+class Statistic(models.Model):
+    label = models.CharField(max_length=100)
+    value = models.CharField(max_length=50)
+    description = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.label
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    quote = models.TextField()
+    image_url = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class Project(models.Model):
     STATUS_CHOICES = [
         ('compiled', 'Compiled'),
