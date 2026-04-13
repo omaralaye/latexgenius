@@ -1,7 +1,7 @@
 <nav class="fixed top-0 w-full z-50 glass-nav border-b border-outline-variant/10">
     <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4 gap-4">
-            <a href="{% url 'landing' %}" class="text-xl font-bold tracking-tighter text-primary font-headline shrink-0">The Engineering Editorial</a>
+            <a href="{% url 'landing' %}" class="text-xl font-bold tracking-tighter text-primary font-headline shrink-0">{{ app_settings.app_name|default:"The Engineering Editorial" }}</a>
 
             <div class="hidden md:flex flex-1 justify-center gap-8 items-center">
                 <a class="font-headline font-bold tracking-tight text-sm uppercase {% if request.resolver_match.url_name == 'landing' %}text-primary border-b-2 border-primary pb-1{% else %}text-slate-600 hover:text-primary transition-colors duration-200{% endif %}" href="{% url 'landing' %}">Features</a>
@@ -12,26 +12,11 @@
             <div class="flex items-center gap-4 shrink-0">
                 {% if user.is_authenticated %}
                     <a href="{% url 'dashboard' %}" class="bg-primary hover:opacity-80 active:scale-[0.98] transition-all px-4 sm:px-6 py-2 rounded font-headline font-bold text-xs sm:text-sm uppercase text-on-primary whitespace-nowrap">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-headline font-bold text-sm uppercase">Logout</a>
+                    <a href="{% url 'logout' %}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-headline font-bold text-sm uppercase ml-4">Logout</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="bg-primary hover:opacity-80 active:scale-[0.98] transition-all px-4 sm:px-6 py-2 rounded font-headline font-bold text-xs sm:text-sm uppercase text-on-primary whitespace-nowrap">Sign In</a>
                 {% endif %}
             </div>
-<nav class="fixed top-0 w-full z-50 glass-nav">
-    <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
-        <a href="{% url 'landing' %}" class="text-xl font-bold tracking-tighter text-primary font-headline">{{ app_settings.app_name|default:"The Engineering Editorial" }}</a>
-        <div class="hidden md:flex gap-8 items-center">
-            <a class="font-headline font-bold tracking-tight text-sm uppercase {% if request.resolver_match.url_name == 'landing' %}text-primary border-b-2 border-primary pb-1{% else %}text-slate-600 hover:text-primary transition-colors duration-200{% endif %}" href="{% url 'landing' %}">Features</a>
-            <a class="font-headline font-bold tracking-tight text-sm uppercase {% if request.resolver_match.url_name == 'templates' %}text-primary border-b-2 border-primary pb-1{% else %}text-slate-600 hover:text-primary transition-colors duration-200{% endif %}" href="{% url 'templates' %}">Templates</a>
-            <a class="font-headline font-bold tracking-tight text-sm uppercase text-slate-600 hover:text-primary transition-colors duration-200" href="#">Pricing</a>
-        </div>
-        <div class="flex items-center gap-4">
-            {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="bg-primary hover:opacity-80 active:scale-[0.98] transition-all px-6 py-2 rounded font-headline font-bold text-sm uppercase text-on-primary">Dashboard</a>
-                <a href="{% url 'logout' %}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-headline font-bold text-sm uppercase">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="bg-primary hover:opacity-80 active:scale-[0.98] transition-all px-6 py-2 rounded font-headline font-bold text-sm uppercase text-on-primary">Sign In</a>
-            {% endif %}
         </div>
     </div>
 </nav>
