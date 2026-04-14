@@ -11,3 +11,6 @@ local_settings.py
 
 # Others:
 .DS_Store
+
+#api
+.env
