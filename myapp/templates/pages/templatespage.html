@@ -35,6 +35,10 @@
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
             <span class="font-body text-sm font-medium">Templates</span>
         </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'settings' %}">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-body text-sm font-medium">Settings</span>
+        </a>
     </div>
     <div class="mt-auto flex flex-col gap-1">
         <div class="bg-indigo-900 rounded-xl p-4 mb-4 text-white">
@@ -70,9 +74,9 @@
             <button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
                 <span class="material-symbols-outlined">notifications</span>
             </button>
-            <button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
+            <a href="{% url 'settings' %}" class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
                 <span class="material-symbols-outlined">settings</span>
-            </button>
+            </a>
             <button class="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2 rounded-lg font-medium text-sm transition-transform active:scale-95">New Project</button>
         </div>
     </header>
@@ -183,9 +187,9 @@
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
         <span class="text-[10px] font-bold">Templates</span>
     </a>
-    <button class="flex flex-col items-center gap-1 text-slate-500">
+    <a href="{% url 'settings' %}" class="flex flex-col items-center gap-1 text-slate-500">
         <span class="material-symbols-outlined">settings</span>
         <span class="text-[10px] font-bold">Settings</span>
-    </button>
+    </a>
 </nav>
 {% endblock %}

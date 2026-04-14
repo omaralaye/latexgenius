@@ -61,9 +61,13 @@ def get_templates(limit=None):
 
 # Settings
 def get_all_settings():
-    cursor = settings_col.find({})
-    settings = {doc["key"]: doc["value"] for doc in cursor}
-    return settings
+    try:
+        cursor = settings_col.find({})
+        settings = {doc["key"]: doc["value"] for doc in cursor}
+        return settings
+    except Exception as e:
+        print(f"Error fetching settings: {e}")
+        return {}
 
 # Features
 def get_features():
