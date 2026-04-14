@@ -98,6 +98,15 @@ def dashboard_page(request):
     return render(request, 'pages/dashboardpage.html', context)
 
 @login_required
+def settings_page(request):
+    context = {
+        'app_settings': services.get_all_settings(),
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/settings.html', context)
+
+@login_required
 def editor_page(request, project_id=None):
     if project_id:
         try:
