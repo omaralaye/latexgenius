@@ -33,6 +33,10 @@
             <span class="material-symbols-outlined">library_books</span>
             <span class="font-body text-sm font-medium">Templates</span>
         </a>
+        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all" href="{% url 'settings' %}">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-body text-sm font-medium">Settings</span>
+        </a>
     </nav>
     <div class="mt-auto flex flex-col gap-1 border-t border-slate-200 pt-4">
         <div class="bg-indigo-50 rounded-xl p-4 mb-4">
@@ -70,9 +74,9 @@
                 <button class="p-1 sm:p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
                     <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
                 </button>
-                <button class="hidden sm:block p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+                <a href="{% url 'settings' %}" class="hidden sm:block p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
                     <span class="material-symbols-outlined">settings</span>
-                </button>
+                </a>
                 <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
                      <span class="material-symbols-outlined text-indigo-600">person</span>
                 </div>
