@@ -23,3 +23,5 @@ types-python-dateutil==2.9.0.20260408
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 wrapt==2.1.2
+pymongo
+python-dotenv
