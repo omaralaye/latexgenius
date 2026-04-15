@@ -25,3 +25,4 @@ typing_extensions==4.15.0
 wrapt==2.1.2
 pymongo
 python-dotenv
+httpx

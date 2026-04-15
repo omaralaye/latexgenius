@@ -97,13 +97,12 @@
     <!-- Utility Bar -->
     <div class="bg-surface-container-low px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/5">
         <div class="flex items-center gap-2">
-            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-on-surface text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
-                <span class="material-symbols-outlined text-sm">upload_file</span>
-                <span class="hidden xs:inline">Replace Source</span>
-                <span class="xs:hidden">Replace</span>
+            <button id="save-button" onclick="saveProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-on-surface text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
+                <span class="material-symbols-outlined text-sm">save</span>
+                <span class="hidden xs:inline">Save</span>
             </button>
             <div class="h-6 w-[1px] mx-1 bg-outline-variant/30"></div>
-            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
+            <button id="compile-button" onclick="compileProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">bolt</span>
                 Compile
             </button>
@@ -113,7 +112,7 @@
                 <span class="material-symbols-outlined text-sm">history</span>
                 Versions
             </button>
-            <button class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-tertiary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
+            <button onclick="downloadTex()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-tertiary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">download</span>
                 <span class="hidden xs:inline">Download .tex</span>
                 <span class="xs:hidden">.tex</span>
@@ -166,10 +165,10 @@
             <div class="p-4 flex items-center justify-between bg-black/30">
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold uppercase tracking-widest text-slate-400">LaTeX Source</span>
-                    <span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded border border-indigo-500/30">LIVE COMPILE</span>
+                    <span id="status-badge" class="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded border border-indigo-500/30">READY</span>
                 </div>
                 <div class="flex gap-2">
-                    <button class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
+                    <button onclick="copyToClipboard()" class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
                         <span class="material-symbols-outlined text-lg">content_copy</span>
                     </button>
                     <button class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
@@ -177,8 +176,8 @@
                     </button>
                 </div>
             </div>
-            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar">
-                <pre class="text-sm leading-relaxed text-slate-300"><code>{{ project.content }}</code></pre>
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <textarea id="latex-editor" class="flex-1 w-full p-6 bg-transparent text-sm leading-relaxed text-slate-300 font-mono focus:ring-0 border-none resize-none custom-scrollbar outline-none" spellcheck="false">{{ project.content }}</textarea>
             </div>
             <!-- Live Notification -->
             <div class="px-6 py-3 bg-tertiary-container/20 border-t border-tertiary-container/30 flex items-center gap-3">
@@ -193,6 +192,102 @@
 </main>
 
 <script>
+    const projectId = "{{ project.id }}";
+    const editor = document.getElementById('latex-editor');
+    const statusBadge = document.getElementById('status-badge');
+    const statusText = document.querySelector('.text-tertiary-fixed');
+
+    async function saveProject() {
+        const saveBtn = document.getElementById('save-button');
+        const originalHtml = saveBtn.innerHTML;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Saving...';
+
+        try {
+            const response = await fetch(`/editor/${projectId}/save/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    content: editor.value
+                })
+            });
+
+            if (response.ok) {
+                statusBadge.textContent = 'SAVED';
+                statusBadge.classList.replace('bg-indigo-500/20', 'bg-emerald-500/20');
+                statusBadge.classList.replace('text-indigo-400', 'text-emerald-400');
+                statusBadge.classList.replace('border-indigo-500/30', 'border-emerald-500/30');
+            }
+        } catch (error) {
+            console.error('Save failed:', error);
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalHtml;
+        }
+    }
+
+    async function compileProject() {
+        const compileBtn = document.getElementById('compile-button');
+        const originalHtml = compileBtn.innerHTML;
+
+        // Auto-save before compiling
+        await saveProject();
+
+        compileBtn.disabled = true;
+        compileBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Compiling...';
+        statusText.textContent = 'Compiling via LaTeX.Online...';
+
+        try {
+            window.location.href = `/editor/${projectId}/compile/`;
+
+            // Note: Since location.href trigger a download, the page won't refresh.
+            // We'll reset the button state after a delay as a heuristic.
+            setTimeout(() => {
+                compileBtn.disabled = false;
+                compileBtn.innerHTML = originalHtml;
+                statusText.textContent = 'Compilation request sent.';
+            }, 3000);
+        } catch (error) {
+            statusText.textContent = 'Error: ' + error.message;
+            compileBtn.disabled = false;
+            compileBtn.innerHTML = originalHtml;
+        }
+    }
+
+    function downloadTex() {
+        const blob = new Blob([editor.value], { type: 'text/x-tex' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'main.tex';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    function copyToClipboard() {
+        navigator.clipboard.writeText(editor.value);
+        alert('LaTeX code copied to clipboard!');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     function initializeEditorClerk() {
         if (!window.Clerk) return;
         const userButtonDiv = document.getElementById('user-button');
