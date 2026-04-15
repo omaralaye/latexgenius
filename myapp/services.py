@@ -4,7 +4,7 @@ from .models import Project, Template, AppSetting, Feature, Statistic, Testimoni
 from django.contrib.auth.models import User
 
 def serialize_project(project):
-    if project is None:
+    if project is None or not project.id:
         return None
     return {
         "id": str(project.id),
@@ -13,7 +13,7 @@ def serialize_project(project):
         "content": project.content,
         "filename": project.filename,
         "status": project.status,
-        "last_modified": project.last_modified.isoformat(),
+        "last_modified": project.last_modified,
         "collaborator_ids": [u.id for u in project.collaborators.all()]
     }
 
@@ -82,7 +82,7 @@ def get_projects(filter_query=None, sort=None, limit=None):
         queryset = queryset.order_by(*sort_args)
     if limit:
         queryset = queryset[:limit]
-    return [serialize_project(p) for p in queryset]
+    return [serialized for p in queryset if (serialized := serialize_project(p))]
 
 def get_user_projects(owner_id):
     return get_projects({"owner_id": owner_id}, sort=[("last_modified", -1)])

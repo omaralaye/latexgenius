@@ -141,6 +141,7 @@
                 </div>
 
                 {% for project in projects %}
+                {% if project.id %}
                 <a href="{% url 'editor_with_id' project.id %}" class="group grid grid-cols-12 items-center px-6 py-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-all cursor-pointer shadow-sm">
                     <div class="col-span-6 flex items-center gap-4">
                         <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
@@ -168,6 +169,7 @@
                         <p class="text-xs font-medium">{{ project.last_modified|timesince }} ago</p>
                     </div>
                 </a>
+                {% endif %}
                 {% empty %}
                 <div class="p-12 text-center bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant/30">
                      <p class="text-on-surface-variant">No projects found. Create your first project to get started!</p>
