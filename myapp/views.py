@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.http import JsonResponse
+from django.utils import timezone
 from . import services
 from datetime import datetime
 
@@ -74,9 +75,8 @@ def dashboard_page(request):
 
     recent_activity = "N/A"
     if projects:
-        last_modified_str = projects[0]['last_modified']
-        last_modified = datetime.fromisoformat(last_modified_str)
-        diff = datetime.utcnow() - last_modified
+        last_modified = projects[0]['last_modified']
+        diff = timezone.now() - last_modified
         if diff.days > 0:
             recent_activity = f"{diff.days}d ago"
         elif diff.seconds // 3600 > 0:
