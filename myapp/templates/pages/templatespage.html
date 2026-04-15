@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Template Selection | TexPrecision{% endblock %}
+{% block title %}Template Selection | LaTeXGenius{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -18,8 +18,8 @@
             <span class="material-symbols-outlined">terminal</span>
         </div>
         <div>
-            <div class="font-headline text-lg font-black text-indigo-900">{{ app_settings.app_name|default:"TexPrecision" }}</div>
-            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{{ app_settings.app_version|default:"V2.4.0" }}</div>
+            <div class="font-headline text-lg font-black text-indigo-900">{{ app_settings.app_name|default:"LaTeXGenius" }}</div>
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{{ app_settings.app_version|default:"V1.0.0" }}</div>
         </div>
     </div>
     <div class="flex flex-col gap-1">
@@ -42,7 +42,7 @@
     </div>
     <div class="mt-auto flex flex-col gap-1">
         <div class="bg-indigo-900 rounded-xl p-4 mb-4 text-white">
-            <p class="text-xs font-medium text-indigo-200 mb-2">PRO FEATURES ACTIVE</p>
+            <p class="text-xs font-medium text-indigo-200 mb-2">PRO FEATURES ACTIVE (COMING SOON)</p>
             <p class="text-sm font-headline font-bold mb-3">Upgrade to Pro</p>
             <button class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 transition-colors rounded-lg text-xs font-bold">Get 1 Month Free</button>
         </div>
@@ -63,7 +63,7 @@
     <!-- Top Nav Replacement for this layout -->
     <header class="bg-slate-50/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-8">
-            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">{{ app_settings.app_name|default:"TexPrecision" }}</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
             <nav class="hidden md:flex gap-6">
                 <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
@@ -112,14 +112,14 @@
     <section class="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         <div class="lg:col-span-5">
             <div class="bg-primary-container/10 p-8 rounded-2xl">
-                <h4 class="font-headline text-2xl font-bold text-primary mb-6">Engineered for Accuracy</h4>
+                <h4 class="font-headline text-2xl font-bold text-primary mb-6">Built for Accuracy</h4>
                 <ul class="space-y-6">
                     <li class="flex items-start gap-4">
                         <div class="p-2 bg-white rounded-lg editorial-shadow">
                             <span class="material-symbols-outlined text-primary">functions</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">LaTeX Native Engine</p>
+                            <p class="font-bold text-on-surface mb-1">LaTeX Native Engine (Coming Soon)</p>
                             <p class="text-sm text-on-surface-variant text-justify">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
                         </div>
                     </li>
@@ -128,7 +128,7 @@
                             <span class="material-symbols-outlined text-primary">source</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">Versioned Templates</p>
+                            <p class="font-bold text-on-surface mb-1">Versioned Templates (Coming Soon)</p>
                             <p class="text-sm text-on-surface-variant text-justify">Access legacy and updated versions of industry-standard document specifications.</p>
                         </div>
                     </li>
@@ -137,7 +137,7 @@
                             <span class="material-symbols-outlined text-primary">auto_awesome</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">Smart Formatting</p>
+                            <p class="font-bold text-on-surface mb-1">Smart Formatting (Coming Soon)</p>
                             <p class="text-sm text-on-surface-variant text-justify">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
                         </div>
                     </li>

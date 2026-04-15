@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}TexPrecision Dashboard{% endblock %}
+{% block title %}LaTeXGenius Dashboard{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -62,7 +62,7 @@
     <!-- TopAppBar -->
     <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant/5">
         <div class="flex items-center gap-4">
-            <h1 class="text-xl font-bold tracking-tighter text-indigo-900">{{ app_settings.app_name|default:"TexPrecision" }}</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-indigo-900">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
         </div>
         <div class="flex items-center gap-2 sm:gap-4">
             <a href="{% url 'editor' %}" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:opacity-90 active:scale-95 transition-all">
@@ -185,11 +185,11 @@
                     <div class="space-y-2">
                         <button class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
                             <span class="material-symbols-outlined text-primary">cloud_upload</span>
-                            Upload .zip Archive
+                            Upload .zip Archive (Coming Soon)
                         </button>
                         <button class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
                             <span class="material-symbols-outlined text-primary">token</span>
-                            Generate API Key
+                            Generate API Key (Coming Soon)
                         </button>
                         <a href="{% url 'templates' %}" class="w-full flex items-center gap-3 p-3 bg-surface-container-lowest hover:bg-surface-bright rounded-lg text-sm font-semibold text-on-surface-variant transition-all text-left">
                             <span class="material-symbols-outlined text-primary">auto_awesome</span>
