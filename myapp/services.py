@@ -1,69 +1,137 @@
-from bson import ObjectId
 from datetime import datetime
-from .db import projects_col, templates_col, settings_col, features_col, statistics_col, testimonials_col
+from django.utils import timezone
+from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial
+from django.contrib.auth.models import User
 
-def serialize_doc(doc):
-    if doc is None:
+def serialize_project(project):
+    if project is None:
         return None
-    doc["_id"] = str(doc["_id"])
-    if "last_modified" in doc and isinstance(doc["last_modified"], datetime):
-        doc["last_modified"] = doc["last_modified"].isoformat()
-    return doc
+    return {
+        "id": str(project.id),
+        "owner_id": project.owner_id,
+        "title": project.title,
+        "content": project.content,
+        "filename": project.filename,
+        "status": project.status,
+        "last_modified": project.last_modified.isoformat(),
+        "collaborator_ids": [u.id for u in project.collaborators.all()]
+    }
 
-def serialize_cursor(cursor):
-    return [serialize_doc(doc) for doc in cursor]
+def serialize_template(template):
+    if template is None:
+        return None
+    return {
+        "id": str(template.id),
+        "name": template.name,
+        "category": template.category,
+        "image_url": template.image_url,
+        "content": template.content
+    }
+
+def serialize_feature(feature):
+    return {
+        "id": str(feature.id),
+        "title": feature.title,
+        "description": feature.description,
+        "icon": feature.icon,
+        "order": feature.order
+    }
+
+def serialize_statistic(stat):
+    return {
+        "id": str(stat.id),
+        "label": stat.label,
+        "value": stat.value,
+        "description": stat.description,
+        "order": stat.order
+    }
+
+def serialize_testimonial(testimonial):
+    return {
+        "id": str(testimonial.id),
+        "name": testimonial.name,
+        "role": testimonial.role,
+        "quote": testimonial.quote,
+        "image_url": testimonial.image_url
+    }
 
 # Projects CRUD
 def create_project(owner_id, title, content, filename='main.tex', status='draft'):
-    data = {
-        "owner_id": owner_id,
-        "title": title,
-        "content": content,
-        "filename": filename,
-        "status": status,
-        "last_modified": datetime.utcnow(),
-        "collaborator_ids": []
-    }
-    result = projects_col.insert_one(data)
-    return str(result.inserted_id)
+    user = User.objects.get(id=owner_id)
+    project = Project.objects.create(
+        owner=user,
+        title=title,
+        content=content,
+        filename=filename,
+        status=status
+    )
+    return str(project.id)
 
 def get_projects(filter_query=None, sort=None, limit=None):
-    cursor = projects_col.find(filter_query or {})
+    queryset = Project.objects.all().prefetch_related('collaborators')
+    if filter_query:
+        # Compatibility with the previous dict-based filter_query used by MongoDB
+        # Views currently use: get_projects({"owner_id": owner_id}, sort=[("last_modified", -1)])
+        # which translates well to Django's .filter(**{"owner_id": owner_id})
+        queryset = queryset.filter(**filter_query)
     if sort:
-        cursor = cursor.sort(sort)
+        sort_args = []
+        for field, direction in sort:
+            prefix = '-' if direction == -1 else ''
+            sort_args.append(f"{prefix}{field}")
+        queryset = queryset.order_by(*sort_args)
     if limit:
-        cursor = cursor.limit(limit)
-    return serialize_cursor(cursor)
+        queryset = queryset[:limit]
+    return [serialize_project(p) for p in queryset]
 
 def get_user_projects(owner_id):
     return get_projects({"owner_id": owner_id}, sort=[("last_modified", -1)])
 
 def get_shared_projects_count(user_id):
-    return projects_col.count_documents({"collaborator_ids": user_id})
+    return Project.objects.filter(collaborators__id=user_id).count()
 
 def get_project_by_id(project_id):
-    doc = projects_col.find_one({"_id": ObjectId(project_id)})
-    return serialize_doc(doc)
+    try:
+        project = Project.objects.prefetch_related('collaborators').get(id=project_id)
+        return serialize_project(project)
+    except (Project.DoesNotExist, ValueError):
+        return None
 
 def update_project(project_id, update_data):
-    update_data["last_modified"] = datetime.utcnow()
-    projects_col.update_one({"_id": ObjectId(project_id)}, {"$set": update_data})
+    try:
+        project = Project.objects.get(id=project_id)
+
+        collaborator_ids = update_data.pop('collaborator_ids', None)
+
+        for key, value in update_data.items():
+            setattr(project, key, value)
+
+        # Explicitly update last_modified just in case, though auto_now=True handles it on save()
+        project.last_modified = timezone.now()
+        project.save()
+
+        if collaborator_ids is not None:
+            project.collaborators.set(User.objects.filter(id__in=collaborator_ids))
+    except (Project.DoesNotExist, ValueError):
+        pass
 
 def delete_project(project_id):
-    projects_col.delete_one({"_id": ObjectId(project_id)})
+    try:
+        Project.objects.filter(id=project_id).delete()
+    except ValueError:
+        pass
 
 # Templates
 def get_templates(limit=None):
-    cursor = templates_col.find({})
+    queryset = Template.objects.all()
     if limit:
-        cursor = cursor.limit(limit)
-    return serialize_cursor(cursor)
+        queryset = queryset[:limit]
+    return [serialize_template(t) for t in queryset]
 
 # Settings
 def get_all_settings():
     try:
-        cursor = settings_col.find({})
-        settings = {doc["key"]: doc["value"] for doc in cursor}
+        settings = {s.key: s.value for s in AppSetting.objects.all()}
         return settings
     except Exception as e:
         print(f"Error fetching settings: {e}")
@@ -71,12 +139,12 @@ def get_all_settings():
 
 # Features
 def get_features():
-    return serialize_cursor(features_col.find({}).sort("order", 1))
+    return [serialize_feature(f) for f in Feature.objects.all().order_by('order')]
 
 # Statistics
 def get_statistics():
-    return serialize_cursor(statistics_col.find({}).sort("order", 1))
+    return [serialize_statistic(s) for s in Statistic.objects.all().order_by('order')]
 
 # Testimonials
 def get_testimonials():
-    return serialize_cursor(testimonials_col.find({}))
+    return [serialize_testimonial(t) for t in Testimonial.objects.all()]
