@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from . import services
 from datetime import datetime
+import httpx
 
 User = get_user_model()
 
@@ -123,7 +124,7 @@ def editor_page(request, project_id=None):
             project_id = services.create_project(
                 owner_id=request.user.id,
                 title="Untitled Project",
-                content=r"\documentclass{article}\n\begin{document}\nHello World\n\end{document}"
+                content="\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}".replace('\\n', '\n')
             )
             project = services.get_project_by_id(project_id)
 
@@ -149,3 +150,58 @@ def templates_page(request):
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)
     return render(request, 'pages/templatespage.html', context)
+
+@login_required
+def save_project(request, project_id):
+    project = services.get_project_by_id(project_id)
+    if not project or project['owner_id'] != request.user.id:
+        return JsonResponse({"status": "error", "message": "Project not found or access denied."}, status=404)
+
+    if request.method == 'POST':
+        import json
+        try:
+            data = json.loads(request.body)
+            content = data.get('content')
+            title = data.get('title')
+        except json.JSONDecodeError:
+            content = request.POST.get('content')
+            title = request.POST.get('title')
+
+        update_data = {}
+        if content is not None:
+            update_data['content'] = content
+        if title is not None:
+            update_data['title'] = title
+
+        if update_data:
+            services.update_project(project_id, update_data)
+            return JsonResponse({"status": "success"})
+
+    return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+
+@login_required
+def compile_project(request, project_id):
+    project = services.get_project_by_id(project_id)
+    if not project or project['owner_id'] != request.user.id:
+        return HttpResponse("Project not found or access denied.", status=404)
+
+    content = project['content']
+
+    try:
+        # We use a POST request to handle potentially large LaTeX content
+        # LaTeX.Online supports text compilation via the 'text' parameter
+        response = httpx.post(
+            "https://latexonline.cc/compile",
+            data={"text": content},
+            timeout=60.0
+        )
+
+        if response.status_code == 200:
+            pdf_response = HttpResponse(response.content, content_type='application/pdf')
+            pdf_response['Content-Disposition'] = f'attachment; filename="{project.get("filename", "document.pdf").replace(".tex", ".pdf")}"'
+            return pdf_response
+        else:
+            # On failure, LaTeX.Online often returns the log in the body
+            return HttpResponse(f"Compilation failed:\n\n{response.text}", content_type="text/plain", status=400)
+    except httpx.RequestError as e:
+        return HttpResponse(f"Error connecting to LaTeX.Online: {str(e)}", status=500)
