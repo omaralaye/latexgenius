@@ -2,54 +2,48 @@
 
 {% block title %}Template Selection | LaTeXGenius{% endblock %}
 
-{% block extra_head %}
-<style>
-    body {
-        background-color: #f7f9fb;
-    }
-</style>
-{% endblock %}
 
 {% block layout %}
 <!-- SideNavBar -->
-<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-100 p-4 gap-2 border-r border-transparent z-50">
+<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-50 dark:bg-slate-900 p-4 gap-2 border-r border-outline-variant dark:border-slate-800 z-50">
     <div class="flex items-center gap-3 mb-8 px-2 mt-2">
         <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
             <span class="material-symbols-outlined">terminal</span>
         </div>
         <div>
-            <div class="font-headline text-lg font-black text-indigo-900">{{ app_settings.app_name|default:"LaTeXGenius" }}</div>
+            <div class="font-headline text-lg font-black text-primary dark:text-white">{{ app_settings.app_name|default:"LaTeXGenius" }}</div>
             <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{{ app_settings.app_version|default:"V1.0.0" }}</div>
         </div>
     </div>
     <div class="flex flex-col gap-1">
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'dashboard' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'dashboard' %}">
             <span class="material-symbols-outlined">dashboard</span>
             <span class="font-body text-sm font-medium">Dashboard</span>
         </a>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'editor' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'editor' %}">
             <span class="material-symbols-outlined">terminal</span>
             <span class="font-body text-sm font-medium">Editor</span>
         </a>
-        <a class="flex items-center gap-3 bg-white text-indigo-700 rounded-lg px-4 py-3 shadow-sm border-l-4 border-indigo-600 translate-x-1 duration-200" href="{% url 'templates' %}">
+        <a class="flex items-center gap-3 bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg px-4 py-3 shadow-sm border-l-4 border-primary transition-all duration-200" href="{% url 'templates' %}">
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
             <span class="font-body text-sm font-medium">Templates</span>
         </a>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'settings' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'settings' %}">
             <span class="material-symbols-outlined">settings</span>
             <span class="font-body text-sm font-medium">Settings</span>
         </a>
     </div>
     <div class="mt-auto flex flex-col gap-1">
-        <div class="bg-indigo-900 rounded-xl p-4 mb-4 text-white">
-            <p class="text-xs font-medium text-indigo-200 mb-2">PRO FEATURES ACTIVE (COMING SOON)</p>
-            <p class="text-sm font-headline font-bold mb-3">Upgrade to Pro</p>
-            <button class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 transition-colors rounded-lg text-xs font-bold">Get 1 Month Free</button>
+        <div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
+            <p class="text-xs font-bold text-primary mb-1">PRO FEATURES (COMING SOON)</p>
+            <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-tight">Unlock unlimited compiles and custom PDF themes.</p>
+            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors">Upgrade to Pro</button>
         </div>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 transition-all" href="#">
-            <span class="material-symbols-outlined">help_outline</span>
-            <span class="font-body text-sm font-medium">Help</span>
-        </a>
+        <button onclick="toggleTheme()" class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white transition-all">
+            <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+            <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+            <span class="font-body text-sm font-medium">Theme</span>
+        </button>
         {% if user.is_authenticated %}
         <div class="px-4 py-3">
              <div id="user-button"></div>
@@ -59,50 +53,50 @@
 </aside>
 
 <!-- Main Content -->
-<main class="md:ml-64 min-h-screen flex flex-col">
+<main class="md:ml-64 min-h-screen flex flex-col bg-background dark:bg-slate-900 transition-colors duration-300">
     <!-- Top Nav Replacement for this layout -->
-    <header class="bg-slate-50/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant/5">
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant dark:border-slate-800">
         <div class="flex items-center gap-8">
-            <h1 class="text-xl font-bold tracking-tighter text-indigo-900 font-headline md:hidden">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white font-headline md:hidden">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
             <nav class="hidden md:flex gap-6">
-                <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="text-slate-500 hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
-                <a class="text-indigo-700 font-bold border-b-2 border-indigo-600 px-3 py-1" href="{% url 'templates' %}">Templates</a>
+                <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
+                <a class="text-primary dark:text-white font-bold border-b-2 border-primary px-3 py-1" href="{% url 'templates' %}">Templates</a>
             </nav>
         </div>
         <div class="flex items-center gap-4">
-            <button class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
+            <button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
                 <span class="material-symbols-outlined">notifications</span>
             </button>
-            <a href="{% url 'settings' %}" class="p-2 text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
+            <a href="{% url 'settings' %}" class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <button class="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2 rounded-lg font-medium text-sm transition-transform active:scale-95">New Project</button>
+            <button class="bg-primary text-white px-5 py-2 rounded-lg font-medium text-sm transition-all hover:bg-primary-variant">New Project</button>
         </div>
     </header>
 
     <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
         <!-- Header Section -->
         <header class="mb-12 mt-8 max-w-4xl">
-            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">{{ app_settings.template_section_title|default:"The Engineering Editorial" }}</h2>
-            <p class="text-on-surface-variant text-lg max-w-2xl font-body leading-relaxed text-justify">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
+            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface dark:text-white mb-4">{{ app_settings.template_section_title|default:"The Engineering Editorial" }}</h2>
+            <p class="text-on-surface-variant dark:text-slate-400 text-lg max-w-2xl font-body leading-relaxed text-justify">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
         </header>
 
         <!-- Bento-Style Grid -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {% for template in templates %}
-        <div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow border border-outline-variant/15 hover:-translate-y-1 transition-all duration-300">
-            <div class="h-64 overflow-hidden bg-surface-container-high relative">
+        <div class="group flex flex-col bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-outline-variant dark:border-slate-700 hover:-translate-y-1 transition-all duration-300">
+            <div class="h-64 overflow-hidden bg-slate-100 dark:bg-slate-900 relative">
                 <img src="{{ template.image_url }}" alt="{{ template.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
             <div class="p-6 flex flex-col flex-grow">
                 <div class="mb-4">
                     <span class="text-[10px] font-bold tracking-widest text-primary uppercase bg-primary/10 px-2 py-1 rounded">{{ template.category }}</span>
-                    <h3 class="font-headline text-xl font-bold mt-3 text-on-surface">{{ template.name }}</h3>
+                    <h3 class="font-headline text-xl font-bold mt-3 text-on-surface dark:text-white">{{ template.name }}</h3>
                 </div>
-                <p class="text-on-surface-variant text-sm font-body mb-6 flex-grow leading-relaxed text-justify">Professional LaTeX template for your {{ template.name|lower }} project.</p>
-                <button class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-lg group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-primary-container group-hover:text-white transition-all duration-300">Select Template</button>
+                <p class="text-on-surface-variant dark:text-slate-400 text-sm font-body mb-6 flex-grow leading-relaxed text-justify">Professional LaTeX template for your {{ template.name|lower }} project.</p>
+                <button class="w-full bg-slate-100 dark:bg-slate-900 text-on-surface dark:text-white font-semibold py-3 rounded-lg group-hover:bg-primary group-hover:text-white transition-all duration-300">Select Template</button>
             </div>
         </div>
         {% endfor %}
@@ -111,34 +105,34 @@
     <!-- Secondary Information Section -->
     <section class="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         <div class="lg:col-span-5">
-            <div class="bg-primary-container/10 p-8 rounded-2xl">
+            <div class="bg-primary/5 dark:bg-primary/10 p-8 rounded-2xl border border-primary/20">
                 <h4 class="font-headline text-2xl font-bold text-primary mb-6">Built for Accuracy</h4>
                 <ul class="space-y-6">
                     <li class="flex items-start gap-4">
-                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                        <div class="p-2 bg-white dark:bg-slate-800 rounded-lg border border-outline-variant dark:border-slate-700">
                             <span class="material-symbols-outlined text-primary">functions</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">LaTeX Native Engine (Coming Soon)</p>
-                            <p class="text-sm text-on-surface-variant text-justify">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
+                            <p class="font-bold text-on-surface dark:text-white mb-1">LaTeX Native Engine (Coming Soon)</p>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400 text-justify">Compile complex mathematical notations with 100% fidelity using our cloud-based engine.</p>
                         </div>
                     </li>
                     <li class="flex items-start gap-4">
-                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                        <div class="p-2 bg-white dark:bg-slate-800 rounded-lg border border-outline-variant dark:border-slate-700">
                             <span class="material-symbols-outlined text-primary">source</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">Versioned Templates (Coming Soon)</p>
-                            <p class="text-sm text-on-surface-variant text-justify">Access legacy and updated versions of industry-standard document specifications.</p>
+                            <p class="font-bold text-on-surface dark:text-white mb-1">Versioned Templates (Coming Soon)</p>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400 text-justify">Access legacy and updated versions of industry-standard document specifications.</p>
                         </div>
                     </li>
                     <li class="flex items-start gap-4">
-                        <div class="p-2 bg-white rounded-lg editorial-shadow">
+                        <div class="p-2 bg-white dark:bg-slate-800 rounded-lg border border-outline-variant dark:border-slate-700">
                             <span class="material-symbols-outlined text-primary">auto_awesome</span>
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface mb-1">Smart Formatting (Coming Soon)</p>
-                            <p class="text-sm text-on-surface-variant text-justify">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
+                            <p class="font-bold text-on-surface dark:text-white mb-1">Smart Formatting (Coming Soon)</p>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400 text-justify">Auto-generation of table of contents, lists of figures, and technical appendices.</p>
                         </div>
                     </li>
                 </ul>
@@ -146,25 +140,25 @@
         </div>
         <div class="lg:col-span-7 flex flex-col gap-6">
             {% if testimonial %}
-            <div class="bg-surface-container-low p-10 rounded-2xl border-l-8 border-primary">
+            <div class="bg-surface dark:bg-slate-800/50 p-10 rounded-2xl border-l-8 border-primary border border-outline-variant dark:border-slate-700">
                 <h5 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">The Curator's Note</h5>
-                <p class="font-headline text-2xl leading-tight text-on-surface italic text-justify">"{{ testimonial.quote }}"</p>
+                <p class="font-headline text-2xl leading-tight text-on-surface dark:text-white italic text-justify">"{{ testimonial.quote }}"</p>
                 <div class="mt-8 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden grayscale">
                         <img src="{{ testimonial.image_url }}" class="w-full h-full object-cover" alt="{{ testimonial.name }}">
                     </div>
                     <div>
-                        <p class="text-on-surface font-bold">{{ testimonial.name }}</p>
-                        <p class="text-xs text-on-surface-variant">{{ testimonial.role }}</p>
+                        <p class="text-on-surface dark:text-white font-bold">{{ testimonial.name }}</p>
+                        <p class="text-xs text-on-surface-variant dark:text-slate-400">{{ testimonial.role }}</p>
                     </div>
                 </div>
             </div>
             {% endif %}
             <div class="grid grid-cols-2 gap-6">
                 {% for stat in stats %}
-                <div class="bg-white p-6 rounded-2xl editorial-shadow">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-outline-variant dark:border-slate-700 shadow-sm">
                     <div class="text-4xl font-headline font-black text-primary mb-2">{{ stat.value }}</div>
-                    <p class="text-sm text-on-surface-variant font-medium text-justify">{{ stat.description }}</p>
+                    <p class="text-sm text-on-surface-variant dark:text-slate-400 font-medium text-justify">{{ stat.description }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -174,20 +168,20 @@
 </main>
 
 <!-- BottomNavBar (Mobile Only) -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-transparent flex justify-around items-center py-3 px-4 z-50">
-    <a href="{% url 'dashboard' %}" class="flex flex-col items-center gap-1 text-slate-500">
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-outline-variant dark:border-slate-800 flex justify-around items-center py-3 px-4 z-50">
+    <a href="{% url 'dashboard' %}" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
         <span class="material-symbols-outlined">dashboard</span>
         <span class="text-[10px] font-bold">Dashboard</span>
     </a>
-    <a href="{% url 'editor' %}" class="flex flex-col items-center gap-1 text-slate-500">
+    <a href="{% url 'editor' %}" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
         <span class="material-symbols-outlined">terminal</span>
         <span class="text-[10px] font-bold">Editor</span>
     </a>
-    <a href="{% url 'templates' %}" class="flex flex-col items-center gap-1 text-indigo-700">
+    <a href="{% url 'templates' %}" class="flex flex-col items-center gap-1 text-primary dark:text-white">
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
         <span class="text-[10px] font-bold">Templates</span>
     </a>
-    <a href="{% url 'settings' %}" class="flex flex-col items-center gap-1 text-slate-500">
+    <a href="{% url 'settings' %}" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
         <span class="material-symbols-outlined">settings</span>
         <span class="text-[10px] font-bold">Settings</span>
     </a>
