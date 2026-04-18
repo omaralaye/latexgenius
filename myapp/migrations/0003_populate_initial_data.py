@@ -11,38 +11,38 @@ def populate_data(apps, schema_editor):
     settings = [
         ('app_name', 'The Engineering Editorial'),
         ('app_version', 'V2.4.0'),
-        ('hero_title', 'Convert Any Document to LaTeX in Seconds'),
-        ('hero_subtitle', 'Bridge the gap between draft and publication. Our AI-driven engine preserves complex equations, nested citations, and intricate layouts with editorial precision.'),
-        ('template_section_title', 'The Precision Templates'),
-        ('template_section_subtitle', 'Standardize your output with high-performance templates designed for the world\'s leading journals and institutions.'),
-        ('footer_description', 'Setting the standard for technical precision. Document conversion built by engineers, for engineers.'),
+        ('hero_title', 'Turn your notes into LaTeX without the headache'),
+        ('hero_subtitle', 'We take your drafts, PDFs, or photos of your notes and turn them into clean, professional LaTeX files so you don\'t have to.'),
+        ('template_section_title', 'Start with a template'),
+        ('template_section_subtitle', 'Pick a layout that fits your project and we\'ll handle the rest.'),
+        ('footer_description', 'Simple tools for researchers. Built to make formatting easier.'),
     ]
     for key, value in settings:
         AppSetting.objects.update_or_create(key=key, defaults={'value': value})
 
     # Features
     features = [
-        ('Real-time Preview', 'Watch your source document transform into a compile-ready PDF in a live, split-pane environment with zero lag.', 'speed', 1),
-        ('AI-Powered Parsing', 'Our custom neural network understands the semantics of your document, ensuring headers, lists, and tables map perfectly to LaTeX syntax.', 'psychology', 2),
-        ('One-Click Export', 'Download a clean .zip package containing the .tex source, bibliography files, and high-resolution figures in one go.', 'download_done', 3),
+        ('Real-time view', 'Watch your notes turn into a formatted document on the right side of your screen as you work.', 'visibility', 1),
+        ('Smart formatting', 'We\'ll figure out where your headers, lists, and tables should go so the code looks exactly right.', 'auto_awesome', 2),
+        ('One-click download', 'Download everything you need in one zip file, including the source code and your figures.', 'download', 3),
     ]
     for title, desc, icon, order in features:
         Feature.objects.update_or_create(title=title, defaults={'description': desc, 'icon': icon, 'order': order})
 
     # Statistics
     stats = [
-        ('Research papers published', '15k+', 'Research papers published using our standard journal template.', 1),
-        ('Compilation success rate', '99.9%', 'Compilation success rate for complex LaTeX-heavy bibliographies.', 2),
+        ('Papers finished', '15k+', 'Total research papers created using our templates.', 1),
+        ('Successful builds', '99.9%', 'Percentage of documents that compile perfectly on the first try.', 2),
     ]
     for label, value, desc, order in stats:
         Statistic.objects.update_or_create(label=label, defaults={'value': value, 'description': desc, 'order': order})
 
     # Testimonial
     Testimonial.objects.update_or_create(
-        name='Arthur P. Vance',
+        name='Dr. Elena Rostova',
         defaults={
-            'role': 'Lead Systems Architect, TexPrecision',
-            'quote': 'Precision is not an afterthought; it is the infrastructure upon which technical credibility is built.',
+            'role': 'Physics Researcher',
+            'quote': 'It cut my work time in half. It\'s much easier than writing all the math by hand.',
             'image_url': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBRc_j-a-vwdkVznB6ziMlKL3BjB_aAcBtlmqQp8JYvX1lPsyX7oVWXU1BY3T33jSZYUsk1s2C9hM6zMlWb5wlgqxuL6pJTNSQfWcKDPvMeuBuhmu_6k35AnjgpGK7wgV7WXzGjDYYwgsuM-kdsw-P4zrrwhD972Z7omJAg3uqU4JRPWdK1Uo9TJo2HcLOu06XoHA8WDh3XTlFdI71me0kYUJsJNQtObcp8X8l8RiTm9jq7-MZtv2IBgmg0Izgq6Ls-ZW3e1BU32g'
         }
     )
