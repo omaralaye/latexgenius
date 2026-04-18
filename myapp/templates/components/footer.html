@@ -1,15 +1,15 @@
-<footer class="bg-[#eff4f7] dark:bg-[#0b0f10] border-t border-[#a7b4ba]/15 font-sans text-sm tracking-wide Inter">
+<footer class="bg-surface dark:bg-slate-900 border-t border-outline-variant dark:border-slate-800 font-sans text-sm tracking-wide transition-colors duration-300">
     <div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-10 gap-6 max-w-7xl mx-auto">
         <div class="flex flex-col items-center md:items-start gap-2">
-            <div class="text-lg font-serif font-bold text-[#1A365D]">{{ app_settings.app_name|default:"LatexGenius" }}</div>
-            <p class="text-[#5d5d78] dark:text-[#a7b4ba]">© 2024 {{ app_settings.app_name|default:"LatexGenius" }}. Precision in Academic Publishing.</p>
+            <div class="text-lg font-serif font-bold text-primary dark:text-white">{{ app_settings.app_name|default:"LatexGenius" }}</div>
+            <p class="text-on-surface-variant dark:text-slate-500">© 2024 {{ app_settings.app_name|default:"LatexGenius" }}. Precision in Academic Publishing.</p>
         </div>
-        <div class="flex flex-wrap justify-center gap-8 text-[#5d5d78] dark:text-[#a7b4ba]">
-            <a class="hover:underline decoration-[#455f88] underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy Policy</a>
-            <a class="hover:underline decoration-[#455f88] underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Terms of Service</a>
-            <a class="hover:underline decoration-[#455f88] underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">API Reference</a>
-            <a class="hover:underline decoration-[#455f88] underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Contact Research Team</a>
-            <a class="hover:underline decoration-[#455f88] underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Institutional Access</a>
+        <div class="flex flex-wrap justify-center gap-8 text-on-surface-variant dark:text-slate-400">
+            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Privacy Policy</a>
+            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Terms of Service</a>
+            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">API Reference</a>
+            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Contact Research Team</a>
+            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Institutional Access</a>
         </div>
     </div>
 </footer>

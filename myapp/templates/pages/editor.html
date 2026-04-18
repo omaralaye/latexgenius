@@ -2,66 +2,48 @@
 
 {% block title %}{{ project.title }} | LaTeXGenius{% endblock %}
 
-{% block extra_head %}
-<style>
-    body { background-color: #f7f9fb; }
-    /* Custom scrollbar for a more editorial feel */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: #1e1e1e;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #444;
-    }
-</style>
-{% endblock %}
 
 {% block layout %}
 <!-- SideNavBar -->
-<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-100 p-4 gap-2 border-r border-outline-variant/10 z-50">
+<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-50 dark:bg-slate-900 p-4 gap-2 border-r border-outline-variant dark:border-slate-800 z-50">
     <div class="mb-8 px-2">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold">T</div>
             <div>
-                <h1 class="font-headline text-lg font-black text-indigo-900 leading-tight">LaTeXGenius</h1>
-                <p class="text-[10px] uppercase tracking-widest text-outline">V1.0.0</p>
+                <h1 class="font-headline text-lg font-black text-primary dark:text-white leading-tight">LaTeXGenius</h1>
+                <p class="text-[10px] uppercase tracking-widest text-slate-500">V1.0.0</p>
             </div>
         </div>
     </div>
     <nav class="flex flex-col gap-1">
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'dashboard' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'dashboard' %}">
             <span class="material-symbols-outlined">dashboard</span>
             <span class="font-body text-sm font-medium">Dashboard</span>
         </a>
-        <a class="flex items-center gap-3 bg-white text-indigo-700 rounded-lg px-4 py-3 shadow-sm border-l-4 border-indigo-600" href="{% url 'editor' %}">
+        <a class="flex items-center gap-3 bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg px-4 py-3 shadow-sm border-l-4 border-primary" href="{% url 'editor' %}">
             <span class="material-symbols-outlined">terminal</span>
             <span class="font-body text-sm font-medium">Editor</span>
         </a>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'templates' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'templates' %}">
             <span class="material-symbols-outlined">library_books</span>
             <span class="font-body text-sm font-medium">Templates</span>
         </a>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-3 hover:text-indigo-600 hover:bg-slate-200/50 transition-all rounded-lg" href="{% url 'settings' %}">
+        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'settings' %}">
             <span class="material-symbols-outlined">settings</span>
             <span class="font-body text-sm font-medium">Settings</span>
         </a>
     </nav>
     <div class="mt-auto flex flex-col gap-1">
-        <div class="bg-primary/5 p-4 rounded-xl mb-4">
+        <div class="bg-primary/10 dark:bg-primary/20 p-4 rounded-xl mb-4 border border-primary/20">
             <p class="text-xs font-bold text-primary mb-1">Upgrade to Pro (Coming Soon)</p>
-            <p class="text-[11px] text-on-surface-variant mb-3">Unlock advanced AI conversion & cloud storage.</p>
-            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:opacity-90 transition-opacity">Upgrade</button>
+            <p class="text-[11px] text-on-surface-variant dark:text-slate-400 mb-3">Unlock advanced AI conversion & cloud storage.</p>
+            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors">Upgrade</button>
         </div>
-        <a class="flex items-center gap-3 text-slate-500 px-4 py-2 hover:bg-slate-200/50 rounded-lg" href="#">
-            <span class="material-symbols-outlined text-sm">help_outline</span>
-            <span class="text-sm">Help</span>
-        </a>
+        <button onclick="toggleTheme()" class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-2 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-lg">
+            <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+            <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+            <span class="text-sm">Theme</span>
+        </button>
         <div class="px-4 py-2">
              <div id="user-button"></div>
         </div>
@@ -69,50 +51,50 @@
 </aside>
 
 <!-- Main Content Canvas -->
-<main class="md:ml-64 min-h-screen flex flex-col">
+<main class="md:ml-64 min-h-screen flex flex-col bg-background dark:bg-slate-900 transition-colors duration-300">
     <!-- TopAppBar -->
-    <header class="bg-slate-50/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant/10 z-40">
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant dark:border-slate-800 z-40">
         <div class="flex items-center gap-4">
-            <h2 class="text-xl font-bold tracking-tighter text-indigo-900">Editor</h2>
-            <div class="h-4 w-[1px] bg-outline-variant/30 hidden sm:block"></div>
-            <p class="text-sm font-medium text-on-surface-variant hidden sm:block truncate max-w-[200px]">{{ project.title }}</p>
+            <h2 class="text-xl font-bold tracking-tighter text-primary dark:text-white">Editor</h2>
+            <div class="h-4 w-[1px] bg-outline-variant dark:bg-slate-700 hidden sm:block"></div>
+            <p class="text-sm font-medium text-on-surface-variant dark:text-slate-400 hidden sm:block truncate max-w-[200px]">{{ project.title }}</p>
         </div>
         <div class="flex items-center gap-2 sm:gap-3">
             <div class="relative hidden lg:block">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
-                <input class="pl-10 pr-4 py-1.5 bg-surface-container-highest/50 border-none rounded-full text-sm w-48 xl:w-64 focus:ring-2 focus:ring-primary/20" placeholder="Search..." type="text"/>
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+                <input class="pl-10 pr-4 py-1.5 bg-surface-variant dark:bg-slate-800 border-none rounded-full text-sm w-48 xl:w-64 focus:ring-2 focus:ring-primary/20 dark:text-white" placeholder="Search..." type="text"/>
             </div>
-            <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+            <button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
                 <span class="material-symbols-outlined">notifications</span>
             </button>
-            <a href="{% url 'settings' %}" class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors hidden sm:block">
+            <a href="{% url 'settings' %}" class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors hidden sm:block">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-             <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
-                 <span class="material-symbols-outlined text-indigo-600">person</span>
+             <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                 <span class="material-symbols-outlined text-primary">person</span>
             </div>
         </div>
     </header>
 
     <!-- Utility Bar -->
-    <div class="bg-surface-container-low px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant/5">
+    <div class="bg-surface dark:bg-slate-800/50 px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-outline-variant dark:border-slate-800">
         <div class="flex items-center gap-2">
-            <button id="save-button" onclick="saveProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-on-surface text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface-bright transition-all">
+            <button id="save-button" onclick="saveProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 text-on-surface dark:text-white text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface dark:hover:bg-slate-700 border border-outline-variant dark:border-slate-700 transition-all">
                 <span class="material-symbols-outlined text-sm">save</span>
                 <span class="hidden xs:inline">Save</span>
             </button>
-            <div class="h-6 w-[1px] mx-1 bg-outline-variant/30"></div>
-            <button id="compile-button" onclick="compileProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95">
+            <div class="h-6 w-[1px] mx-1 bg-outline-variant dark:bg-slate-700"></div>
+            <button id="compile-button" onclick="compileProject()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-primary-variant transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">bolt</span>
                 Compile
             </button>
         </div>
         <div class="flex items-center gap-2">
-            <button class="hidden sm:flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface text-sm font-medium rounded-lg hover:bg-surface-dim transition-all">
+            <button class="hidden sm:flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 text-on-surface dark:text-white text-sm font-medium rounded-lg hover:bg-surface dark:hover:bg-slate-700 border border-outline-variant dark:border-slate-700 transition-all">
                 <span class="material-symbols-outlined text-sm">history</span>
                 Versions
             </button>
-            <button onclick="downloadTex()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-tertiary text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-tertiary-container transition-all active:scale-95">
+            <button onclick="downloadTex()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-700 text-white text-xs sm:text-sm font-bold rounded-lg shadow-md hover:bg-slate-800 transition-all active:scale-95">
                 <span class="material-symbols-outlined text-sm">download</span>
                 <span class="hidden xs:inline">Download .tex</span>
                 <span class="xs:hidden">.tex</span>
@@ -123,9 +105,9 @@
     <!-- Conversion Split View -->
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
         <!-- Left Side: Source Area -->
-        <section class="flex-1 flex flex-col bg-surface border-b md:border-b-0 md:border-r border-outline-variant/10 overflow-hidden">
-            <div class="p-4 flex items-center justify-between bg-surface-container-lowest/40">
-                <span class="text-xs font-bold uppercase tracking-widest text-outline">Source Content</span>
+        <section class="flex-1 flex flex-col bg-white dark:bg-slate-900 border-b md:border-b-0 md:border-r border-outline-variant dark:border-slate-800 overflow-hidden">
+            <div class="p-4 flex items-center justify-between bg-surface dark:bg-slate-800/50">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Source Content</span>
                 <div class="flex gap-1">
                     <button class="p-1 hover:bg-surface-container rounded transition-colors text-primary">
                         <span class="material-symbols-outlined text-lg">description</span>
@@ -137,35 +119,23 @@
             </div>
             <div class="flex-1 p-8 overflow-y-auto">
                 <div class="max-w-3xl mx-auto">
-                    <div class="mb-8 p-12 border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center text-center bg-surface-container-lowest/30 group hover:border-primary/40 transition-colors">
-                        <div class="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <div class="mb-8 p-12 border-2 border-dashed border-outline-variant dark:border-slate-700 rounded-2xl flex flex-col items-center text-center bg-surface dark:bg-slate-800/30">
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                             <span class="material-symbols-outlined text-3xl text-primary">cloud_upload </span>
                         </div>
-                        <h3 class="text-lg font-bold text-on-surface mb-2">Source Document Processed</h3>
-                        <p class="text-sm text-outline mb-6">"{{ project.title }}" is ready for conversion.</p>
-                    </div>
-                    <!-- Content Mockup -->
-                    <div class="space-y-6 opacity-60 pointer-events-none">
-                        <div class="h-8 w-2/3 bg-surface-container-high rounded-full"></div>
-                        <div class="space-y-2">
-                            <div class="h-4 w-full bg-surface-container-low rounded-full"></div>
-                            <div class="h-4 w-full bg-surface-container-low rounded-full"></div>
-                            <div class="h-4 w-4/5 bg-surface-container-low rounded-full"></div>
-                        </div>
-                        <div class="h-40 w-full bg-surface-container-high rounded-2xl flex items-center justify-center text-outline text-xs italic">
-                            [ Image Placeholder: Analysis Visual ]
-                        </div>
+                        <h3 class="text-lg font-bold text-on-surface dark:text-white mb-2">Document Ready</h3>
+                        <p class="text-sm text-slate-500">"{{ project.title }}" is loaded and ready for editing.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Right Side: LaTeX Preview Area -->
-        <section class="flex-1 flex flex-col bg-[#1e1e1e] overflow-hidden min-h-[300px]">
+        <section class="flex-1 flex flex-col bg-slate-900 overflow-hidden min-h-[300px]">
             <div class="p-4 flex items-center justify-between bg-black/30">
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold uppercase tracking-widest text-slate-400">LaTeX Source</span>
-                    <span id="status-badge" class="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded border border-indigo-500/30">READY</span>
+                    <span id="status-badge" class="px-2 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded border border-primary/30">READY</span>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="copyToClipboard()" class="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400">
@@ -179,13 +149,12 @@
             <div class="flex-1 flex flex-col overflow-hidden">
                 <textarea id="latex-editor" class="flex-1 w-full p-6 bg-transparent text-sm leading-relaxed text-slate-300 font-mono focus:ring-0 border-none resize-none custom-scrollbar outline-none" spellcheck="false">{{ project.content }}</textarea>
             </div>
-            <!-- Live Notification -->
-            <div class="px-6 py-3 bg-tertiary-container/20 border-t border-tertiary-container/30 flex items-center gap-3">
+            <!-- Status Bar -->
+            <div class="px-6 py-3 bg-slate-800 border-t border-slate-700 flex items-center gap-3">
                 <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
-                <p class="text-[11px] font-mono text-tertiary-fixed italic">Conversion successful: 0 errors, 0 warnings</p>
+                <p class="text-[11px] font-mono text-slate-400">Ready</p>
             </div>
         </section>
     </div>
@@ -195,7 +164,7 @@
     const projectId = "{{ project.id }}";
     const editor = document.getElementById('latex-editor');
     const statusBadge = document.getElementById('status-badge');
-    const statusText = document.querySelector('.text-tertiary-fixed');
+    const statusText = document.querySelector('.italic');
 
     async function saveProject() {
         const saveBtn = document.getElementById('save-button');
