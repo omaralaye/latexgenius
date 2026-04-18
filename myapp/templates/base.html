@@ -15,57 +15,19 @@
         theme: {
           extend: {
             "colors": {
-                    "secondary-fixed": "#d8e3fa",
-                    "tertiary-fixed": "#d9d7f8",
-                    "tertiary-fixed-dim": "#cbc9e9",
-                    "inverse-primary": "#b3cdfd",
-                    "error-dim": "#4e0309",
-                    "on-surface-variant": "#546166",
-                    "primary-fixed": "#d6e3ff",
-                    "primary-container": "#d6e3ff",
-                    "on-secondary-fixed": "#354052",
-                    "on-error-container": "#752121",
-                    "primary": "#455f88",
-                    "on-surface": "#283439",
-                    "error": "#9f403d",
-                    "on-tertiary-container": "#4a4a65",
-                    "tertiary": "#5d5d78",
-                    "secondary-fixed-dim": "#cad5ec",
-                    "secondary-container": "#d8e3fa",
-                    "on-primary": "#f6f7ff",
-                    "surface-dim": "#ccdde4",
-                    "surface-container-low": "#eff4f7",
-                    "on-primary-container": "#38527b",
-                    "inverse-on-surface": "#9a9d9f",
-                    "surface-variant": "#d7e5eb",
-                    "surface-bright": "#f7fafc",
-                    "on-tertiary-fixed-variant": "#54546f",
-                    "surface-container": "#e7eff3",
-                    "secondary": "#546073",
-                    "on-primary-fixed": "#254067",
-                    "on-secondary-fixed-variant": "#515c6f",
-                    "primary-dim": "#39537c",
-                    "inverse-surface": "#0b0f10",
-                    "surface-container-highest": "#d7e5eb",
-                    "surface-container-high": "#dfeaef",
-                    "tertiary-container": "#d9d7f8",
-                    "on-tertiary-fixed": "#373851",
-                    "surface-tint": "#455f88",
-                    "on-tertiary": "#fbf7ff",
-                    "on-error": "#fff7f6",
-                    "background": "#f7fafc",
-                    "on-primary-fixed-variant": "#425c85",
-                    "outline": "#707d82",
-                    "surface": "#f7fafc",
-                    "error-container": "#fe8983",
-                    "primary-fixed-dim": "#bfd5ff",
-                    "on-background": "#283439",
-                    "tertiary-dim": "#51516c",
-                    "surface-container-lowest": "#ffffff",
-                    "secondary-dim": "#495467",
-                    "outline-variant": "#a7b4ba",
-                    "on-secondary": "#f8f8ff",
-                    "on-secondary-container": "#475265"
+                    "primary": "#2563eb",
+                    "primary-variant": "#1d4ed8",
+                    "on-primary": "#ffffff",
+                    "background": "#f8fafc",
+                    "on-background": "#0f172a",
+                    "surface": "#ffffff",
+                    "on-surface": "#1e293b",
+                    "surface-variant": "#f1f5f9",
+                    "on-surface-variant": "#475569",
+                    "outline": "#94a3b8",
+                    "outline-variant": "#cbd5e1",
+                    "error": "#ef4444",
+                    "on-error": "#ffffff"
             },
             "borderRadius": {
                     "DEFAULT": "0.125rem",
@@ -97,14 +59,16 @@
         }
         body { font-family: 'Inter', sans-serif; }
         .font-serif { font-family: 'Newsreader', serif; }
-        .glass-panel {
-            background: rgba(215, 229, 235, 0.7);
-            backdrop-filter: blur(20px);
+
+        /* Dark mode overrides for custom background and surfaces */
+        .dark body {
+            background-color: #0f172a;
+            color: #f8fafc;
         }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-surface font-body text-on-surface antialiased">
+<body class="bg-background dark:bg-[#0f172a] font-body text-on-background dark:text-slate-200 antialiased transition-colors duration-300">
     {% block layout %}
     {% include "components/navbar.html" %}
 
@@ -117,5 +81,23 @@
     {% endblock %}
 
     {% block extra_scripts %}{% endblock %}
+    <script>
+        // Check for saved theme preference, otherwise use system preference
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    </script>
 </body>
 </html>
