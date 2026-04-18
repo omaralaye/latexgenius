@@ -139,21 +139,6 @@
             </div>
         </div>
         <div class="lg:col-span-7 flex flex-col gap-6">
-            {% if testimonial %}
-            <div class="bg-surface dark:bg-slate-800/50 p-10 rounded-2xl border-l-8 border-primary border border-outline-variant dark:border-slate-700">
-                <h5 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">The Curator's Note</h5>
-                <p class="font-headline text-2xl leading-tight text-on-surface dark:text-white italic text-justify">"{{ testimonial.quote }}"</p>
-                <div class="mt-8 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full overflow-hidden grayscale">
-                        <img src="{{ testimonial.image_url }}" class="w-full h-full object-cover" alt="{{ testimonial.name }}">
-                    </div>
-                    <div>
-                        <p class="text-on-surface dark:text-white font-bold">{{ testimonial.name }}</p>
-                        <p class="text-xs text-on-surface-variant dark:text-slate-400">{{ testimonial.role }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
             <div class="grid grid-cols-2 gap-6">
                 {% for stat in stats %}
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-outline-variant dark:border-slate-700 shadow-sm">
