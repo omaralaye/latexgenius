@@ -9,7 +9,7 @@ def populate_data(apps, schema_editor):
 
     # App Settings
     settings = [
-        ('app_name', 'The Engineering Editorial'),
+        ('app_name', 'LaTeXGenius'),
         ('app_version', 'V2.4.0'),
         ('hero_title', 'Turn your notes into LaTeX without the headache'),
         ('hero_subtitle', 'We take your drafts, PDFs, or photos of your notes and turn them into clean, professional LaTeX files so you don\'t have to.'),
