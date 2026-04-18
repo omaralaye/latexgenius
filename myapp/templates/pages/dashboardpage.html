@@ -81,10 +81,10 @@
 
     <!-- Content Area -->
     <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
-        <!-- Dashboard Hero: Bento Style -->
+        <!-- Dashboard Hero -->
         <div class="flex flex-col lg:flex-row gap-6 mb-12">
             <!-- Stat 1: Welcome -->
-            <div class="flex-[2] p-8 rounded-xl bg-white dark:bg-slate-800 border border-outline-variant dark:border-slate-700 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[240px]">
+            <div class="flex-1 p-8 rounded-xl bg-white dark:bg-slate-800 border border-outline-variant dark:border-slate-700 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[200px]">
                 <div class="relative z-10">
                     <h2 class="text-3xl font-extrabold text-on-surface dark:text-white tracking-tight mb-2">Welcome back, {{ user.first_name|default:user.username }}.</h2>
                     <p class="text-on-surface-variant dark:text-slate-400 max-w-md leading-relaxed text-justify">Your technical workspace is ready. You have managed <span class="text-primary font-bold">{{ total_projects }} projects</span> this season.</p>
@@ -99,21 +99,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Stat 2: Active Instance -->
-            <div class="p-8 rounded-xl bg-primary text-on-primary shadow-lg flex flex-col justify-between">
-                <div>
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="material-symbols-outlined text-3xl">memory</span>
-                        <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold uppercase">System: Online</span>
-                    </div>
-                    <p class="font-headline text-lg font-bold">Local Engine</p>
-                    <p class="text-white/70 text-xs">V3.1.2-beta active</p>
-                </div>
-                <div class="mt-4">
-                    <p class="text-2xl font-mono font-bold tracking-tighter">{{ recent_activity }}</p>
-                    <p class="text-[10px] uppercase font-bold tracking-widest opacity-70">Last Activity</p>
-                </div>
-            </div>
         </div>
 
         <!-- Main Content: Recent Documents & Activity -->
@@ -125,7 +110,6 @@
                         Recent Documents
                         <span class="bg-surface-variant dark:bg-slate-800 px-2 py-0.5 rounded-full text-xs font-mono dark:text-slate-400">{{ total_projects }}</span>
                     </h3>
-                    <button class="text-xs font-bold text-primary hover:underline">View All Archive</button>
                 </div>
                 <!-- List Header -->
                 <div class="grid grid-cols-12 px-6 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
@@ -171,7 +155,7 @@
                 {% endfor %}
             </div>
 
-            <!-- Right Sidebar: Stats & Quick Actions -->
+            <!-- Right Sidebar: Quick Actions -->
             <div class="w-full lg:flex-1 space-y-6">
                 <!-- Quick Actions -->
                 <div class="bg-surface dark:bg-slate-800/50 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
@@ -179,26 +163,16 @@
                     <div class="space-y-2">
                         <button class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">cloud_upload</span>
-                            Upload .zip Archive (Coming Soon)
+                            Upload .zip Archive
                         </button>
                         <button class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">token</span>
-                            Generate API Key (Coming Soon)
+                            Generate API Key
                         </button>
                         <a href="{% url 'templates' %}" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">auto_awesome</span>
                             Template Library
                         </a>
-                    </div>
-                </div>
-                <!-- Editorial Insight -->
-                <div class="relative rounded-xl overflow-hidden aspect-square flex flex-col justify-end p-6 group cursor-pointer border border-outline-variant dark:border-slate-700">
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5J56Vb7MaTamzj4HLvviGLEomFqUPJHn9RNHtxm0cyuFpb-7E-zrNHtnEYVaBbCFEDbjJ8xPA6fCb3ALYqsOL6MnpCCDXkjgIOHjbqEDy5aSyGZYg2ccq-RaTme-P3i0ZGuVbuRew4jU78munEQ392ViDhV3qSBSIRCaaCg1IO_Cd13vTFUVL9Da5YYrBOOJUR6ZlwkDEmgVzDVJLch8y6Oc8O5LZtFLm3l-8TOxW6XtdVzIpNKsfDY1c6fJHDFCzQZZKajZcPQ" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-slate-900/60"></div>
-                    <div class="relative z-10">
-                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-white/70">Masterclass</span>
-                        <h4 class="text-white font-bold leading-tight mt-1">Mastering TikZ for Engineering Schematics</h4>
-                        <p class="text-white/60 text-[11px] mt-2 leading-relaxed text-justify">New guide by Dr. Sarah Chen on procedural drawing.</p>
                     </div>
                 </div>
             </div>
