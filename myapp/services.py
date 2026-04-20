@@ -2,6 +2,9 @@ from datetime import datetime
 from django.utils import timezone
 from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial
 from django.contrib.auth.models import User
+import logging
+
+logger = logging.getLogger('myapp')
 
 def serialize_project(project):
     if project is None or not project.id:
@@ -112,14 +115,21 @@ def update_project(project_id, update_data):
 
         if collaborator_ids is not None:
             project.collaborators.set(User.objects.filter(id__in=collaborator_ids))
-    except (Project.DoesNotExist, ValueError):
-        pass
+    except Project.DoesNotExist:
+        logger.error(f"Failed to update project: Project {project_id} does not exist.")
+    except ValueError as e:
+        logger.error(f"Failed to update project {project_id} due to value error: {str(e)}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while updating project {project_id}: {str(e)}")
 
 def delete_project(project_id):
     try:
         Project.objects.filter(id=project_id).delete()
-    except ValueError:
-        pass
+        logger.info(f"Project {project_id} deleted.")
+    except ValueError as e:
+        logger.error(f"Failed to delete project {project_id} due to value error: {str(e)}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while deleting project {project_id}: {str(e)}")
 
 # Templates
 def get_templates(limit=None):
@@ -134,7 +144,7 @@ def get_all_settings():
         settings = {s.key: s.value for s in AppSetting.objects.all()}
         return settings
     except Exception as e:
-        print(f"Error fetching settings: {e}")
+        logger.error(f"Error fetching settings: {e}")
         return {}
 
 # Features
