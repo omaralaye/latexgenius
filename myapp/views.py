@@ -248,3 +248,9 @@ def compile_project(request, project_id):
     except httpx.RequestError as e:
         logger.error(f"Error connecting to LaTeX.Online for project {project_id}: {str(e)}")
         return HttpResponse(f"Error connecting to LaTeX.Online: {str(e)}", status=500)
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+def handler500(request):
+    return render(request, '500.html', status=500)
