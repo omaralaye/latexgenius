@@ -40,3 +40,56 @@ class DashboardTests(TestCase):
 
     def test_serialize_project_none(self):
         self.assertIsNone(services.serialize_project(None))
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from django.contrib.auth.models import User
+import time
+
+class RateLimitTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='ratelimit@example.com', email='ratelimit@example.com', password='password123')
+
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+    def test_login_rate_limit(self):
+        url = reverse('login')
+        # Rate is 10/m for login
+        for i in range(10):
+            response = self.client.post(url, {'username': 'ratelimit@example.com', 'password': 'wrongpassword'})
+            self.assertEqual(response.status_code, 200) # Form errors, but not rate limited yet
+
+        # 11th attempt should be rate limited
+        response = self.client.post(url, {'username': 'ratelimit@example.com', 'password': 'wrongpassword'})
+        self.assertEqual(response.status_code, 200) # It returns 200 but with an error message in context
+        self.assertContains(response, "Too many login attempts. Please try again later.")
+
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+    def test_signup_rate_limit(self):
+        url = reverse('signup')
+        # Rate is 5/m for signup
+        for i in range(5):
+            response = self.client.post(url, {'email': f'test{i}@example.com', 'password': 'password123', 'name': 'Test'})
+            self.assertEqual(response.status_code, 302) # Redirect to dashboard
+            self.client.logout()
+
+        # 6th attempt should be rate limited
+        response = self.client.post(url, {'email': 'final@example.com', 'password': 'password123', 'name': 'Test'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Too many signup attempts. Please try again later.")
+
+    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+    def test_save_project_rate_limit(self):
+        self.client.login(username='ratelimit@example.com', password='password123')
+        # Create a project first
+        from myapp import services
+        project_id = services.create_project(owner_id=self.user.id, title="Test", content="Content")
+
+        url = reverse('save_project', kwargs={'project_id': project_id})
+        # Rate is 20/m for save_project
+        for i in range(20):
+            response = self.client.post(url, {'content': f'content {i}'})
+            self.assertEqual(response.status_code, 200)
+
+        # 21st attempt should be rate limited
+        response = self.client.post(url, {'content': 'final content'})
+        self.assertEqual(response.status_code, 429)
+        self.assertJSONEqual(response.content, {"status": "error", "message": "Too many requests. Please slow down."})

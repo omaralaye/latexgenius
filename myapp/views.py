@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
+from django_ratelimit.decorators import ratelimit
 from . import services
 from datetime import datetime
 import httpx
@@ -23,7 +24,14 @@ def landing_page(request):
         return JsonResponse(context, safe=False)
     return render(request, 'pages/landingpage.html', context)
 
+@ratelimit(key='ip', rate='10/m', method='POST', block=False)
 def login_page(request):
+    if getattr(request, 'limited', False):
+        if request.GET.get('format') == 'json':
+            return JsonResponse({"status": "error", "message": "Too many login attempts. Please try again later."}, status=429)
+        messages.error(request, "Too many login attempts. Please try again later.")
+        return render(request, 'pages/login.html', {'form': AuthenticationForm()})
+
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -43,7 +51,14 @@ def login_page(request):
         form = AuthenticationForm()
     return render(request, 'pages/login.html', {'form': form})
 
+@ratelimit(key='ip', rate='5/m', method='POST', block=False)
 def signup_page(request):
+    if getattr(request, 'limited', False):
+        if request.GET.get('format') == 'json':
+            return JsonResponse({"status": "error", "message": "Too many signup attempts. Please try again later."}, status=429)
+        messages.error(request, "Too many signup attempts. Please try again later.")
+        return render(request, 'pages/signup.html')
+
     if request.method == 'POST':
         username = request.POST.get('email')
         email = request.POST.get('email')
@@ -151,8 +166,12 @@ def templates_page(request):
         return JsonResponse(context, safe=False)
     return render(request, 'pages/templatespage.html', context)
 
+@ratelimit(key='user', rate='20/m', block=False)
 @login_required
 def save_project(request, project_id):
+    if getattr(request, 'limited', False):
+        return JsonResponse({"status": "error", "message": "Too many requests. Please slow down."}, status=429)
+
     project = services.get_project_by_id(project_id)
     if not project or project['owner_id'] != request.user.id:
         return JsonResponse({"status": "error", "message": "Project not found or access denied."}, status=404)
@@ -179,8 +198,12 @@ def save_project(request, project_id):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
 
+@ratelimit(key='user', rate='10/m', block=False)
 @login_required
 def compile_project(request, project_id):
+    if getattr(request, 'limited', False):
+        return HttpResponse("Too many compilation requests. Please slow down.", status=429)
+
     project = services.get_project_by_id(project_id)
     if not project or project['owner_id'] != request.user.id:
         return HttpResponse("Project not found or access denied.", status=404)
