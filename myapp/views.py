@@ -8,8 +8,10 @@ from django.utils import timezone
 from . import services
 from datetime import datetime
 import httpx
+import logging
 
 User = get_user_model()
+logger = logging.getLogger('myapp')
 
 def landing_page(request):
     features = services.get_features()
@@ -32,10 +34,14 @@ def login_page(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                logger.info(f"User logged in: {username}")
                 if request.GET.get('format') == 'json':
                     return JsonResponse({"status": "success", "user_id": user.id})
                 return redirect('dashboard')
+            else:
+                logger.warning(f"Failed login attempt for user: {username}")
         else:
+            logger.warning(f"Invalid login form submission")
             if request.GET.get('format') == 'json':
                 return JsonResponse({"status": "error", "message": "Invalid username or password."}, status=400)
             messages.error(request, "Invalid username or password.")
@@ -51,12 +57,14 @@ def signup_page(request):
         first_name = request.POST.get('name')
 
         if User.objects.filter(username=username).exists():
+            logger.warning(f"Signup failed: User already exists: {username}")
             if request.GET.get('format') == 'json':
                 return JsonResponse({"status": "error", "message": "User already exists."}, status=400)
             messages.error(request, "User already exists.")
         else:
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name)
             login(request, user)
+            logger.info(f"New user signed up: {username}")
             if request.GET.get('format') == 'json':
                 return JsonResponse({"status": "success", "user_id": user.id})
             return redirect('dashboard')
@@ -64,7 +72,9 @@ def signup_page(request):
     return render(request, 'pages/signup.html')
 
 def logout_view(request):
+    username = request.user.username if request.user.is_authenticated else "Anonymous"
     logout(request)
+    logger.info(f"User logged out: {username}")
     if request.GET.get('format') == 'json':
         return JsonResponse({"status": "success"})
     return redirect('landing')
@@ -113,14 +123,17 @@ def editor_page(request, project_id=None):
         try:
             project = services.get_project_by_id(project_id)
             if not project or project['owner_id'] != request.user.id:
+                 logger.warning(f"Unauthorized access attempt to project {project_id} by user {request.user.id}")
                  return JsonResponse({"status": "error", "message": "Project not found or access denied."}, status=404)
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error accessing project {project_id}: {str(e)}")
             return JsonResponse({"status": "error", "message": "Invalid project ID."}, status=400)
     else:
         projects = services.get_user_projects(request.user.id)
         if projects:
             project = projects[0]
         else:
+            logger.info(f"Creating default project for user {request.user.id}")
             project_id = services.create_project(
                 owner_id=request.user.id,
                 title="Untitled Project",
@@ -155,6 +168,7 @@ def templates_page(request):
 def save_project(request, project_id):
     project = services.get_project_by_id(project_id)
     if not project or project['owner_id'] != request.user.id:
+        logger.warning(f"Unauthorized save attempt to project {project_id} by user {request.user.id}")
         return JsonResponse({"status": "error", "message": "Project not found or access denied."}, status=404)
 
     if request.method == 'POST':
@@ -174,6 +188,7 @@ def save_project(request, project_id):
             update_data['title'] = title
 
         if update_data:
+            logger.info(f"Saving project {project_id} for user {request.user.id}")
             services.update_project(project_id, update_data)
             return JsonResponse({"status": "success"})
 
@@ -183,9 +198,11 @@ def save_project(request, project_id):
 def compile_project(request, project_id):
     project = services.get_project_by_id(project_id)
     if not project or project['owner_id'] != request.user.id:
+        logger.warning(f"Unauthorized compilation attempt for project {project_id} by user {request.user.id}")
         return HttpResponse("Project not found or access denied.", status=404)
 
     content = project['content']
+    logger.info(f"Compiling project {project_id} for user {request.user.id}")
 
     try:
         # We use a POST request to handle potentially large LaTeX content
@@ -197,11 +214,14 @@ def compile_project(request, project_id):
         )
 
         if response.status_code == 200:
+            logger.info(f"Compilation successful for project {project_id}")
             pdf_response = HttpResponse(response.content, content_type='application/pdf')
             pdf_response['Content-Disposition'] = f'attachment; filename="{project.get("filename", "document.pdf").replace(".tex", ".pdf")}"'
             return pdf_response
         else:
             # On failure, LaTeX.Online often returns the log in the body
+            logger.error(f"Compilation failed for project {project_id}: {response.text[:100]}...")
             return HttpResponse(f"Compilation failed:\n\n{response.text}", content_type="text/plain", status=400)
     except httpx.RequestError as e:
+        logger.error(f"Error connecting to LaTeX.Online for project {project_id}: {str(e)}")
         return HttpResponse(f"Error connecting to LaTeX.Online: {str(e)}", status=500)
