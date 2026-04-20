@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error | LaTeXGenius{% endblock %}
+
+{% block layout %}
+<div class="min-h-screen bg-background dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div class="text-center">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-error/10 text-error mb-8 border border-error/20">
+            <span class="material-symbols-outlined text-4xl">warning</span>
+        </div>
+        <h1 class="text-6xl font-black text-error mb-4 tracking-tighter">500</h1>
+        <h2 class="text-2xl font-bold text-on-surface dark:text-white mb-4">Compiler Crash</h2>
+        <p class="text-on-surface-variant dark:text-slate-400 max-w-md mx-auto mb-8 leading-relaxed">
+            Our systems encountered an unexpected exception while rendering your request. Our engineers have been notified.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="window.location.reload()" class="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-variant transition-all">
+                Retry Connection
+            </button>
+            <a href="{% url 'landing' %}" class="px-8 py-3 bg-white dark:bg-slate-800 text-on-surface dark:text-white border border-outline-variant dark:border-slate-700 font-bold rounded-xl hover:bg-surface dark:hover:bg-slate-700 transition-all">
+                System Status
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
