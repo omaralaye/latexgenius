@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found | LaTeXGenius{% endblock %}
+
+{% block layout %}
+<div class="min-h-screen bg-background dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div class="text-center">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 text-primary mb-8 border border-primary/20">
+            <span class="material-symbols-outlined text-4xl">search_off</span>
+        </div>
+        <h1 class="text-6xl font-black text-primary mb-4 tracking-tighter">404</h1>
+        <h2 class="text-2xl font-bold text-on-surface dark:text-white mb-4">Lost in Translation?</h2>
+        <p class="text-on-surface-variant dark:text-slate-400 max-w-md mx-auto mb-8 leading-relaxed">
+            The page you are looking for doesn't exist or has been moved to a different coordinate.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'landing' %}" class="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-variant transition-all">
+                Back to Home
+            </a>
+            <a href="{% url 'dashboard' %}" class="px-8 py-3 bg-white dark:bg-slate-800 text-on-surface dark:text-white border border-outline-variant dark:border-slate-700 font-bold rounded-xl hover:bg-surface dark:hover:bg-slate-700 transition-all">
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

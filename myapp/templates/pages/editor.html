@@ -164,7 +164,30 @@
     const projectId = "{{ project.id }}";
     const editor = document.getElementById('latex-editor');
     const statusBadge = document.getElementById('status-badge');
-    const statusText = document.querySelector('.italic');
+    const statusText = document.querySelector('.font-mono.text-slate-400');
+
+    /**
+     * fetchWithRetry helper function
+     */
+    async function fetchWithRetry(url, options = {}, retries = 3, backoff = 1000) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                if (response.status >= 500 && retries > 0) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response;
+            }
+            return response;
+        } catch (error) {
+            if (retries > 0) {
+                console.warn(`Retrying fetch... (${retries} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, backoff));
+                return fetchWithRetry(url, options, retries - 1, backoff * 2);
+            }
+            throw error;
+        }
+    }
 
     async function saveProject() {
         const saveBtn = document.getElementById('save-button');
@@ -173,7 +196,7 @@
         saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Saving...';
 
         try {
-            const response = await fetch(`/editor/${projectId}/save/`, {
+            const response = await fetchWithRetry(`/editor/${projectId}/save/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -186,12 +209,18 @@
 
             if (response.ok) {
                 statusBadge.textContent = 'SAVED';
-                statusBadge.classList.replace('bg-indigo-500/20', 'bg-emerald-500/20');
-                statusBadge.classList.replace('text-indigo-400', 'text-emerald-400');
-                statusBadge.classList.replace('border-indigo-500/30', 'border-emerald-500/30');
+                statusBadge.className = "px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded border border-emerald-500/30";
+                toast('Project saved successfully', 'success');
+                return true;
+            } else {
+                const data = await response.json().catch(() => ({}));
+                toast(data.message || 'Failed to save project', 'error');
+                return false;
             }
         } catch (error) {
             console.error('Save failed:', error);
+            toast('Network error while saving. Please check your connection.', 'error');
+            return false;
         } finally {
             saveBtn.disabled = false;
             saveBtn.innerHTML = originalHtml;
@@ -203,24 +232,32 @@
         const originalHtml = compileBtn.innerHTML;
 
         // Auto-save before compiling
-        await saveProject();
+        const saved = await saveProject();
+        if (!saved) {
+            toast('Auto-save failed. Compilation aborted.', 'error');
+            return;
+        }
 
         compileBtn.disabled = true;
         compileBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Compiling...';
-        statusText.textContent = 'Compiling via LaTeX.Online...';
+
+        if (statusText) statusText.textContent = 'Compiling via LaTeX.Online...';
+        toast('Starting compilation...', 'info');
 
         try {
+            // Since we're downloading a file, we can't easily catch 500s from window.location.href
+            // But we already verified the connection with saveProject
             window.location.href = `/editor/${projectId}/compile/`;
 
-            // Note: Since location.href trigger a download, the page won't refresh.
-            // We'll reset the button state after a delay as a heuristic.
+            // Reset button state after a delay as a heuristic since the browser doesn't refresh on download
             setTimeout(() => {
                 compileBtn.disabled = false;
                 compileBtn.innerHTML = originalHtml;
-                statusText.textContent = 'Compilation request sent.';
+                toast('PDF should begin downloading shortly.', 'success');
+                if (statusText) statusText.textContent = 'Ready';
             }, 3000);
         } catch (error) {
-            statusText.textContent = 'Error: ' + error.message;
+            toast('Compilation error: ' + error.message, 'error');
             compileBtn.disabled = false;
             compileBtn.innerHTML = originalHtml;
         }

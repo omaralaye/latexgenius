@@ -65,6 +65,14 @@
             background-color: #0f172a;
             color: #f8fafc;
         }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .animate-toast {
+            animation: slideIn 0.3s ease-out forwards;
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
@@ -79,6 +87,9 @@
 
     {% include "components/footer.html" %}
     {% endblock %}
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3"></div>
 
     {% block extra_scripts %}{% endblock %}
     <script>
@@ -97,6 +108,39 @@
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
             }
+        }
+
+        /**
+         * toast function to show notifications
+         * @param {string} message - The message to display
+         * @param {'success' | 'error' | 'info'} type - The type of toast
+         */
+        function toast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const bgClass = type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-error' : 'bg-primary';
+            const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+
+            toast.className = `${bgClass} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-toast transform transition-all duration-300`;
+
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'material-symbols-outlined text-xl';
+            iconSpan.textContent = icon;
+
+            const messageSpan = document.createElement('span');
+            messageSpan.className = 'text-sm font-bold';
+            messageSpan.textContent = message;
+
+            toast.appendChild(iconSpan);
+            toast.appendChild(messageSpan);
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
         }
     </script>
 </body>
