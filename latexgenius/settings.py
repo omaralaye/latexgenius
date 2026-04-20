@@ -10,20 +10,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
+
+# Validate required environment variables
+REQUIRED_ENV_VARS = [
+    'SECRET_KEY',
+    'DEBUG',
+    'MONGODB_URI',
+    'MONGODB_DB_NAME',
+]
+
+for var in REQUIRED_ENV_VARS:
+    if not os.environ.get(var):
+        raise ImproperlyConfigured(f"The required environment variable '{var}' is missing or empty.")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#+%bax4*fw%fd+-aj6=l()@%%a!kf11j#y+p^7o8@q#_%g$tou'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = []
 
