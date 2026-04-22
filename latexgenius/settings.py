@@ -137,6 +137,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 STATIC_URL = 'static/'
 
+# LaTeX Compiler Settings
+LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.cc/compile')
+
 # Logging configuration
 LOGGING = {
     'version': 1,

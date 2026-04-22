@@ -1,0 +1,20 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - LATEX_COMPILER_URL=http://latex-online:2700/compile
+      - SECRET_KEY=dummy-secret-key-for-docker-compose
+      - DEBUG=True
+      - MONGODB_URI=mongodb://localhost:27017/unused
+      - MONGODB_DB_NAME=unused
+    depends_on:
+      - latex-online
+
+  latex-online:
+    image: aslushnikov/latex-online
+    ports:
+      - "2700:2700"
