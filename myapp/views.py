@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
+from django.conf import settings
 from django_ratelimit.decorators import ratelimit
 from . import services
 from datetime import datetime
@@ -231,7 +232,7 @@ def compile_project(request, project_id):
         # We use a POST request to handle potentially large LaTeX content
         # LaTeX.Online supports text compilation via the 'text' parameter
         response = httpx.post(
-            "https://latexonline.cc/compile",
+            settings.LATEX_COMPILER_URL,
             data={"text": content},
             timeout=60.0
         )
