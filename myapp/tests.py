@@ -93,3 +93,46 @@ class RateLimitTests(TestCase):
         response = self.client.post(url, {'content': 'final content'})
         self.assertEqual(response.status_code, 429)
         self.assertJSONEqual(response.content, {"status": "error", "message": "Too many requests. Please slow down."})
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+class DocumentUploadTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser@example.com', password='password123')
+        self.client.login(username='testuser@example.com', password='password123')
+
+    def test_upload_valid_tex_file(self):
+        content = b"\\documentclass{article}\\begin{document}Hello\\end{document}"
+        uploaded_file = SimpleUploadedFile("test.tex", content, content_type="text/plain")
+
+        response = self.client.post(reverse('upload_document'), {'document': uploaded_file})
+
+        # Should redirect to editor
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/editor/'))
+
+        # Check if project was created
+        project = Project.objects.filter(owner=self.user, title="test").first()
+        self.assertIsNotNone(project)
+        self.assertEqual(project.content, content.decode('utf-8'))
+        self.assertEqual(project.filename, "test.tex")
+
+    def test_upload_invalid_file_extension(self):
+        content = b"some content"
+        uploaded_file = SimpleUploadedFile("test.txt", content, content_type="text/plain")
+
+        response = self.client.post(reverse('upload_document'), {'document': uploaded_file})
+
+        # Should redirect back to dashboard
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('dashboard'))
+
+        # Check no project was created
+        self.assertEqual(Project.objects.filter(owner=self.user).count(), 0)
+
+    def test_upload_no_file(self):
+        response = self.client.post(reverse('upload_document'))
+
+        # Should redirect back to dashboard
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('dashboard'))
