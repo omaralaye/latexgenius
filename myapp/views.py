@@ -229,18 +229,19 @@ def compile_project(request, project_id):
     logger.info(f"Compiling project {project_id} for user {request.user.id}")
 
     try:
-        # We use a POST request to handle potentially large LaTeX content
-        # LaTeX.Online supports text compilation via the 'text' parameter
-        response = httpx.post(
+        # We use a GET request because the public latexonline.cc instance
+        # currently does not support POST for the /compile endpoint with 'text' parameter.
+        # Note: This may fail for very long documents due to URL length limits.
+        response = httpx.get(
             settings.LATEX_COMPILER_URL,
-            data={"text": content},
+            params={"text": content},
             timeout=60.0
         )
 
         if response.status_code == 200:
             logger.info(f"Compilation successful for project {project_id}")
             pdf_response = HttpResponse(response.content, content_type='application/pdf')
-            pdf_response['Content-Disposition'] = f'attachment; filename="{project.get("filename", "document.pdf").replace(".tex", ".pdf")}"'
+            pdf_response['Content-Disposition'] = f'inline; filename="{project.get("filename", "document.pdf").replace(".tex", ".pdf")}"'
             return pdf_response
         else:
             # On failure, LaTeX.Online often returns the log in the body
