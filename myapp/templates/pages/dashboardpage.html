@@ -10,8 +10,8 @@
             <span class="material-symbols-outlined text-white text-sm">terminal</span>
         </div>
         <div>
-            <h2 class="font-headline text-lg font-black text-primary dark:text-white">{{ app_settings.app_name|default:"LaTeXGenius" }}</h2>
-            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">{{ app_settings.app_version|default:"V1.0.0" }}</p>
+            <h2 class="font-headline text-lg font-black text-primary dark:text-white">LaTeXGenius</h2>
+            <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">V1.0.0</p>
         </div>
     </div>
     <nav class="flex flex-col gap-1 flex-grow">
@@ -57,7 +57,7 @@
     <!-- TopAppBar -->
     <header class="fixed top-0 right-0 left-0 md:left-64 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant dark:border-slate-800">
         <div class="flex items-center gap-4">
-            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white">LaTeXGenius</h1>
         </div>
         <div class="flex items-center gap-2 sm:gap-4">
             <a href="{% url 'editor' %}" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-white rounded-lg font-semibold text-xs sm:text-sm shadow-sm hover:bg-primary-variant transition-all">
