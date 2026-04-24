@@ -11,8 +11,8 @@
             <span class="material-symbols-outlined">terminal</span>
         </div>
         <div>
-            <div class="font-headline text-lg font-black text-primary dark:text-white">{{ app_settings.app_name|default:"LaTeXGenius" }}</div>
-            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{{ app_settings.app_version|default:"V1.0.0" }}</div>
+            <div class="font-headline text-lg font-black text-primary dark:text-white">LaTeXGenius</div>
+            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">V1.0.0</div>
         </div>
     </div>
     <div class="flex flex-col gap-1">
@@ -57,7 +57,7 @@
     <!-- Top Nav Replacement for this layout -->
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant dark:border-slate-800">
         <div class="flex items-center gap-8">
-            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white font-headline md:hidden">{{ app_settings.app_name|default:"LaTeXGenius" }}</h1>
+            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white font-headline md:hidden">LaTeXGenius</h1>
             <nav class="hidden md:flex gap-6">
                 <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
@@ -78,8 +78,8 @@
     <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
         <!-- Header Section -->
         <header class="mb-12 mt-8 max-w-4xl">
-            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface dark:text-white mb-4">{{ app_settings.template_section_title|default:"LaTeXGenius" }}</h2>
-            <p class="text-on-surface-variant dark:text-slate-400 text-lg max-w-2xl font-body leading-relaxed text-justify">{{ app_settings.template_section_subtitle|default:"Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity." }}</p>
+            <h2 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface dark:text-white mb-4">LaTeXGenius Templates</h2>
+            <p class="text-on-surface-variant dark:text-slate-400 text-lg max-w-2xl font-body leading-relaxed text-justify">Select a high-fidelity template to begin your technical composition. Every layout is optimized for precision and clarity.</p>
         </header>
 
         <!-- Bento-Style Grid -->

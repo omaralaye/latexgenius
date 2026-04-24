@@ -1,6 +1,6 @@
 <header class="sticky top-0 z-50 bg-background dark:bg-slate-900 border-b border-outline-variant dark:border-slate-800">
     <nav class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
-        <a href="{% url 'landing' %}" class="text-2xl font-bold font-serif text-primary dark:text-white">{{ app_settings.app_name|default:"LatexGenius" }}</a>
+        <a href="{% url 'landing' %}" class="text-2xl font-bold font-serif text-primary dark:text-white">LatexGenius</a>
         <div class="hidden md:flex items-center space-x-8 font-serif font-medium">
             <a class="{% if request.resolver_match.url_name == 'landing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'landing' %}">Features</a>
             <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'templates' %}">Templates</a>

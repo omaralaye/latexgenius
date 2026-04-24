@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Settings | {{ app_settings.app_name|default:"LaTeXGenius" }}{% endblock %}
+{% block title %}Settings | LaTeXGenius{% endblock %}
 
 
 {% block layout %}
@@ -8,7 +8,7 @@
 <!-- SideNavBar Shell -->
 <aside class="fixed left-0 top-0 h-full w-72 bg-slate-50 dark:bg-slate-900 flex flex-col p-6 gap-8 z-20 border-r border-outline-variant dark:border-slate-800">
 <div class="flex flex-col gap-1">
-<a href="{% url 'dashboard' %}" class="text-2xl font-newsreader font-bold text-primary dark:text-white">{{ app_settings.app_name|default:"LaTeXGenius" }}</a>
+<a href="{% url 'dashboard' %}" class="text-2xl font-newsreader font-bold text-primary dark:text-white">LaTeXGenius</a>
 <span class="font-newsreader text-lg italic tracking-tight text-on-surface-variant dark:text-slate-400">The Digital Atelier</span>
 </div>
 <a href="{% url 'editor' %}" class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label font-medium flex items-center justify-center gap-2 hover:bg-primary-variant transition-colors">
