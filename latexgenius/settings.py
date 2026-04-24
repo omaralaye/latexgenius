@@ -25,8 +25,6 @@ load_dotenv(BASE_DIR / '.env')
 REQUIRED_ENV_VARS = [
     'SECRET_KEY',
     'DEBUG',
-    'MONGODB_URI',
-    'MONGODB_DB_NAME',
 ]
 
 for var in REQUIRED_ENV_VARS:
