@@ -95,6 +95,41 @@ def logout_view(request):
         return JsonResponse({"status": "success"})
     return redirect('landing')
 
+import os
+
+@login_required
+def upload_document(request):
+    if request.method == 'POST' and request.FILES.get('document'):
+        uploaded_file = request.FILES['document']
+
+        # Check file size (limit to 5MB)
+        if uploaded_file.size > 5 * 1024 * 1024:
+            messages.error(request, "File size exceeds the 5MB limit.")
+            return redirect('dashboard')
+
+        if not uploaded_file.name.lower().endswith('.tex'):
+            messages.error(request, "Only .tex files are allowed.")
+            return redirect('dashboard')
+
+        try:
+            content = uploaded_file.read().decode('utf-8')
+            title, _ = os.path.splitext(uploaded_file.name)
+
+            project_id = services.create_project(
+                owner_id=request.user.id,
+                title=title,
+                content=content,
+                filename=uploaded_file.name
+            )
+            logger.info(f"User {request.user.id} uploaded document: {uploaded_file.name}")
+            return redirect('editor_with_id', project_id=project_id)
+        except Exception as e:
+            logger.error(f"Error uploading document: {str(e)}")
+            messages.error(request, "Failed to process the uploaded file.")
+            return redirect('dashboard')
+
+    return redirect('dashboard')
+
 @login_required
 def dashboard_page(request):
     projects = services.get_user_projects(request.user.id)
