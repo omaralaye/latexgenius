@@ -179,11 +179,11 @@
                     <div class="space-y-2">
                         <form id="uploadForm" action="{% url 'upload_document' %}" method="POST" enctype="multipart/form-data" class="hidden">
                             {% csrf_token %}
-                            <input type="file" id="documentInput" name="document" accept=".tex" onchange="document.getElementById('uploadForm').submit()">
+                            <input type="file" id="documentInput" name="document" accept=".tex,.md,.markdown,.docx,.odt,.html,.txt" onchange="document.getElementById('uploadForm').submit()">
                         </form>
                         <button onclick="document.getElementById('documentInput').click()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">upload_file</span>
-                            Upload .tex Document
+                            Upload Document
                         </button>
                         <button class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">token</span>
