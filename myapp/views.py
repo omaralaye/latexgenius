@@ -11,6 +11,8 @@ from . import services
 from datetime import datetime
 import httpx
 import logging
+import io
+import tarfile
 
 User = get_user_model()
 logger = logging.getLogger('myapp')
@@ -261,22 +263,36 @@ def compile_project(request, project_id):
         return HttpResponse("Project not found or access denied.", status=404)
 
     content = project['content']
+    filename = project.get('filename', 'main.tex')
     logger.info(f"Compiling project {project_id} for user {request.user.id}")
 
     try:
-        # We use a GET request because the public latexonline.cc instance
-        # currently does not support POST for the /compile endpoint with 'text' parameter.
-        # Note: This may fail for very long documents due to URL length limits.
-        response = httpx.get(
-            settings.LATEX_COMPILER_URL,
-            params={"text": content},
+        # We use a POST request to the /data endpoint with the content as a file.
+        # This avoids 414 Request-URI Too Large errors for long documents.
+        # The /data endpoint expects a tarball or a single file and a 'target' parameter.
+        tar_stream = io.BytesIO()
+        with tarfile.open(fileobj=tar_stream, mode='w:gz') as tar:
+            content_bytes = content.encode('utf-8')
+            tar_info = tarfile.TarInfo(name=filename)
+            tar_info.size = len(content_bytes)
+            tar.addfile(tarinfo=tar_info, fileobj=io.BytesIO(content_bytes))
+
+        tar_stream.seek(0)
+
+        # The /data endpoint is usually at /data, not /compile
+        compiler_url = settings.LATEX_COMPILER_URL.replace('/compile', '/data')
+
+        response = httpx.post(
+            compiler_url,
+            params={"target": filename},
+            files={"file": (f"{filename}.tar.gz", tar_stream, "application/gzip")},
             timeout=60.0
         )
 
         if response.status_code == 200:
             logger.info(f"Compilation successful for project {project_id}")
             pdf_response = HttpResponse(response.content, content_type='application/pdf')
-            pdf_response['Content-Disposition'] = f'inline; filename="{project.get("filename", "document.pdf").replace(".tex", ".pdf")}"'
+            pdf_response['Content-Disposition'] = f'inline; filename="{filename.replace(".tex", ".pdf")}"'
             return pdf_response
         else:
             # On failure, LaTeX.Online often returns the log in the body

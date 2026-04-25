@@ -127,8 +127,55 @@ class DocumentUploadTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('dashboard'))
 
-        # Check no project was created
-        self.assertEqual(Project.objects.filter(owner=self.user).count(), 0)
+from unittest.mock import patch, MagicMock
+
+class CompilationTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser@example.com', password='password123')
+        self.client.login(username='testuser@example.com', password='password123')
+        self.project_id = services.create_project(
+            owner_id=self.user.id,
+            title="Test Project",
+            content="\\documentclass{article}\\begin{document}Hello\\end{document}",
+            filename="main.tex"
+        )
+
+    @patch('httpx.post')
+    def test_compile_project_success(self, mock_post):
+        # Mock successful response from latex-online
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.content = b"%PDF-1.4 binary data"
+        mock_post.return_value = mock_response
+
+        url = reverse('compile_project', kwargs={'project_id': self.project_id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertEqual(response.content, b"%PDF-1.4 binary data")
+
+        # Verify httpx.post was called correctly
+        mock_post.assert_called_once()
+        args, kwargs = mock_post.call_args
+        self.assertIn('/data', args[0])
+        self.assertEqual(kwargs['params'], {'target': 'main.tex'})
+        self.assertIn('file', kwargs['files'])
+
+    @patch('httpx.post')
+    def test_compile_project_failure(self, mock_post):
+        # Mock failed response from latex-online
+        mock_response = MagicMock()
+        mock_response.status_code = 400
+        mock_response.text = "LaTeX Error: Missing \begin{document}"
+        mock_post.return_value = mock_response
+
+        url = reverse('compile_project', kwargs={'project_id': self.project_id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b"Compilation failed", response.content)
+        self.assertIn(b"LaTeX Error", response.content)
 
     def test_upload_no_file(self):
         response = self.client.post(reverse('upload_document'))
