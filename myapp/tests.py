@@ -129,13 +129,27 @@ class DocumentUploadTests(TestCase):
 
     def test_upload_invalid_file_extension(self):
         content = b"some content"
-        uploaded_file = SimpleUploadedFile("test.txt", content, content_type="text/plain")
+        uploaded_file = SimpleUploadedFile("test.exe", content, content_type="application/octet-stream")
 
-        response = self.client.post(reverse('upload_document'), {'document': uploaded_file})
+        response = self.client.post(reverse('upload_document'), {'document': uploaded_file}, follow=True)
 
-        # Should redirect back to dashboard
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('dashboard'))
+        # Should redirect back to dashboard (or referer)
+        self.assertEqual(response.status_code, 200)
+        messages = [m.message for m in response.context['messages']]
+        self.assertIn('File type .exe not supported.', messages)
+
+    def test_upload_md_conversion(self):
+        content = b'# Hello World\nThis is markdown.'
+        uploaded_file = SimpleUploadedFile('test_md.md', content, content_type='text/markdown')
+
+        with patch('pypandoc.convert_file') as mock_convert:
+            mock_convert.return_value = '\\section{Hello World}\\label{hello-world}\nThis is markdown.'
+            response = self.client.post(reverse('upload_document'), {'document': uploaded_file})
+
+            project = Project.objects.get(title='test_md')
+            self.assertIn('section{Hello World}', project.content)
+            self.assertEqual(project.filename, 'test_md.tex')
+            self.assertRedirects(response, f'/editor/{project.id}/')
 
 class AIConversionTests(TestCase):
     def setUp(self):

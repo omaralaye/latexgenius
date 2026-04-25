@@ -90,6 +90,14 @@
             </button>
         </div>
         <div class="flex items-center gap-2">
+            <form id="uploadForm" action="{% url 'upload_document' %}" method="POST" enctype="multipart/form-data" class="hidden">
+                {% csrf_token %}
+                <input type="file" id="documentInput" name="document" accept=".tex,.md,.markdown,.docx,.odt,.html,.txt" onchange="document.getElementById('uploadForm').submit()">
+            </form>
+            <button onclick="document.getElementById('documentInput').click()" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 text-on-surface dark:text-white text-xs sm:text-sm font-bold rounded-lg shadow-sm hover:bg-surface dark:hover:bg-slate-700 border border-outline-variant dark:border-slate-700 transition-all">
+                <span class="material-symbols-outlined text-sm">upload_file</span>
+                <span class="hidden xs:inline">Upload</span>
+            </button>
             <button class="hidden sm:flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 text-on-surface dark:text-white text-sm font-medium rounded-lg hover:bg-surface dark:hover:bg-slate-700 border border-outline-variant dark:border-slate-700 transition-all">
                 <span class="material-symbols-outlined text-sm">history</span>
                 Versions
