@@ -138,6 +138,10 @@ STATIC_URL = 'static/'
 # LaTeX Compiler Settings
 LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.cc/compile')
 
+# OpenAI Settings
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'gpt-4o')
+
 # Logging configuration
 LOGGING = {
     'version': 1,
