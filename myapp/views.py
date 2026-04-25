@@ -13,6 +13,9 @@ import httpx
 import logging
 import io
 import tarfile
+import pypandoc
+import os
+import tempfile
 import tempfile
 from urllib.parse import urlencode
 
@@ -159,36 +162,56 @@ def ai_convert(request):
 
 @login_required
 def upload_document(request):
+    redirect_url = request.META.get('HTTP_REFERER', 'dashboard')
     if request.method == 'POST' and request.FILES.get('document'):
         uploaded_file = request.FILES['document']
 
         # Check file size (limit to 5MB)
         if uploaded_file.size > 5 * 1024 * 1024:
             messages.error(request, "File size exceeds the 5MB limit.")
-            return redirect('dashboard')
+            return redirect(redirect_url)
 
-        if not uploaded_file.name.lower().endswith('.tex'):
-            messages.error(request, "Only .tex files are allowed.")
-            return redirect('dashboard')
+        allowed_extensions = ['.tex', '.md', '.markdown', '.docx', '.odt', '.html', '.txt']
+        _, ext = os.path.splitext(uploaded_file.name.lower())
+        if ext not in allowed_extensions:
+            messages.error(request, f"File type {ext} not supported.")
+            return redirect(redirect_url)
 
         try:
-            content = uploaded_file.read().decode('utf-8')
             title, _ = os.path.splitext(uploaded_file.name)
+            filename = uploaded_file.name
+
+            if ext == '.tex':
+                content = uploaded_file.read().decode('utf-8')
+            else:
+                # Use a temporary file for pypandoc
+                with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as tmp:
+                    for chunk in uploaded_file.chunks():
+                        tmp.write(chunk)
+                    tmp_path = tmp.name
+
+                try:
+                    # Convert to LaTeX
+                    content = pypandoc.convert_file(tmp_path, 'latex', extra_args=['--standalone'])
+                    filename = title + '.tex'
+                finally:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
 
             project_id = services.create_project(
                 owner_id=request.user.id,
                 title=title,
                 content=content,
-                filename=uploaded_file.name
+                filename=filename
             )
             logger.info(f"User {request.user.id} uploaded document: {uploaded_file.name}")
             return redirect('editor_with_id', project_id=project_id)
         except Exception as e:
             logger.error(f"Error uploading document: {str(e)}")
             messages.error(request, "Failed to process the uploaded file.")
-            return redirect('dashboard')
+            return redirect(redirect_url)
 
-    return redirect('dashboard')
+    return redirect(redirect_url)
 
 @login_required
 def dashboard_page(request):
