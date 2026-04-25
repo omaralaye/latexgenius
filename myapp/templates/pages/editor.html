@@ -393,5 +393,16 @@
             initializeEditorClerk();
         };
     }
+
+    // Auto-compile if requested
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('autocompile') === 'true') {
+            // Give it a small delay to ensure everything is ready
+            setTimeout(() => {
+                compileProject();
+            }, 500);
+        }
+    });
 </script>
 {% endblock %}

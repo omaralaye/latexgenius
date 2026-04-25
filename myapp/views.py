@@ -13,6 +13,8 @@ import httpx
 import logging
 import io
 import tarfile
+import tempfile
+from urllib.parse import urlencode
 
 User = get_user_model()
 logger = logging.getLogger('myapp')
@@ -98,6 +100,62 @@ def logout_view(request):
     return redirect('landing')
 
 import os
+
+@login_required
+def ai_convert(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        uploaded_file = request.FILES.get('document')
+        title = "AI Project"
+
+        if uploaded_file:
+            # Check file size (limit to 5MB)
+            if uploaded_file.size > 5 * 1024 * 1024:
+                messages.error(request, "File size exceeds the 5MB limit.")
+                return redirect('dashboard')
+
+            title, _ = os.path.splitext(uploaded_file.name)
+
+            # Save temporary file for Pandoc/Processing using tempfile to avoid collisions
+            suffix = os.path.splitext(uploaded_file.name)[1]
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
+                for chunk in uploaded_file.chunks():
+                    tmp_file.write(chunk)
+                temp_path = tmp_file.name
+
+            try:
+                latex_code = services.convert_to_latex_ai(file_path=temp_path)
+            finally:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+        elif content:
+            latex_code = services.convert_to_latex_ai(content=content)
+            # Try to extract a title from the content if it's long, else use default
+            if len(content) > 20:
+                title = content[:20].strip() + "..."
+        else:
+            messages.error(request, "No content provided for AI conversion.")
+            return redirect('dashboard')
+
+        if latex_code:
+            project_id = services.create_project(
+                owner_id=request.user.id,
+                title=title,
+                content=latex_code,
+                filename="main.tex"
+            )
+            logger.info(f"User {request.user.id} created AI project: {project_id}")
+
+            # Construct redirect URL with query parameter properly
+            from django.urls import reverse
+            url = reverse('editor_with_id', kwargs={'project_id': project_id})
+            params = urlencode({'autocompile': 'true'})
+            return redirect(f"{url}?{params}")
+        else:
+            messages.error(request, "AI conversion failed. Please try again or check your API key.")
+            return redirect('dashboard')
+
+    return redirect('dashboard')
 
 @login_required
 def upload_document(request):
