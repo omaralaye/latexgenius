@@ -1,8 +1,12 @@
 from datetime import datetime
 from django.utils import timezone
+from django.conf import settings
 from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial
 from django.contrib.auth.models import User
 import logging
+import openai
+import pypandoc
+import os
 
 logger = logging.getLogger('myapp')
 
@@ -158,3 +162,60 @@ def get_statistics():
 # Testimonials
 def get_testimonials():
     return [serialize_testimonial(t) for t in Testimonial.objects.all()]
+
+# AI Conversion
+def convert_to_latex_ai(content=None, file_path=None):
+    """
+    Converts document content or a file to LaTeX using OpenAI.
+    """
+    input_text = ""
+    if file_path:
+        try:
+            # Try to convert to markdown first as it's a good intermediate format for LLMs
+            input_text = pypandoc.convert_file(file_path, 'markdown')
+        except Exception as e:
+            logger.error(f"Pandoc conversion failed: {e}")
+            # Fallback to reading as text
+            try:
+                with open(file_path, 'r', errors='ignore') as f:
+                    input_text = f.read()
+            except Exception as read_err:
+                logger.error(f"Failed to read file: {read_err}")
+                return None
+    else:
+        input_text = content
+
+    if not input_text:
+        logger.warning("AI conversion attempted with empty input.")
+        return None
+
+    if not settings.OPENAI_API_KEY:
+        logger.error("OPENAI_API_KEY is not configured.")
+        return None
+
+    try:
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+
+        prompt = f"Convert the following document into a high-quality, valid LaTeX document. Return ONLY the LaTeX code, starting from \\documentclass and ending with \\end{{document}}.\n\nDocument Content:\n{input_text}"
+
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": "You are a LaTeX expert. Your task is to convert any provided document into a clean, well-structured LaTeX source code."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.2
+        )
+
+        latex_code = response.choices[0].message.content
+
+        # Clean up Markdown code blocks if present
+        if "```latex" in latex_code:
+            latex_code = latex_code.split("```latex")[1].split("```")[0]
+        elif "```" in latex_code:
+            latex_code = latex_code.split("```")[1].split("```")[0]
+
+        return latex_code.strip()
+    except Exception as e:
+        logger.error(f"OpenAI API error: {e}")
+        return None
