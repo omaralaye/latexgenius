@@ -5,12 +5,18 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    environment:
-      - LATEX_COMPILER_URL=http://latex-online:2700/compile
-      - SECRET_KEY=dummy-secret-key-for-docker-compose
-      - DEBUG=True
-      - MONGODB_URI=mongodb://localhost:27017/unused
-      - MONGODB_DB_NAME=unused
+    sharelatex:
+    
+      environment:
+    
+        - LATEX_COMPILER_URL=http://latex-online:2700/compile
+        - SECRET_KEY=dummy-secret-key-for-docker-compose
+        - DEBUG=True
+        - MONGODB_URI=mongodb://localhost:27017/unused
+        - MONGODB_DB_NAME=unused
+      SHARELATEX_COMPILER: pdflatex
+      # Increase body size limits
+      SHARELATEX_BEHIND_PROXY: "true"
     depends_on:
       - latex-online
 
@@ -18,3 +24,6 @@ services:
     image: aslushnikov/latex-online
     ports:
       - "2700:2700"
+
+
+      
