@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard_page, name='dashboard'),
     path('upload/', views.upload_document, name='upload_document'),
+    path('ai-convert/', views.ai_convert, name='ai_convert'),
     path('settings/', views.settings_page, name='settings'),
     path('editor/', views.editor_page, name='editor'),
     path('editor/<str:project_id>/', views.editor_page, name='editor_with_id'),
