@@ -27,4 +27,5 @@ pymongo
 python-dotenv
 httpx
 django-ratelimit
+openai
 pypandoc

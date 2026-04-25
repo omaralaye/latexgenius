@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from myapp.models import Project
 from myapp import services
+from unittest.mock import patch, MagicMock
+from django.core.files.uploadedfile import SimpleUploadedFile
+import io
+import os
 
 class DashboardTests(TestCase):
     def setUp(self):
@@ -62,21 +66,27 @@ class RateLimitTests(TestCase):
         self.assertEqual(response.status_code, 200) # It returns 200 but with an error message in context
         self.assertContains(response, "Too many login attempts. Please try again later.")
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+    @override_settings(
+        CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}},
+        RATELIMIT_ENABLE=True
+    )
     def test_signup_rate_limit(self):
         url = reverse('signup')
         # Rate is 5/m for signup
         for i in range(5):
-            response = self.client.post(url, {'email': f'test{i}@example.com', 'password': 'password123', 'name': 'Test'})
-            self.assertEqual(response.status_code, 302) # Redirect to dashboard
+            response = self.client.post(url, {'email': f'test-rl-{i}@example.com', 'password': 'password123', 'name': 'Test'})
+            self.assertEqual(response.status_code, 302)
             self.client.logout()
 
         # 6th attempt should be rate limited
-        response = self.client.post(url, {'email': 'final@example.com', 'password': 'password123', 'name': 'Test'})
+        response = self.client.post(url, {'email': 'final-rl@example.com', 'password': 'password123', 'name': 'Test'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Too many signup attempts. Please try again later.")
 
-    @override_settings(CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}})
+    @override_settings(
+        CACHES={'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}},
+        RATELIMIT_ENABLE=True
+    )
     def test_save_project_rate_limit(self):
         self.client.login(username='ratelimit@example.com', password='password123')
         # Create a project first
@@ -140,6 +150,47 @@ class DocumentUploadTests(TestCase):
             self.assertIn('section{Hello World}', project.content)
             self.assertEqual(project.filename, 'test_md.tex')
             self.assertRedirects(response, f'/editor/{project.id}/')
+
+class AIConversionTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testai@example.com', password='password123')
+        self.client.login(username='testai@example.com', password='password123')
+
+    @patch('openai.OpenAI')
+    def test_ai_convert_text_success(self, mock_openai):
+        # Mock OpenAI response
+        mock_client = MagicMock()
+        mock_openai.return_value = mock_client
+        mock_response = MagicMock()
+        mock_response.choices = [
+            MagicMock(message=MagicMock(content="\\documentclass{article}\n\\begin{document}\nAI Generated\n\\end{document}"))
+        ]
+        mock_client.chat.completions.create.return_value = mock_response
+
+        with self.settings(OPENAI_API_KEY='fake-key'):
+            response = self.client.post(reverse('ai_convert'), {'content': 'Convert this text to LaTeX'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('autocompile=true' in response.url)
+
+        project = Project.objects.filter(owner=self.user).last()
+        self.assertIsNotNone(project)
+        self.assertEqual(project.title, 'Convert this text to...')
+        self.assertIn('\\documentclass', project.content)
+
+    @patch('myapp.services.convert_to_latex_ai')
+    def test_ai_convert_file_success(self, mock_convert):
+        mock_convert.return_value = "\\documentclass{article}\n\\begin{document}\nFile Content\n\\end{document}"
+
+        content = b"Some document content"
+        uploaded_file = SimpleUploadedFile("test_doc.txt", content, content_type="text/plain")
+
+        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file})
+
+        self.assertEqual(response.status_code, 302)
+        project = Project.objects.filter(owner=self.user).last()
+        self.assertIsNotNone(project)
+        self.assertEqual(project.title, 'test_doc')
 
 from unittest.mock import patch, MagicMock
 
