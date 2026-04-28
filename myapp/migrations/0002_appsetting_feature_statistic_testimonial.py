@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=100)),
                 ("role", models.CharField(max_length=100)),
                 ("quote", models.TextField()),
-                ("image_url", models.URLField(blank=True, null=True)),
+                ("image_url", models.URLField(blank=True, max_length=500, null=True)),
             ],
         ),
     ]

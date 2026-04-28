@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Template(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=50)
-    image_url = models.URLField()
+    image_url = models.URLField(max_length=500)
     content = models.TextField(help_text="Default LaTeX content for this template")
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Testimonial(models.Model):
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     quote = models.TextField()
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name

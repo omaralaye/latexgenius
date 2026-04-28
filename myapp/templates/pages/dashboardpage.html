@@ -132,13 +132,32 @@
                     </p>
                     <form action="{% url 'ai_convert' %}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         {% csrf_token %}
+                        <div class="space-y-4">
+                            <div>
+                                <label for="templateSelect" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Select a template</label>
+                                <select id="templateSelect" name="template_id" required class="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
+                                    <option value="">Choose a template...</option>
+                                    {% for template in templates %}
+                                        <option value="{{ template.id }}">{{ template.name }} — {{ template.category }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="relative group">
+                                <textarea name="content" rows="4" class="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-white outline-none resize-none" placeholder="Paste your document content here..."></textarea>
+                            </div>
+                        </div>
                         <div class="relative group">
-                            <textarea name="content" rows="4" class="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-white outline-none resize-none" placeholder="Paste your document content here..."></textarea>
                             <div class="absolute bottom-3 right-3 flex items-center gap-2">
                                 <label for="aiDocumentInput" class="cursor-pointer p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center gap-2 text-xs font-bold dark:text-white">
                                     <span class="material-symbols-outlined text-sm">attach_file</span>
                                     Upload File
                                 </label>
+                                <input type="file" id="aiDocumentInput" name="document" class="hidden" onchange="updateFileName(this)">
+                                <button type="submit" class="px-6 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-all shadow-md active:scale-95">
+                                    Convert to LaTeX
+                                </button>
+                            </div>
+                        </div>
                                 <input type="file" id="aiDocumentInput" name="document" class="hidden" onchange="updateFileName(this)">
                                 <button type="submit" class="px-6 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-all shadow-md active:scale-95">
                                     Convert to LaTeX

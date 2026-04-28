@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from django.urls import reverse
-from myapp.models import Project
+from myapp.models import Project, Template
 from myapp import services
 from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -181,16 +181,44 @@ class AIConversionTests(TestCase):
     @patch('myapp.services.convert_to_latex_ai')
     def test_ai_convert_file_success(self, mock_convert):
         mock_convert.return_value = "\\documentclass{article}\n\\begin{document}\nFile Content\n\\end{document}"
+        template = Template.objects.create(
+            name='Conference Paper',
+            category='Academic',
+            image_url='http://example.com/template.png',
+            content='\\documentclass{article}\\n% Conference paper template'
+        )
 
         content = b"Some document content"
         uploaded_file = SimpleUploadedFile("test_doc.txt", content, content_type="text/plain")
 
-        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file})
+        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file, 'template_id': template.id})
 
         self.assertEqual(response.status_code, 302)
         project = Project.objects.filter(owner=self.user).last()
         self.assertIsNotNone(project)
         self.assertEqual(project.title, 'test_doc')
+
+    @patch('myapp.services.convert_to_latex_ai')
+    def test_ai_convert_file_with_template_success(self, mock_convert):
+        template = Template.objects.create(
+            name='Conference Paper',
+            category='Academic',
+            image_url='http://example.com/template.png',
+            content='\\documentclass{article}\\n% Conference paper template'
+        )
+        mock_convert.return_value = "\\documentclass{article}\\n\\begin{document}\\nTemplate AI\\n\\end{document}"
+
+        content = b"Some document content"
+        uploaded_file = SimpleUploadedFile("test_doc.txt", content, content_type="text/plain")
+        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file, 'template_id': template.id})
+
+        self.assertEqual(response.status_code, 302)
+        project = Project.objects.filter(owner=self.user).last()
+        self.assertIsNotNone(project)
+        self.assertEqual(project.title, 'test_doc')
+        self.assertIn('\\documentclass', project.content)
+        mock_convert.assert_called_once()
+        self.assertEqual(mock_convert.call_args.kwargs.get('template_content'), template.content)
 
 from unittest.mock import patch, MagicMock
 

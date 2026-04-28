@@ -14,3 +14,4 @@ local_settings.py
 
 #api
 .env
+.env.example

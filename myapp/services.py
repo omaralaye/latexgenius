@@ -142,6 +142,13 @@ def get_templates(limit=None):
         queryset = queryset[:limit]
     return [serialize_template(t) for t in queryset]
 
+def get_template_by_id(template_id):
+    try:
+        template = Template.objects.get(id=template_id)
+        return serialize_template(template)
+    except (Template.DoesNotExist, ValueError):
+        return None
+
 # Settings
 def get_all_settings():
     try:
@@ -164,9 +171,9 @@ def get_testimonials():
     return [serialize_testimonial(t) for t in Testimonial.objects.all()]
 
 # AI Conversion
-def convert_to_latex_ai(content=None, file_path=None):
+def convert_to_latex_ai(content=None, file_path=None, template_content=None):
     """
-    Converts document content or a file to LaTeX using OpenAI.
+    Converts document content or a file to LaTeX using OpenAI, optionally respecting a selected template.
     """
     input_text = ""
     if file_path:
@@ -196,12 +203,16 @@ def convert_to_latex_ai(content=None, file_path=None):
     try:
         client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
-        prompt = f"Convert the following document into a high-quality, valid LaTeX document. Return ONLY the LaTeX code, starting from \\documentclass and ending with \\end{{document}}.\n\nDocument Content:\n{input_text}"
+        prompt = "Convert the following document into a high-quality, valid LaTeX document. Return ONLY the LaTeX code, starting from \\documentclass and ending with \\end{document}."
+        if template_content:
+            prompt += "\n\nUse the provided LaTeX template as the formatting and structure guide. Preserve the template style and incorporate the document content into that template."
+            prompt += f"\n\nTemplate Content:\n{template_content}"
+        prompt += f"\n\nDocument Content:\n{input_text}"
 
         response = client.chat.completions.create(
             model=settings.OPENAI_MODEL,
             messages=[
-                {"role": "system", "content": "You are a LaTeX expert. Your task is to convert any provided document into a clean, well-structured LaTeX source code."},
+                {"role": "system", "content": "You are a LaTeX expert. Your task is to convert any provided document into a clean, well-structured LaTeX source code in accordance with the requested template."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.2

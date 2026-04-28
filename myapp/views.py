@@ -111,6 +111,17 @@ def ai_convert(request):
         uploaded_file = request.FILES.get('document')
         title = "AI Project"
 
+        template_id = request.POST.get('template_id')
+        if not template_id:
+            messages.error(request, "Please select a template before converting.")
+            return redirect('dashboard')
+
+        template = services.get_template_by_id(template_id)
+        if not template:
+            messages.error(request, "Selected template is invalid.")
+            return redirect('dashboard')
+        template_content = template.get('content')
+
         if uploaded_file:
             # Check file size (limit to 5MB)
             if uploaded_file.size > 5 * 1024 * 1024:
@@ -127,12 +138,15 @@ def ai_convert(request):
                 temp_path = tmp_file.name
 
             try:
-                latex_code = services.convert_to_latex_ai(file_path=temp_path)
+                latex_code = services.convert_to_latex_ai(file_path=temp_path, template_content=template_content)
             finally:
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
         elif content:
-            latex_code = services.convert_to_latex_ai(content=content)
+            if not template_content:
+                messages.error(request, "Please select a template before converting.")
+                return redirect('dashboard')
+            latex_code = services.convert_to_latex_ai(content=content, template_content=template_content)
             # Try to extract a title from the content if it's long, else use default
             if len(content) > 20:
                 title = content[:20].strip() + "..."
@@ -230,12 +244,14 @@ def dashboard_page(request):
             recent_activity = f"{diff.seconds // 60}m ago"
 
     shared_projects_count = services.get_shared_projects_count(request.user.id)
+    templates = services.get_templates()
 
     context = {
         'projects': projects,
         'total_projects': total_projects,
         'recent_activity': recent_activity,
         'shared_projects': shared_projects_count,
+        'templates': templates,
         'app_settings': services.get_all_settings(),
     }
     if request.GET.get('format') == 'json':
