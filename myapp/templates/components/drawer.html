@@ -1,0 +1,84 @@
+<!-- Drawer Overlay -->
+<div id="drawer-overlay" class="drawer-overlay fixed inset-0 bg-black/40 z-[100]" onclick="closeDrawer()"></div>
+
+<!-- Drawer Panel -->
+<div id="drawer-panel" class="drawer-panel fixed top-0 left-0 h-full w-72 bg-slate-50 dark:bg-slate-900 z-[110] flex flex-col shadow-2xl">
+    <!-- Drawer Header -->
+    <div class="flex items-center justify-between p-4 border-b border-outline-variant dark:border-slate-800">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-sm">terminal</span>
+            </div>
+            <div>
+                <h2 class="font-headline text-lg font-black text-primary dark:text-white">LaTeXGenius</h2>
+                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">V1.0.0</p>
+            </div>
+        </div>
+        <button onclick="closeDrawer()" class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
+
+    <!-- Drawer Navigation -->
+    <nav class="flex flex-col gap-1 p-4 flex-grow">
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'dashboard' %}bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'dashboard' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'dashboard' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>dashboard</span>
+            <span class="font-body text-sm font-medium">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'editor' or request.resolver_match.url_name == 'editor_with_id' %}bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'editor' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'editor' or request.resolver_match.url_name == 'editor_with_id' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>terminal</span>
+            <span class="font-body text-sm font-medium">Editor</span>
+        </a>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'templates' %}bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'templates' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'templates' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>library_books</span>
+            <span class="font-body text-sm font-medium">Templates</span>
+        </a>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'settings' %}bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'settings' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'settings' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>settings</span>
+            <span class="font-body text-sm font-medium">Settings</span>
+        </a>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'profile' %}bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'profile' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'profile' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>person</span>
+            <span class="font-body text-sm font-medium">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Drawer Footer -->
+    <div class="border-t border-outline-variant dark:border-slate-800 p-4">
+        <div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
+            <p class="text-xs font-bold text-primary dark:text-primary mb-1">PRO FEATURES (COMING SOON)</p>
+            <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-tight">Unlock unlimited compiles and custom PDF themes.</p>
+            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors">Upgrade to Pro</button>
+        </div>
+        <button onclick="toggleTheme()" class="w-full flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white transition-all rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+            <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+            <span class="font-body text-sm font-medium">Theme</span>
+        </button>
+        <a href="{% url 'logout' %}" class="w-full flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white transition-all rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">logout</span>
+            <span class="font-body text-sm font-medium">Logout</span>
+        </a>
+    </div>
+</div>
+
+<script>
+    const drawerPanel = document.getElementById('drawer-panel');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+
+    function openDrawer() {
+        drawerPanel.classList.add('open');
+        drawerOverlay.classList.add('open');
+    }
+
+    function closeDrawer() {
+        drawerPanel.classList.remove('open');
+        drawerOverlay.classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeDrawer();
+        }
+    });
+</script>

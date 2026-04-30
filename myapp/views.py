@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.conf import settings
 from django_ratelimit.decorators import ratelimit
 from . import services
+from .models import Profile
 from datetime import datetime
 import httpx
 import logging
@@ -266,6 +267,66 @@ def settings_page(request):
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)
     return render(request, 'pages/settings.html', context)
+
+@login_required
+def profile_page(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'update')
+
+        if action == 'update':
+            user = request.user
+            user.first_name = request.POST.get('first_name', '').strip()
+            user.last_name = request.POST.get('last_name', '').strip()
+            user.email = request.POST.get('email', '').strip()
+            user.save()
+
+            profile.bio = request.POST.get('bio', '').strip()
+            profile.avatar_url = request.POST.get('avatar_url', '').strip()
+            profile.affiliation = request.POST.get('affiliation', '').strip()
+            profile.website = request.POST.get('website', '').strip()
+            profile.github = request.POST.get('github', '').strip()
+            profile.google_scholar = request.POST.get('google_scholar', '').strip()
+            profile.save()
+
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'success', 'message': 'Profile updated successfully'})
+            messages.success(request, 'Profile updated successfully')
+            return redirect('profile')
+
+        elif action == 'change_password':
+            current_password = request.POST.get('current_password', '')
+            new_password = request.POST.get('new_password', '')
+            confirm_password = request.POST.get('confirm_password', '')
+
+            if not request.user.check_password(current_password):
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'error', 'message': 'Current password is incorrect'}, status=400)
+                messages.error(request, 'Current password is incorrect')
+            elif new_password != confirm_password:
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'error', 'message': 'New passwords do not match'}, status=400)
+                messages.error(request, 'New passwords do not match')
+            elif len(new_password) < 8:
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'error', 'message': 'Password must be at least 8 characters'}, status=400)
+                messages.error(request, 'Password must be at least 8 characters')
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'status': 'success', 'message': 'Password changed successfully'})
+                messages.success(request, 'Password changed successfully. Please log in again.')
+                return redirect('login')
+
+    context = {
+        'profile': profile,
+        'app_settings': services.get_all_settings(),
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/profile.html', context)
 
 @login_required
 def editor_page(request, project_id=None):

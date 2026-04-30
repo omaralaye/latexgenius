@@ -2,72 +2,24 @@
 
 {% block title %}Settings | LaTeXGenius{% endblock %}
 
+{% block extra_head %}
+{% include "components/drawer_styles.html" %}
+{% endblock %}
 
 {% block layout %}
+{% include "components/drawer.html" %}
+
 <div class="bg-background dark:bg-slate-900 text-on-background transition-colors duration-300">
-<!-- SideNavBar Shell -->
-<aside class="fixed left-0 top-0 h-full w-72 bg-slate-50 dark:bg-slate-900 flex flex-col p-6 gap-8 z-20 border-r border-outline-variant dark:border-slate-800">
-<div class="flex flex-col gap-1">
-<a href="{% url 'dashboard' %}" class="text-2xl font-newsreader font-bold text-primary dark:text-white">LaTeXGenius</a>
-<span class="font-newsreader text-lg italic tracking-tight text-on-surface-variant dark:text-slate-400">The Digital Atelier</span>
-</div>
-<a href="{% url 'editor' %}" class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label font-medium flex items-center justify-center gap-2 hover:bg-primary-variant transition-colors">
-<span class="material-symbols-outlined text-xl">add</span>
-            New Document
-</a>
-<nav class="flex-1 flex flex-col gap-2">
-<!-- Active State: Account & Security -->
-<a class="flex items-center gap-4 py-3 px-4 text-primary dark:text-white font-bold border-r-2 border-primary dark:border-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="#account-section">
-<span class="material-symbols-outlined" data-icon="security">security</span>
-<span class="font-label">Account &amp; Security</span>
-</a>
-<a class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="#api-section">
-<span class="material-symbols-outlined" data-icon="api">api</span>
-<span class="font-label">Research API (Coming Soon)</span>
-</a>
-<a class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="#preferences-section">
-<span class="material-symbols-outlined" data-icon="settings_applications">settings_applications</span>
-<span class="font-label">Editor Preferences</span>
-</a>
 
-<div class="h-[1px] bg-outline-variant dark:bg-slate-800 my-4"></div>
-
-<a class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="{% url 'dashboard' %}">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-label">Dashboard</span>
-</a>
-<a class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="{% url 'editor' %}">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-<span class="font-label">Editor</span>
-</a>
-<a class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300" href="{% url 'templates' %}">
-<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
-<span class="font-label">Templates</span>
-</a>
-</nav>
-<div class="mt-auto border-t border-outline-variant dark:border-slate-800 pt-6 flex flex-col gap-1">
-<button onclick="toggleTheme()" class="flex items-center gap-4 py-3 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-300">
-<span class="material-symbols-outlined dark:hidden">dark_mode</span>
-<span class="material-symbols-outlined hidden dark:block">light_mode</span>
-<span class="font-label">Theme</span>
-</button>
-<a class="flex items-center gap-4 py-2 px-4 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors" href="{% url 'logout' %}">
-<span class="material-symbols-outlined" data-icon="logout">logout</span>
-<span class="font-label">Sign Out</span>
-</a>
-<div class="flex items-center gap-3 mt-4 px-4">
-<img alt="User profile photo" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGp5NHp-HP82Wu91FwD3nJKi56KjPQWGRe7epNqjlI-DxRPsQ9GmEmyX8vjPk_m7T-FVPbro25jI_PRK5tEOtLnw8g508VSw6INCZRQW5lKqdWCoeqNfhHODkkZc1t9ZuGB3gOYtTQKe09oicz_6QF4Qtyu9KasY57aUQpeEKfqlee_wjVHw9b98fAaAuTMYuxEg5yHF-Q2e7RNCVmUfwY-Q7US5fdg5j6tuhLtmye-t9sNALo7Y0JtPYqlfLIPohWpAoRHYZ3k3EN"/>
-<div class="flex flex-col">
-<span class="text-sm font-bold text-on-surface dark:text-white">{{ user.first_name|default:user.username }}</span>
-<span class="text-xs text-on-surface-variant dark:text-slate-400 font-label">{{ user.email }}</span>
-</div>
-</div>
-</div>
-</aside>
 <!-- Main Content Canvas -->
-<main class="ml-72 min-h-screen bg-background dark:bg-slate-900">
+<main class="min-h-screen bg-background dark:bg-slate-900">
 <!-- TopAppBar Shell -->
 <header class="w-full h-16 sticky top-0 z-10 flex justify-end items-center px-12 bg-transparent">
+    <div class="absolute left-4 top-1/2 -translate-y-1/2">
+        <button onclick="openDrawer()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+            <span class="material-symbols-outlined text-xl">menu</span>
+        </button>
+    </div>
 <div class="flex items-center gap-6">
 <div class="relative group">
 <input class="bg-white dark:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-full px-6 py-1.5 text-sm w-64 focus:ring-1 focus:ring-primary transition-all font-label dark:text-white" placeholder="Search settings..." type="text"/>

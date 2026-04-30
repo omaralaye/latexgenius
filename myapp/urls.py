@@ -10,6 +10,7 @@ urlpatterns = [
     path('upload/', views.upload_document, name='upload_document'),
     path('ai-convert/', views.ai_convert, name='ai_convert'),
     path('settings/', views.settings_page, name='settings'),
+    path('profile/', views.profile_page, name='profile'),
     path('editor/', views.editor_page, name='editor'),
     path('editor/<str:project_id>/', views.editor_page, name='editor_with_id'),
     path('editor/<str:project_id>/save/', views.save_project, name='save_project'),

@@ -2,67 +2,22 @@
 
 {% block title %}Template Selection | LaTeXGenius{% endblock %}
 
+{% block extra_head %}
+{% include "components/drawer_styles.html" %}
+{% endblock %}
 
 {% block layout %}
-<!-- SideNavBar -->
-<aside class="h-screen w-64 fixed left-0 top-0 hidden md:flex flex-col bg-slate-50 dark:bg-slate-900 p-4 gap-2 border-r border-outline-variant dark:border-slate-800 z-50">
-    <div class="flex items-center gap-3 mb-8 px-2 mt-2">
-        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
-            <span class="material-symbols-outlined">terminal</span>
-        </div>
-        <div>
-            <div class="font-headline text-lg font-black text-primary dark:text-white">LaTeXGenius</div>
-            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">V1.0.0</div>
-        </div>
-    </div>
-    <div class="flex flex-col gap-1">
-        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'dashboard' %}">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="font-body text-sm font-medium">Dashboard</span>
-        </a>
-        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'editor' %}">
-            <span class="material-symbols-outlined">terminal</span>
-            <span class="font-body text-sm font-medium">Editor</span>
-        </a>
-        <a class="flex items-center gap-3 bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg px-4 py-3 shadow-sm border-l-4 border-primary transition-all duration-200" href="{% url 'templates' %}">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">library_books</span>
-            <span class="font-body text-sm font-medium">Templates</span>
-        </a>
-        <a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-all rounded-lg" href="{% url 'settings' %}">
-            <span class="material-symbols-outlined">settings</span>
-            <span class="font-body text-sm font-medium">Settings</span>
-        </a>
-    </div>
-    <div class="mt-auto flex flex-col gap-1">
-        <div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
-            <p class="text-xs font-bold text-primary mb-1">PRO FEATURES (COMING SOON)</p>
-            <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-tight">Unlock unlimited compiles and custom PDF themes.</p>
-            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors">Upgrade to Pro</button>
-        </div>
-        <button onclick="toggleTheme()" class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white transition-all">
-            <span class="material-symbols-outlined dark:hidden">dark_mode</span>
-            <span class="material-symbols-outlined hidden dark:block">light_mode</span>
-            <span class="font-body text-sm font-medium">Theme</span>
-        </button>
-        {% if user.is_authenticated %}
-        <div class="px-4 py-3">
-             <div id="user-button"></div>
-        </div>
-        {% endif %}
-    </div>
-</aside>
+{% include "components/drawer.html" %}
 
 <!-- Main Content -->
-<main class="md:ml-64 min-h-screen flex flex-col bg-background dark:bg-slate-900 transition-colors duration-300">
+<main class="min-h-screen flex flex-col bg-background dark:bg-slate-900 transition-colors duration-300">
     <!-- Top Nav Replacement for this layout -->
-    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md fixed top-0 right-0 left-0 md:left-64 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant dark:border-slate-800">
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md fixed top-0 right-0 left-0 z-40 flex justify-between items-center px-6 py-3 border-b border-outline-variant dark:border-slate-800">
         <div class="flex items-center gap-8">
-            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white font-headline md:hidden">LaTeXGenius</h1>
-            <nav class="hidden md:flex gap-6">
-                <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors px-3 py-1 rounded-lg" href="{% url 'editor' %}">Editor</a>
-                <a class="text-primary dark:text-white font-bold border-b-2 border-primary px-3 py-1" href="{% url 'templates' %}">Templates</a>
-            </nav>
+            <button onclick="openDrawer()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined text-xl">menu</span>
+            </button>
+            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white font-headline">LaTeXGenius</h1>
         </div>
         <div class="flex items-center gap-4">
             <button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
