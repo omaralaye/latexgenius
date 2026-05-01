@@ -156,22 +156,28 @@ class AIConversionTests(TestCase):
         self.user = User.objects.create_user(username='testai@example.com', password='password123')
         self.client.login(username='testai@example.com', password='password123')
 
-    @patch('openai.OpenAI')
-    def test_ai_convert_text_success(self, mock_openai):
-        # Mock OpenAI response
-        mock_client = MagicMock()
-        mock_openai.return_value = mock_client
-        mock_response = MagicMock()
-        mock_response.choices = [
-            MagicMock(message=MagicMock(content="\\documentclass{article}\n\\begin{document}\nAI Generated\n\\end{document}"))
-        ]
-        mock_client.chat.completions.create.return_value = mock_response
+    @patch('myapp.views.services.convert_to_latex_ai')
+    def test_ai_convert_text_success(self, mock_convert):
+        mock_convert.return_value = "\\documentclass{article}\n\\begin{document}\nAI Generated\n\\end{document}"
+
+        # Create a template for the test
+        template = Template.objects.create(
+            name='Test Template',
+            category='Test',
+            image_url='http://example.com/test.png',
+            content='\\documentclass{article}'
+        )
 
         with self.settings(OPENAI_API_KEY='fake-key'):
-            response = self.client.post(reverse('ai_convert'), {'content': 'Convert this text to LaTeX'})
+            response = self.client.post(reverse('ai_convert'), {
+                'content': 'Convert this text to LaTeX',
+                'template_id': template.id
+            })
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue('autocompile=true' in response.url)
+        # Check that the redirect URL contains the autocompile parameter
+        location = response.get('Location', '')
+        self.assertIn('autocompile=true', location)
 
         project = Project.objects.filter(owner=self.user).last()
         self.assertIsNotNone(project)
