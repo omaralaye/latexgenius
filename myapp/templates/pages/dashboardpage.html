@@ -76,83 +76,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- AI Conversion Section -->
-        <div class="mb-12 bg-white dark:bg-slate-800 rounded-2xl border border-outline-variant dark:border-slate-700 shadow-sm overflow-hidden">
-            <div class="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
-                <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
-                        </div>
-                        <h3 class="text-xl font-bold dark:text-white">AI Document Magic</h3>
-                    </div>
-                    <p class="text-on-surface-variant dark:text-slate-400 mb-6 leading-relaxed">
-                        Transform any document, notes, or raw text into professional LaTeX code instantly. Upload a file or paste your content below.
-                    </p>
-                    <form action="{% url 'ai_convert' %}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                        {% csrf_token %}
-                        <div class="space-y-4">
-                            <div>
-                                <label for="templateSelect" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Select a template</label>
-                                <select id="templateSelect" name="template_id" required class="w-full p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                                    <option value="">Choose a template...</option>
-                                    {% for template in templates %}
-                                        <option value="{{ template.id }}">{{ template.name }} — {{ template.category }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="relative group">
-                                <textarea name="content" rows="4" class="w-full p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-white outline-none resize-none" placeholder="Paste your document content here..."></textarea>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <div class="absolute bottom-3 right-3 flex items-center gap-2">
-                                <label for="aiDocumentInput" class="cursor-pointer p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center gap-2 text-xs font-bold dark:text-white">
-                                    <span class="material-symbols-outlined text-sm">attach_file</span>
-                                    Upload File
-                                </label>
-                                <input type="file" id="aiDocumentInput" name="document" class="hidden" onchange="updateFileName(this)">
-                                <button type="submit" class="px-6 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-all shadow-md active:scale-95">
-                                    Convert to LaTeX
-                                </button>
-                            </div>
-                        </div>
-                                <input type="file" id="aiDocumentInput" name="document" class="hidden" onchange="updateFileName(this)">
-                                <button type="submit" class="px-6 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-all shadow-md active:scale-95">
-                                    Convert to LaTeX
-                                </button>
-                            </div>
-                        </div>
-                        <p id="fileNameDisplay" class="text-[10px] font-mono text-primary font-bold hidden"></p>
-                    </form>
-                </div>
-                <div class="hidden lg:flex flex-col justify-center gap-4 w-64 border-l border-slate-100 dark:border-slate-700 pl-8">
-                    <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
-                        <div>
-                            <p class="text-xs font-bold dark:text-white">Smart Formatting</p>
-                            <p class="text-[10px] text-slate-500">Auto-detects structure</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
-                        <div>
-                            <p class="text-xs font-bold dark:text-white">Math Support</p>
-                            <p class="text-[10px] text-slate-500">Perfect equations</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
-                        <div>
-                            <p class="text-xs font-bold dark:text-white">Native LaTeX</p>
-                            <p class="text-[10px] text-slate-500">Clean, editable source</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Main Content: Recent Documents & Activity -->
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             <!-- Recent Documents List -->
@@ -178,7 +101,12 @@
                             <span class="material-symbols-outlined">{% if project.status == 'compiled' %}description{% else %}edit_note{% endif %}</span>
                         </div>
                         <div>
-                            <p class="font-semibold text-sm group-hover:text-primary transition-colors dark:text-white">{{ project.title }}</p>
+                            <div class="flex items-center gap-2">
+                                <p class="font-semibold text-sm group-hover:text-primary transition-colors dark:text-white rename-display" id="rename-display-{{ project.id }}">{{ project.title }}</p>
+                                <button onclick="startRename('{{ project.id }}', '{{ project.title|escapejs }}')" class="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-opacity" title="Rename">
+                                    <span class="material-symbols-outlined text-sm text-slate-400">edit</span>
+                                </button>
+                            </div>
                             <p class="text-[10px] font-mono text-slate-400 uppercase">{{ project.filename }}</p>
                         </div>
                     </div>
@@ -245,6 +173,105 @@
         } else {
             display.classList.add('hidden');
         }
+    }
+
+    let currentRenameId = null;
+
+    function startRename(projectId, currentTitle) {
+        if (currentRenameId) cancelRename();
+        currentRenameId = projectId;
+
+        const display = document.getElementById(`rename-display-${projectId}`);
+        const container = display.parentElement;
+
+        display.classList.add('hidden');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentTitle;
+        input.className = 'text-sm font-semibold px-2 py-1 border-2 border-primary rounded w-full focus:outline-none dark:bg-slate-700 dark:text-white';
+        input.id = `rename-input-${projectId}`;
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveRename(projectId);
+            if (e.key === 'Escape') cancelRename();
+        });
+        input.addEventListener('blur', () => saveRename(projectId));
+
+        container.appendChild(input);
+        input.focus();
+        input.select();
+    }
+
+    function cancelRename() {
+        if (!currentRenameId) return;
+        const display = document.getElementById(`rename-display-${currentRenameId}`);
+        const input = document.getElementById(`rename-input-${currentRenameId}`);
+        if (input) input.remove();
+        if (display) display.classList.remove('hidden');
+        currentRenameId = null;
+    }
+
+    async function saveRename(projectId) {
+        const input = document.getElementById(`rename-input-${projectId}`);
+        if (!input) return;
+
+        const newTitle = input.value.trim();
+        if (!newTitle) {
+            cancelRename();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/editor/${projectId}/save/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ title: newTitle })
+            });
+
+            if (response.ok) {
+                const display = document.getElementById(`rename-display-${projectId}`);
+                display.textContent = newTitle;
+                cancelRename();
+                toast('Project renamed successfully', 'success');
+            } else {
+                toast('Failed to rename project', 'error');
+                cancelRename();
+            }
+        } catch (error) {
+            toast('Network error while renaming', 'error');
+            cancelRename();
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function toast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-20 right-4 px-4 py-2 rounded-lg text-white text-sm font-medium z-50 ${type === 'success' ? 'bg-emerald-500' : 'bg-red-500'}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
     }
 </script>
 

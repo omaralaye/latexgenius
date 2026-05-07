@@ -52,7 +52,10 @@
         <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
                 <span class="text-xs text-slate-400">Project /</span>
-                <span class="text-xs font-bold text-white uppercase tracking-wide truncate max-w-[200px]">{{ project.title }}</span>
+                <span class="text-xs font-bold text-white uppercase tracking-wide truncate max-w-[200px] rename-display-editor" id="rename-display-editor">{{ project.title }}</span>
+                <button onclick="startRenameEditor('{{ project.id }}', '{{ project.title|escapejs }}')" class="p-1 hover:bg-white/20 rounded transition-colors" title="Rename project">
+                    <span class="material-symbols-outlined text-sm text-slate-300">edit</span>
+                </button>
             </div>
         </div>
     </div>
@@ -134,7 +137,7 @@
                         <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">article</span>
                     </div>
                     <div class="overflow-hidden">
-                        <p class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{{ project.title }}.tex</p>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate" id="sidebar-project-title">{{ project.title }}.tex</p>
                         <p class="text-[10px] text-slate-400 dark:text-slate-500">Active project</p>
                     </div>
                 </div>
@@ -273,7 +276,7 @@
 <footer class="h-6 bg-primary dark:bg-primary-variant text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
     <div class="flex items-center gap-4">
         <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">cloud_done</span> Pipeline active</span>
-        <span class="opacity-70">Editing: {{ project.title }}</span>
+        <span class="opacity-70" id="footer-editing">Editing: {{ project.title }}</span>
     </div>
     <div class="flex items-center gap-4">
         <span class="opacity-70">AI Engine: gpt-4o</span>
@@ -444,7 +447,8 @@
         if (!currentPdfUrl) return;
         const a = document.createElement('a');
         a.href = currentPdfUrl;
-        a.download = '{{ project.title|default:"document" }}.pdf';
+        const currentTitle = document.getElementById('rename-display-editor').textContent || 'document';
+        a.download = currentTitle + '.pdf';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -464,6 +468,75 @@
     function copyToClipboard() {
         navigator.clipboard.writeText(editor.value);
         toast('LaTeX code copied to clipboard!', 'success');
+    }
+
+    function startRenameEditor(projectId, currentTitle) {
+        const display = document.getElementById('rename-display-editor');
+        if (document.getElementById('rename-input-editor')) return;
+
+        display.classList.add('hidden');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentTitle;
+        input.className = 'text-xs font-bold text-white uppercase tracking-wide bg-slate-800 border-2 border-primary rounded px-2 py-0.5 w-[200px] focus:outline-none';
+        input.id = 'rename-input-editor';
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveRenameEditor(projectId);
+            if (e.key === 'Escape') cancelRenameEditor();
+        });
+        input.addEventListener('blur', () => saveRenameEditor(projectId));
+
+        display.parentElement.appendChild(input);
+        input.focus();
+        input.select();
+    }
+
+    function cancelRenameEditor() {
+        const display = document.getElementById('rename-display-editor');
+        const input = document.getElementById('rename-input-editor');
+        if (input) input.remove();
+        if (display) display.classList.remove('hidden');
+    }
+
+    async function saveRenameEditor(projectId) {
+        const input = document.getElementById('rename-input-editor');
+        if (!input) return;
+
+        const newTitle = input.value.trim();
+        if (!newTitle) {
+            cancelRenameEditor();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/editor/${projectId}/save/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ title: newTitle })
+            });
+
+            if (response.ok) {
+                document.getElementById('rename-display-editor').textContent = newTitle;
+                cancelRenameEditor();
+                toast('Project renamed successfully', 'success');
+                document.title = newTitle + ' | LaTeXGenius';
+                const sidebarTitle = document.getElementById('sidebar-project-title');
+                if (sidebarTitle) sidebarTitle.textContent = newTitle + '.tex';
+                const footerEditing = document.getElementById('footer-editing');
+                if (footerEditing) footerEditing.textContent = 'Editing: ' + newTitle;
+            } else {
+                toast('Failed to rename project', 'error');
+                cancelRenameEditor();
+            }
+        } catch (error) {
+            toast('Network error while renaming', 'error');
+            cancelRenameEditor();
+        }
     }
 
     function getCookie(name) {

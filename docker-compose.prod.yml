@@ -1,0 +1,39 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://latexgenius:secure_password@db:5432/latexgenius
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+      - CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - LATEX_COMPILER_URL=http://latex-online:2700/compile
+    depends_on:
+      - db
+      - latex-online
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=latexgenius
+      - POSTGRES_USER=latexgenius
+      - POSTGRES_PASSWORD=secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  latex-online:
+    image: aslushnikov/latex-online
+    ports:
+      - "2700:2700"
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

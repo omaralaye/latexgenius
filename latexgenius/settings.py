@@ -40,7 +40,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'testserver']
+# Production hosts - configure via environment variable
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -91,12 +92,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+import dj_database_url
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -137,6 +147,11 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # LaTeX Compiler Settings
 LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.cc/compile')
@@ -185,3 +200,26 @@ LOGGING = {
         },
     },
 }
+
+# Production Security Settings
+if not DEBUG:
+    # HTTPS settings
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # HSTS
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Other security
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+
+    # CSRF trusted origins (configure via environment)
+    csrf_trusted_origins_env = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+    if csrf_trusted_origins_env:
+        CSRF_TRUSTED_ORIGINS = csrf_trusted_origins_env.split(',')

@@ -340,17 +340,14 @@ def editor_page(request, project_id=None):
             logger.error(f"Error accessing project {project_id}: {str(e)}")
             return JsonResponse({"status": "error", "message": "Invalid project ID."}, status=400)
     else:
-        projects = services.get_user_projects(request.user.id)
-        if projects:
-            project = projects[0]
-        else:
-            logger.info(f"Creating default project for user {request.user.id}")
-            project_id = services.create_project(
-                owner_id=request.user.id,
-                title="Untitled Project",
-                content="\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}".replace('\\n', '\n')
-            )
-            project = services.get_project_by_id(project_id)
+        # Always create a new project when "New Project" is clicked
+        logger.info(f"Creating new project for user {request.user.id}")
+        project_id = services.create_project(
+            owner_id=request.user.id,
+            title="Untitled Project",
+            content="\\documentclass{article}\n\\begin{document}\n\n\\end{document}".replace('\\n', '\n')
+        )
+        return redirect('editor_with_id', project_id=project_id)
 
     context = {
         'project': project
@@ -458,7 +455,7 @@ def compile_project(request, project_id):
             return HttpResponse(f"Compilation failed:\n\n{response.text}", content_type="text/plain", status=400)
     except httpx.RequestError as e:
         logger.error(f"Error connecting to LaTeX.Online for project {project_id}: {str(e)}")
-        return HttpResponse(f"Error connecting to LaTeX.Online: {str(e)}", status=500)
+        return HttpResponse("LaTeX compilation service is not available. Please ensure Docker is running with: docker-compose up -d", status=503)
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)
