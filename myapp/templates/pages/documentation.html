@@ -1,0 +1,788 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation | LatexGenius{% endblock %}
+
+{% block content %}
+<section class="pt-20 bg-background dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-8">
+        <div class="text-center py-16 border-b border-outline-variant dark:border-slate-800">
+            <h1 class="text-5xl font-serif font-bold text-on-background dark:text-white mb-4">
+                LatexGenius <span class="text-primary italic">Documentation</span>
+            </h1>
+            <p class="text-xl text-on-surface-variant dark:text-slate-400 max-w-2xl mx-auto">
+                Everything you need to know about converting documents into beautiful LaTeX
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-8 py-12">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <aside class="lg:w-64 flex-shrink-0">
+                <div class="lg:sticky lg:top-24">
+                    <button id="sidebar-toggle" class="lg:hidden w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 mb-4">
+                        <span class="font-label text-sm font-bold dark:text-white">Navigation</span>
+                        <span class="material-symbols-outlined text-primary">menu</span>
+                    </button>
+                    
+                    <nav id="sidebar-nav" class="hidden lg:block space-y-1">
+                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-slate-500 px-4 py-2">GETTING STARTED</p>
+                        <a href="#introduction" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Introduction
+                        </a>
+                        <a href="#quickstart" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Quick Start
+                        </a>
+                        <a href="#installation" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Installation
+                        </a>
+                        
+                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-slate-500 px-4 py-2 mt-6">GUIDES</p>
+                        <a href="#first-conversion" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            First Conversion
+                        </a>
+                        <a href="#templates" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Using Templates
+                        </a>
+                        <a href="#editor" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Editor Basics
+                        </a>
+                        
+                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-slate-500 px-4 py-2 mt-6">REFERENCE</p>
+                        <a href="#export" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Export Options
+                        </a>
+                        <a href="#troubleshooting" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-800 transition-colors font-medium">
+                            Troubleshooting
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <main class="flex-1 min-w-0">
+                <section id="introduction" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">auto_stories</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Introduction</h2>
+                    </div>
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-6">
+                        LatexGenius is an AI-powered document conversion platform that transforms your manuscripts, notes, and equations into publication-ready LaTeX files. Built for researchers, students, and academic institutions, LatexGenius combines the precision of LaTeX with the accessibility of modern document editing.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
+                            <span class="material-symbols-outlined text-primary text-2xl mb-4 block">smart_toy</span>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">AI-Powered Conversion</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Our specialized academic AI detects symbols, structure, and citations with unmatched accuracy.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
+                            <span class="material-symbols-outlined text-primary text-2xl mb-4 block">visibility</span>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">Live Preview</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">See your LaTeX rendered in real-time as you edit. No more compile-wait cycles.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
+                            <span class="material-symbols-outlined text-primary text-2xl mb-4 block">description</span>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">Multiple Formats</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Import from Word, PDF, Markdown, or plain text. Export to LaTeX, PDF, or source archives.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
+                            <span class="material-symbols-outlined text-primary text-2xl mb-4 block">article</span>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">Journal Templates</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Pre-built templates for IEEE, ACM, Elsevier, Springer, and many more academic publishers.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="quickstart" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">rocket_launch</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Quick Start</h2>
+                    </div>
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        Get up and running in under 5 minutes with this quick start guide.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">
+                                1
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-serif font-semibold dark:text-white mb-2">Create an Account</h3>
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-4">
+                                    Sign up for a free account at <a href="{% url 'signup' %}" class="text-primary hover:underline">latexgenius.com/signup</a>. No credit card required for the free plan.
+                                </p>
+                                <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                                    <code class="text-slate-300 text-sm font-mono">
+                                        # Visit the signup page<br>
+                                        # Enter your email and password<br>
+                                        # Verify your email (if required)
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">
+                                2
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-serif font-semibold dark:text-white mb-2">Upload Your First Document</h3>
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-4">
+                                    From the dashboard, click "New Project" or drag and drop your document.
+                                </p>
+                                <div class="bg-slate-900 rounded-xl p-5">
+                                    <p class="text-slate-400 text-sm font-mono mb-2">Supported formats:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-slate-800 text-green-400 text-xs rounded-full font-mono">.tex</span>
+                                        <span class="px-3 py-1 bg-slate-800 text-green-400 text-xs rounded-full font-mono">.md</span>
+                                        <span class="px-3 py-1 bg-slate-800 text-green-400 text-xs rounded-full font-mono">.docx</span>
+                                        <span class="px-3 py-1 bg-slate-800 text-green-400 text-xs rounded-full font-mono">.odt</span>
+                                        <span class="px-3 py-1 bg-slate-800 text-green-400 text-xs rounded-full font-mono">.txt</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">
+                                3
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-serif font-semibold dark:text-white mb-2">Convert & Edit</h3>
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-4">
+                                    Watch as our AI converts your document to LaTeX. Make any necessary adjustments in the editor.
+                                </p>
+                                <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                                    <code class="text-slate-300 text-sm font-mono">
+                                        <span class="text-primary">\documentclass</span>{article}<br>
+                                        <span class="text-primary">\usepackage</span>{amsmath}<br>
+                                        <span class="text-primary">\title</span>{Your Document Title}<br>
+                                        <span class="text-primary">\begin</span>{document}<br>
+                                        &nbsp;&nbsp;<span class="text-primary">\maketitle</span><br>
+                                        &nbsp;&nbsp;Your content here...<br>
+                                        <span class="text-primary">\end</span>{document}
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">
+                                4
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-serif font-semibold dark:text-white mb-2">Export</h3>
+                                <p class="text-on-surface-variant dark:text-slate-400">
+                                    Download your LaTeX source, compiled PDF, or a complete project archive.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="installation" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">download</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Installation</h2>
+                    </div>
+                    
+                    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-6 mb-8">
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-2xl flex-shrink-0">info</span>
+                            <div>
+                                <h4 class="font-semibold text-amber-800 dark:text-amber-300 mb-1">Note</h4>
+                                <p class="text-sm text-amber-700 dark:text-amber-400">
+                                    LatexGenius is primarily a web-based platform and doesn't require local installation. This section is for self-hosting the open-source version.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Prerequisites</h3>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                            <span class="text-on-surface dark:text-slate-300">Python 3.10+</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                            <span class="text-on-surface dark:text-slate-300">Django 5.2+</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                            <span class="text-on-surface dark:text-slate-300">Docker (for LaTeX compilation service)</span>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Quick Setup</h3>
+                    
+                    <div class="relative mb-4">
+                        <button onclick="copyCode(this)" class="absolute top-3 right-3 p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors" title="Copy to clipboard">
+                            <span class="material-symbols-outlined text-slate-400 text-sm">content_copy</span>
+                        </button>
+                        <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                            <pre class="text-sm"><code class="text-green-400"># Clone the repository
+git clone https://github.com/anomalyco/latexgenius.git
+cd latexgenius
+
+# Create virtual environment
+python -m venv venv
+
+# Activate on Windows
+venv\Scripts\activate
+
+# Or activate on macOS/Linux
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt</code></pre>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Environment Configuration</h3>
+                    
+                    <div class="relative mb-4">
+                        <button onclick="copyCode(this)" class="absolute top-3 right-3 p-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors" title="Copy to clipboard">
+                            <span class="material-symbols-outlined text-slate-400 text-sm">content_copy</span>
+                        </button>
+                        <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                            <pre class="text-sm"><code class="text-slate-300"># Copy the example env file
+cp .env.example .env
+
+# Edit .env with your configuration
+# Required variables:
+# - DATABASE_URL: SQLite or PostgreSQL connection string
+# - LATEX_COMPILER_URL: LaTeX.Online service URL
+# - SECRET_KEY: Django secret key
+
+# Start the LaTeX compiler service
+docker-compose up -d latex-compiler
+
+# Run migrations
+python manage.py migrate
+
+# Create admin user
+python manage.py createsuperuser
+
+# Start development server
+python manage.py runserver</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="first-conversion" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">magic_button</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">First Document Conversion</h2>
+                    </div>
+                    
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        Learn how to convert your first document using our AI-powered conversion engine.
+                    </p>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-6 mb-8">
+                        <h3 class="font-serif font-semibold text-lg dark:text-white mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">tips_and_updates</span>
+                            Best Practices for Conversion
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                                <span class="text-on-surface-variant dark:text-slate-400 text-sm">Use clear headings (Title, Abstract, Introduction, etc.)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                                <span class="text-on-surface-variant dark:text-slate-400 text-sm">Separate equations on their own lines when possible</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                                <span class="text-on-surface-variant dark:text-slate-400 text-sm">Include a references section at the end for automatic BibTeX generation</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                                <span class="text-on-surface-variant dark:text-slate-400 text-sm">Avoid complex nested tables in source documents</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">AI Conversion Workflow</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">1</div>
+                            <div class="flex-1 pb-6 border-l-2 border-outline-variant dark:border-slate-700 pl-6 -mt-2">
+                                <h4 class="font-serif font-semibold dark:text-white mb-2">Select Template</h4>
+                                <p class="text-on-surface-variant dark:text-slate-400 text-sm">Choose a journal template that matches your target publication. Our AI will format the output accordingly.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">2</div>
+                            <div class="flex-1 pb-6 border-l-2 border-outline-variant dark:border-slate-700 pl-6 -mt-2">
+                                <h4 class="font-serif font-semibold dark:text-white mb-2">Upload or Paste Content</h4>
+                                <p class="text-on-surface-variant dark:text-slate-400 text-sm">Either upload a document file or paste your text directly into the input field. The AI accepts plain text, Markdown, Word, and ODT formats.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">3</div>
+                            <div class="flex-1 pb-6 border-l-2 border-outline-variant dark:border-slate-700 pl-6 -mt-2">
+                                <h4 class="font-serif font-semibold dark:text-white mb-2">AI Processing</h4>
+                                <p class="text-on-surface-variant dark:text-slate-400 text-sm">Our specialized academic AI analyzes your document structure, detects equations, identifies citations, and generates properly formatted LaTeX.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">4</div>
+                            <div class="flex-1 pl-6 -mt-2">
+                                <h4 class="font-serif font-semibold dark:text-white mb-2">Review & Refine</h4>
+                                <p class="text-on-surface-variant dark:text-slate-400 text-sm">The generated LaTeX opens in our editor with a live PDF preview. Make any necessary adjustments before exporting.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="templates" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">article</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Using Templates</h2>
+                    </div>
+                    
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        LatexGenius comes with pre-built templates for major academic publishers. Selecting the right template ensures your document meets journal requirements.
+                    </p>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Available Template Categories</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">science</span>
+                                IEEE Transactions
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">IEEEtran.cls based templates for all IEEE journals and conferences.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">computer</span>
+                                ACM Proceedings
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">acmart.cls templates for SIGCHI, SIGGRAPH, and other ACM conferences.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">biotech</span>
+                                Elsevier
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">elsarticle.cls for ScienceDirect and other Elsevier publications.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">school</span>
+                                Thesis & Dissertation
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">memoir and report class templates for academic theses.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">description</span>
+                                General Article
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Standard article, report, and book classes for general purposes.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-5">
+                            <h4 class="font-serif font-semibold dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">slideshow</span>
+                                Beamer Presentations
+                            </h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Professional Beamer themes for academic presentations.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Template Structure</h3>
+                    <p class="text-on-surface-variant dark:text-slate-400 mb-4">All templates follow a consistent structure that the AI uses to map your content:</p>
+                    
+                    <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                        <pre class="text-sm"><code class="text-slate-300">% ============================================
+% Document Class & Packages
+% ============================================
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{cite}
+
+% ============================================
+% Title & Authors
+% ============================================
+\title{Your Paper Title}
+\author{Author One, Author Two}
+
+% ============================================
+% Abstract & Keywords
+% ============================================
+\begin{abstract}
+Your abstract content goes here...
+\end{abstract}
+
+\begin{IEEEkeywords}
+keyword1, keyword2, keyword3
+\end{IEEEkeywords}
+
+% ============================================
+% Main Content
+% ============================================
+\begin{document}
+\maketitle
+
+\section{Introduction}
+% Your introduction...
+
+\section{Methodology}
+% Your methodology...
+
+\section{Results}
+% Your results...
+
+\section{Conclusion}
+% Your conclusion...
+
+% ============================================
+% References
+% ============================================
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}</code></pre>
+                    </div>
+                </section>
+
+                <section id="editor" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">edit</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Editor Basics</h2>
+                    </div>
+                    
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        The LatexGenius editor provides a powerful environment for writing and editing LaTeX with real-time preview.
+                    </p>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Editor Layout</h3>
+                    
+                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-6 mb-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-serif font-semibold dark:text-white mb-3">Left Pane: Source Editor</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Monospace code editor with syntax highlighting</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Line numbers for easy navigation</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Auto-save on every keystroke</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-serif font-semibold dark:text-white mb-3">Right Pane: PDF Preview</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Real-time compiled PDF preview</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Zoom controls for readability</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="material-symbols-outlined text-primary text-sm mt-0.5">chevron_right</span>
+                                        <span class="text-sm text-on-surface-variant dark:text-slate-400">Sync-to-source on click</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Keyboard Shortcuts</h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-outline-variant dark:border-slate-700">
+                                    <th class="py-3 px-4 text-left font-serif dark:text-white">Action</th>
+                                    <th class="py-3 px-4 text-left font-mono text-primary">Windows/Linux</th>
+                                    <th class="py-3 px-4 text-left font-mono text-primary">Mac</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant dark:divide-slate-700">
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Compile & Preview</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + Enter</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + Enter</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Save Project</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + S</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + S</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Bold Text</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + B</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + B</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Italic Text</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + I</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + I</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Insert Equation</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + E</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + E</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-on-surface dark:text-slate-300">Insert Citation</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Ctrl + K</td>
+                                    <td class="py-3 px-4 font-mono text-on-surface-variant dark:text-slate-400">Cmd + K</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="export" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">output</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Export Options</h2>
+                    </div>
+                    
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        Export your work in multiple formats for different use cases.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-6 text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                                <span class="material-symbols-outlined text-primary text-3xl">picture_as_pdf</span>
+                            </div>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">PDF</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Compiled PDF document ready for submission or sharing.</p>
+                            <div class="mt-4">
+                                <span class="text-xs font-label text-green-600 bg-green-50 dark:bg-green-900/20 px-3 py-1 rounded-full">Most Common</span>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-6 text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                                <span class="material-symbols-outlined text-primary text-3xl">code</span>
+                            </div>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">LaTeX Source</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Single .tex file for further editing in your local environment.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 p-6 text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                                <span class="material-symbols-outlined text-primary text-3xl">folder_zip</span>
+                            </div>
+                            <h4 class="font-serif font-semibold dark:text-white mb-2">Project Archive</h4>
+                            <p class="text-sm text-on-surface-variant dark:text-slate-400">Complete .zip with .tex, .bib, images, and all assets.</p>
+                            <div class="mt-4">
+                                <span class="text-xs font-label text-primary bg-primary/10 dark:bg-primary/20 px-3 py-1 rounded-full">Recommended</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif font-semibold dark:text-white mb-4">Project Archive Structure</h3>
+                    
+                    <div class="bg-slate-900 rounded-xl p-5 overflow-x-auto">
+                        <pre class="text-sm"><code class="text-slate-400">my-project.zip/
+├── main.tex              # Main LaTeX source file
+├── main.bib              # BibTeX bibliography
+├── main.pdf              # Compiled PDF
+├── images/
+│   ├── figure1.pdf
+│   ├── figure2.pdf
+│   └── diagram.pdf
+├── chapters/
+│   ├── introduction.tex
+│   ├── methodology.tex
+│   ├── results.tex
+│   └── conclusion.tex
+└── README.md             # Compilation instructions</code></pre>
+                    </div>
+                </section>
+
+                <section id="troubleshooting" class="mb-16 scroll-mt-24">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="material-symbols-outlined text-primary text-4xl">help</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Troubleshooting</h2>
+                    </div>
+                    
+                    <p class="text-lg text-on-surface dark:text-slate-300 leading-relaxed mb-8">
+                        Common issues and their solutions.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-error">error</span>
+                                    <span class="font-serif font-semibold dark:text-white">LaTeX Compilation Failed</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                            </button>
+                            <div class="hidden px-6 pb-6 pl-16">
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-3">Common causes and fixes:</p>
+                                <ol class="list-decimal list-inside space-y-2 text-sm text-on-surface-variant dark:text-slate-400">
+                                    <li>Check for unmatched braces <code>{</code> or <code>}</code></li>
+                                    <li>Ensure all <code>\usepackage{}</code> declarations are in the preamble</li>
+                                    <li>Verify image filenames don't contain spaces or special characters</li>
+                                    <li>Check the compilation log for specific error messages</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-error">error</span>
+                                    <span class="font-serif font-semibold dark:text-white">AI Conversion Not Accurate</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                            </button>
+                            <div class="hidden px-6 pb-6 pl-16">
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-3">Tips for better AI conversion:</p>
+                                <ul class="list-disc list-inside space-y-2 text-sm text-on-surface-variant dark:text-slate-400">
+                                    <li>Use clear section headings (Introduction, Methodology, etc.)</li>
+                                    <li>Place equations on separate lines</li>
+                                    <li>Include references in a dedicated section at the end</li>
+                                    <li>Avoid complex nested tables in source documents</li>
+                                    <li>Try converting from Markdown or plain text instead of Word for more predictable results</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-error">error</span>
+                                    <span class="font-serif font-semibold dark:text-white">Images Not Showing in PDF</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                            </button>
+                            <div class="hidden px-6 pb-6 pl-16">
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-3">Image troubleshooting:</p>
+                                <ul class="list-disc list-inside space-y-2 text-sm text-on-surface-variant dark:text-slate-400">
+                                    <li>Use PDF, PNG, or JPEG formats (EPS is deprecated)</li>
+                                    <li>Ensure filenames have no spaces or special characters</li>
+                                    <li>Check that the graphicx package is included</li>
+                                    <li>Use relative paths without leading slashes: <code>\includegraphics{images/fig.pdf}</code></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-xl border border-outline-variant dark:border-slate-700 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-error">error</span>
+                                    <span class="font-serif font-semibold dark:text-white">Bibliography Not Compiling</span>
+                                </div>
+                                <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                            </button>
+                            <div class="hidden px-6 pb-6 pl-16">
+                                <p class="text-on-surface-variant dark:text-slate-400 mb-3">BibTeX troubleshooting checklist:</p>
+                                <ol class="list-decimal list-inside space-y-2 text-sm text-on-surface-variant dark:text-slate-400">
+                                    <li>Ensure you have <code>\bibliographystyle{...}</code> and <code>\bibliography{...}</code> in your document</li>
+                                    <li>Verify that all citation keys in <code>\cite{}</code> match entries in your .bib file</li>
+                                    <li>Check that your .bib file has proper syntax (comma-separated entries, matching braces)</li>
+                                    <li>The compilation requires multiple passes: LaTeX → BibTeX → LaTeX → LaTeX</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded-xl p-8 text-center">
+                        <span class="material-symbols-outlined text-primary text-4xl mb-4 block">support_agent</span>
+                        <h3 class="text-xl font-serif font-semibold dark:text-white mb-2">Still Need Help?</h3>
+                        <p class="text-on-surface-variant dark:text-slate-400 mb-4 max-w-md mx-auto">
+                            Our support team is ready to assist you. Reach out for personalized help with your specific use case.
+                        </p>
+                        <a href="#" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-label font-bold transition-all hover:bg-primary-variant">
+                            <span class="material-symbols-outlined">mail</span>
+                            Contact Support
+                        </a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</section>
+
+<script>
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarNav = document.getElementById('sidebar-nav');
+    
+    if (sidebarToggle && sidebarNav) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebarNav.classList.toggle('hidden');
+        });
+    }
+
+    function toggleFaq(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.material-symbols-outlined:last-child');
+        
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            if (icon) {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        } else {
+            content.classList.add('hidden');
+            if (icon) {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    }
+
+    function copyCode(button) {
+        const codeBlock = button.nextElementSibling.querySelector('code');
+        const originalIcon = button.innerHTML;
+        
+        if (codeBlock) {
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                button.innerHTML = '<span class="material-symbols-outlined text-green-400 text-sm">check</span>';
+                setTimeout(() => {
+                    button.innerHTML = originalIcon;
+                }, 2000);
+            });
+        }
+    }
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0
+    };
+
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(link => {
+                    link.classList.remove('bg-primary/10', 'dark:bg-primary/20', 'text-primary');
+                });
+                
+                const activeLink = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('bg-primary/10', 'dark:bg-primary/20', 'text-primary');
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+</script>
+{% endblock %}

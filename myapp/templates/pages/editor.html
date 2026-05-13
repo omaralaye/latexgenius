@@ -23,6 +23,26 @@
     .dark .custom-scrollbar::-webkit-scrollbar-thumb {
         background: rgba(255,255,255,0.15);
     }
+    .file-active {
+        background-color: rgba(79, 70, 229, 0.1) !important;
+        color: rgb(79, 70, 229) !important;
+    }
+    .dark .file-active {
+        background-color: rgba(79, 70, 229, 0.2) !important;
+        color: rgb(165, 180, 252) !important;
+    }
+    .folder-collapsible {
+        cursor: pointer;
+    }
+    .folder-contents {
+        margin-left: 16px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease;
+    }
+    .folder-contents.open {
+        max-height: 500px;
+    }
     @media (max-width: 768px) {
         .editor-container {
             grid-template-columns: 1fr;
@@ -45,7 +65,6 @@
 <!-- Top Utility Toolbar -->
 <header class="h-14 bg-slate-900 dark:bg-slate-950 text-white flex items-center justify-between px-4 z-[60] border-b border-white/10 shrink-0">
     <div class="flex items-center gap-6">
-        <!-- Hamburger Menu Button -->
         <button onclick="openDrawer()" class="flex items-center gap-1 text-slate-300 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-lg">
             <span class="material-symbols-outlined text-xl">menu</span>
         </button>
@@ -64,7 +83,7 @@
             <span class="material-symbols-outlined text-sm text-indigo-400 animate-pulse">sync</span>
             <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-200">Compiling...</span>
         </div>
-        <button class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-xs font-medium transition-colors border border-white/5">
+        <button onclick="openShareModal()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-xs font-medium transition-colors border border-white/5">
             <span class="material-symbols-outlined text-sm">share</span>
             Share
         </button>
@@ -91,30 +110,30 @@
             Upload Document
         </button>
         <div class="h-5 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
-        <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors" title="New File">
+        <button onclick="showNewFileModal()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors" title="New File">
             <span class="material-symbols-outlined text-lg">note_add</span>
         </button>
-        <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors" title="New Folder">
+        <button onclick="showNewFolderModal()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors" title="New Folder">
             <span class="material-symbols-outlined text-lg">create_new_folder</span>
         </button>
         <div class="h-5 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
-        <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors">
+        <button id="undo-btn" onclick="undoAction()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" title="Undo (Ctrl+Z)" disabled>
             <span class="material-symbols-outlined text-lg">undo</span>
         </button>
-        <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors">
+        <button id="redo-btn" onclick="redoAction()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" title="Redo (Ctrl+Shift+Z)" disabled>
             <span class="material-symbols-outlined text-lg">redo</span>
         </button>
     </div>
     <div class="flex items-center gap-2">
         <div class="flex bg-slate-100 dark:bg-slate-700 p-0.5 rounded-lg border border-slate-200 dark:border-slate-600">
-            <button class="px-3 py-1 bg-white dark:bg-slate-600 shadow-sm rounded-md text-[11px] font-bold text-primary dark:text-white">Source</button>
-            <button class="px-3 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white">Visual</button>
+            <button id="mode-source" onclick="toggleEditorMode('source')" class="px-3 py-1 bg-white dark:bg-slate-600 shadow-sm rounded-md text-[11px] font-bold text-primary dark:text-white">Source</button>
+            <button id="mode-visual" onclick="toggleEditorMode('visual')" class="px-3 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white">Visual</button>
         </div>
         <button id="save-button" onclick="saveProject()" class="flex items-center gap-1 px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors">
             <span class="material-symbols-outlined text-sm">save</span>
             Save
         </button>
-        <button class="flex items-center gap-1 px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors">
+        <button onclick="openHistoryModal()" class="flex items-center gap-1 px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors">
             <span class="material-symbols-outlined text-sm">history</span>
             History
         </button>
@@ -142,31 +161,43 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-center gap-2">
-                    <button onclick="document.getElementById('documentInput').click()" class="flex-1 py-1.5 bg-slate-900 dark:bg-slate-600 text-white dark:text-slate-200 text-[10px] font-bold rounded hover:bg-black dark:hover:bg-slate-500 transition-colors flex items-center justify-center gap-1">
+                    <button onclick="openReprocessModal()" class="flex-1 py-1.5 bg-slate-900 dark:bg-slate-600 text-white dark:text-slate-200 text-[10px] font-bold rounded hover:bg-black dark:hover:bg-slate-500 transition-colors flex items-center justify-center gap-1">
                         <span class="material-symbols-outlined text-xs">auto_fix</span>
                         Re-Process
                     </button>
                 </div>
+                <div class="mt-2 text-[9px] text-slate-400 dark:text-slate-500">
+                    <span class="font-semibold">What is Re-Process?</span> Upload a new document to replace the current content using AI conversion.
+                </div>
             </div>
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Project Files</span>
         </div>
-        <nav class="flex-1 overflow-y-auto py-2 custom-scrollbar">
+        <nav class="flex-1 overflow-y-auto py-2 custom-scrollbar" id="project-files-nav">
             <div class="px-2 space-y-0.5">
-                <button class="w-full flex items-center gap-2 px-2 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded group">
+                <button class="file-active w-full flex items-center gap-2 px-2 py-1.5 rounded group" onclick="selectFile('main.tex')">
                     <span class="material-symbols-outlined text-[18px] text-indigo-400 dark:text-indigo-500">description</span>
                     <span class="text-xs font-medium truncate">main.tex</span>
                 </button>
-                <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
-                    <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
-                    <span class="text-xs font-medium truncate">sections</span>
-                </button>
-                <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
-                    <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
-                    <span class="text-xs font-medium truncate">images</span>
-                </button>
+                <div class="folder-collapsible" onclick="toggleFolder(this, event)">
+                    <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
+                        <span class="material-symbols-outlined text-[18px] text-slate-400 folder-arrow transition-transform">chevron_right</span>
+                        <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
+                        <span class="text-xs font-medium truncate">sections</span>
+                        <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
+                    </button>
+                </div>
+                <div class="folder-collapsible" onclick="toggleFolder(this, event)">
+                    <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
+                        <span class="material-symbols-outlined text-[18px] text-slate-400 folder-arrow transition-transform">chevron_right</span>
+                        <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
+                        <span class="text-xs font-medium truncate">images</span>
+                        <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
+                    </button>
+                </div>
                 <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
                     <span class="material-symbols-outlined text-[18px] text-slate-400">menu_book</span>
                     <span class="text-xs font-medium truncate">references.bib</span>
+                    <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
                 </button>
             </div>
         </nav>
@@ -174,17 +205,25 @@
             <p class="text-[10px] text-indigo-800 dark:text-indigo-300 font-bold mb-2">Conversion Stats</p>
             <div class="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
                 <span>Confidence Score:</span>
-                <span class="text-emerald-600 dark:text-emerald-400 font-bold">—</span>
+                <span id="stat-confidence" class="text-emerald-600 dark:text-emerald-400 font-bold">--</span>
             </div>
-            <div class="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
+            <div class="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                 <span>Math Symbols:</span>
-                <span>—</span>
+                <span id="stat-math" class="font-bold">--</span>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                <span>Sections:</span>
+                <span id="stat-sections" class="font-bold">--</span>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                <span>Citations:</span>
+                <span id="stat-citations" class="font-bold">--</span>
             </div>
         </div>
     </aside>
 
     <!-- 2. Central Pane: LaTeX Code Editor -->
-    <section class="bg-[#1e1e1e] dark:bg-[#0d1117] flex flex-col overflow-hidden border-r border-black dark:border-slate-800 relative">
+    <section id="editor-source-pane" class="bg-[#1e1e1e] dark:bg-[#0d1117] flex flex-col overflow-hidden border-r border-black dark:border-slate-800 relative">
         <div class="h-8 bg-black/40 dark:bg-slate-900/60 flex items-center px-4 justify-between shrink-0">
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-tighter">Generated LaTeX</span>
@@ -194,21 +233,43 @@
                 <button onclick="copyToClipboard()" class="p-1 hover:bg-white/10 rounded transition-colors text-slate-400 dark:text-slate-500">
                     <span class="material-symbols-outlined text-sm">content_copy</span>
                 </button>
-                <button class="p-1 hover:bg-white/10 rounded transition-colors text-slate-400 dark:text-slate-500">
+                <button id="fullscreen-editor-btn" onclick="toggleEditorFullscreen()" class="p-1 hover:bg-white/10 rounded transition-colors text-slate-400 dark:text-slate-500">
                     <span class="material-symbols-outlined text-sm">fullscreen</span>
                 </button>
-                <span class="text-[10px] text-slate-500 dark:text-slate-600 font-mono self-center">Ln 1, Col 1</span>
+                <span id="cursor-position" class="text-[10px] text-slate-500 dark:text-slate-600 font-mono self-center">Ln 1, Col 1</span>
             </div>
         </div>
         <div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[13px] leading-relaxed">
             <textarea id="latex-editor" class="w-full h-full bg-transparent text-slate-300 dark:text-slate-400 font-mono text-[13px] leading-relaxed focus:ring-0 border-none resize-none outline-none custom-scrollbar" spellcheck="false">{{ project.content }}</textarea>
         </div>
         <div class="h-6 bg-slate-800 dark:bg-slate-900 flex items-center px-3 border-t border-white/5 dark:border-slate-800 shrink-0">
-            <div class="flex items-center gap-2">
-                <span class="relative flex h-1.5 w-1.5">
-                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                </span>
-                <p class="text-[9px] text-slate-400 dark:text-slate-500 font-medium">Ready</p>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-1.5 w-1.5">
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    <p class="text-[9px] text-slate-400 dark:text-slate-500 font-medium">Ready</p>
+                </div>
+            </div>
+            <div class="ml-auto flex items-center gap-4">
+                <span class="text-[9px] text-slate-400 dark:text-slate-500">UTF-8</span>
+                <span class="text-[9px] text-slate-400 dark:text-slate-500">LaTeX</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Editor Placeholder -->
+    <section id="editor-visual-pane" class="hidden bg-white dark:bg-slate-50 flex flex-col overflow-hidden border-r border-outline-variant dark:border-slate-700">
+        <div class="h-8 bg-slate-100 dark:bg-slate-200 flex items-center px-4 justify-between shrink-0 border-b border-outline-variant dark:border-slate-300">
+            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">Visual Editor</span>
+        </div>
+        <div class="flex-1 flex items-center justify-center">
+            <div class="text-center p-8">
+                <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-400 mb-4 block">edit_note</span>
+                <h3 class="text-lg font-bold text-slate-600 dark:text-slate-500 mb-2">Visual Editor Coming Soon</h3>
+                <p class="text-sm text-slate-400 dark:text-slate-500 max-w-xs">
+                    A WYSIWYG editor for LaTeX is currently in development. Use the Source editor for now.
+                </p>
             </div>
         </div>
     </section>
@@ -227,16 +288,18 @@
                 <button id="mode-log" onclick="togglePreviewMode('log')" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Log View">
                     <span class="material-symbols-outlined text-[18px]">description</span>
                 </button>
-                <button class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Zoom In">
+                <button id="zoom-in-btn" onclick="zoomPreview(1.1)" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Zoom In">
                     <span class="material-symbols-outlined text-[18px]">zoom_in</span>
                 </button>
-                <button class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Fullscreen">
+                <button id="zoom-out-btn" onclick="zoomPreview(0.9)" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Zoom Out">
+                    <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+                </button>
+                <button id="fullscreen-preview-btn" onclick="togglePreviewFullscreen()" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Fullscreen">
                     <span class="material-symbols-outlined text-[18px]">fullscreen</span>
                 </button>
             </div>
         </div>
         <div id="preview-container" class="flex-1 p-8 overflow-y-auto custom-scrollbar flex justify-center bg-slate-400/20 dark:bg-slate-900/40 relative">
-            <!-- Initial State -->
             <div id="preview-placeholder" class="absolute inset-0 flex items-center justify-center p-8 overflow-y-auto z-0">
                 <div class="max-w-md w-full">
                     <div class="p-12 border-2 border-dashed border-slate-400 dark:border-slate-600 rounded-2xl flex flex-col items-center text-center bg-white/60 dark:bg-slate-800/40 backdrop-blur-sm">
@@ -248,12 +311,9 @@
                     </div>
                 </div>
             </div>
-            <!-- PDF Iframe -->
-            <iframe id="preview-iframe" class="hidden w-full h-full border-none z-10 relative bg-white shadow-2xl rounded" src="" sandbox="allow-scripts allow-same-origin"></iframe>
-            <!-- Log View -->
+            <iframe id="preview-iframe" class="hidden w-full h-full border-none z-10 relative bg-white shadow-2xl rounded" src="" sandbox="allow-scripts allow-same-origin" style="transform-origin: top center;"></iframe>
             <div id="preview-log" class="hidden w-full h-full p-6 bg-slate-900 dark:bg-slate-950 text-slate-300 dark:text-slate-400 font-mono text-sm overflow-auto whitespace-pre-wrap z-10 relative rounded shadow-2xl"></div>
 
-            <!-- Loading Overlay -->
             <div id="preview-loading" class="hidden absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-[2px] flex items-center justify-center z-20">
                 <div class="flex flex-col items-center gap-3">
                     <span class="material-symbols-outlined animate-spin text-4xl text-primary dark:text-white">sync</span>
@@ -262,7 +322,6 @@
             </div>
         </div>
 
-        <!-- Conversion Bridge Notification -->
         <div id="conversion-bridge" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-indigo-900 dark:bg-indigo-950 text-white rounded-full shadow-2xl flex items-center gap-3 border border-white/20 dark:border-indigo-800">
             <span class="material-symbols-outlined text-sm text-indigo-300 dark:text-indigo-400">check_circle</span>
             <span class="text-[11px] font-medium">Conversion Bridge: Source -> LaTeX -> PDF</span>
@@ -286,12 +345,660 @@
 
 </main>
 
+<!-- Modals -->
+
+<!-- Share Modal -->
+<div id="share-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-lg font-serif font-bold dark:text-white">Share Project</h3>
+            <button onclick="closeShareModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Invite by Email</label>
+                <div class="flex gap-2">
+                    <input type="email" id="share-email" placeholder="colleague@university.edu" 
+                           class="flex-1 px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
+                    <select id="share-permission" class="px-3 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-lg text-sm focus:ring-1 focus:ring-primary dark:text-white">
+                        <option value="read">Can Read</option>
+                        <option value="write">Can Edit</option>
+                    </select>
+                    <button onclick="sendShareInvitation()" class="px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
+                        Send
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="text-sm font-medium dark:text-white mb-3">Pending Invitations</h4>
+                <div id="pending-invitations" class="space-y-2">
+                    <p class="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No pending invitations</p>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-sm font-medium dark:text-white mb-3">Collaborators</h4>
+                <div id="collaborators-list" class="space-y-2">
+                    <p class="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No collaborators yet</p>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 bg-surface/50 dark:bg-slate-900/50">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                <span class="material-symbols-outlined text-sm align-middle">info</span>
+                Project sharing is a Pro feature. Upgrade to collaborate with colleagues.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- History Modal -->
+<div id="history-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700 shrink-0">
+            <h3 class="text-lg font-serif font-bold dark:text-white">Version History</h3>
+            <button onclick="closeHistoryModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div id="versions-list" class="space-y-3">
+                <div class="text-center py-8">
+                    <div class="animate-spin inline-block w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full mb-4"></div>
+                    <p class="text-sm text-slate-400 dark:text-slate-500">Loading versions...</p>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 bg-surface/50 dark:bg-slate-900/50 shrink-0">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                <span class="material-symbols-outlined text-sm align-middle">info</span>
+                Version history is a Pro feature. Upgrade to access previous versions.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- New File Modal -->
+<div id="new-file-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-lg font-serif font-bold dark:text-white">New File</h3>
+            <button onclick="closeNewFileModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">File Name</label>
+                <input type="text" id="new-file-name" placeholder="e.g., introduction.tex" 
+                       class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">File Type</label>
+                <select id="new-file-type" class="w-full px-4 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-lg text-sm focus:ring-1 focus:ring-primary dark:text-white">
+                    <option value="tex">LaTeX (.tex)</option>
+                    <option value="bib">Bibliography (.bib)</option>
+                    <option value="sty">Style Package (.sty)</option>
+                    <option value="cls">Class File (.cls)</option>
+                </select>
+            </div>
+            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <div class="flex gap-3">
+                    <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 flex-shrink-0">construction</span>
+                    <div>
+                        <p class="text-sm font-medium text-amber-800 dark:text-amber-300">Multi-file projects coming soon</p>
+                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">Currently, all content is stored in a single main.tex file. Full multi-file support is in development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 flex gap-3">
+            <button onclick="closeNewFileModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-slate-700 text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                Cancel
+            </button>
+            <button onclick="createNewFile()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
+                Create File
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- New Folder Modal -->
+<div id="new-folder-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-lg font-serif font-bold dark:text-white">New Folder</h3>
+            <button onclick="closeNewFolderModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Folder Name</label>
+                <input type="text" id="new-folder-name" placeholder="e.g., sections, images" 
+                       class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
+            </div>
+            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <div class="flex gap-3">
+                    <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 flex-shrink-0">construction</span>
+                    <div>
+                        <p class="text-sm font-medium text-amber-800 dark:text-amber-300">Multi-file projects coming soon</p>
+                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">Folder organization for multi-file projects is in development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 flex gap-3">
+            <button onclick="closeNewFolderModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-slate-700 text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                Cancel
+            </button>
+            <button onclick="createNewFolder()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
+                Create Folder
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Re-Process Modal -->
+<div id="reprocess-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-lg font-serif font-bold dark:text-white">Re-Process with AI</h3>
+            <button onclick="closeReprocessModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6 p-4 bg-primary/5 dark:bg-primary/10 rounded-lg border border-primary/20 dark:border-primary/30">
+                <h4 class="font-medium text-primary dark:text-white mb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    What does Re-Process do?
+                </h4>
+                <p class="text-sm text-on-surface-variant dark:text-slate-400 leading-relaxed">
+                    Upload a new document (Word, PDF, Markdown, text) and our AI will convert it to LaTeX, replacing the current content of this project. 
+                    <strong>A version of your current content will be saved</strong> before the replacement.
+                </p>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Select Document</label>
+                <form id="reprocess-form" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="file" id="reprocess-file" name="document" accept=".docx,.odt,.pdf,.md,.markdown,.txt,.html" 
+                           class="w-full text-sm text-on-surface-variant dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-variant cursor-pointer">
+                </form>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Version Note (optional)</label>
+                <input type="text" id="reprocess-note" placeholder="e.g., Updated from revised manuscript" 
+                       class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 flex gap-3">
+            <button onclick="closeReprocessModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-slate-700 text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                Cancel
+            </button>
+            <button onclick="reprocessDocument()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">auto_fix</span>
+                Re-Process
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     const projectId = "{{ project.id }}";
     const editor = document.getElementById('latex-editor');
     const statusBadge = document.getElementById('status-badge');
     const processingBadge = document.getElementById('processing-badge');
     const conversionBridge = document.getElementById('conversion-bridge');
+    
+    let undoStack = [];
+    let redoStack = [];
+    let isUndoing = false;
+    let lastContent = editor.value;
+    let previewZoom = 1.0;
+
+    function initUndoRedo() {
+        editor.addEventListener('input', () => {
+            if (!isUndoing) {
+                if (lastContent !== editor.value) {
+                    undoStack.push(lastContent);
+                    redoStack = [];
+                    lastContent = editor.value;
+                    updateUndoRedoButtons();
+                }
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undoAction();
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'z') {
+                e.preventDefault();
+                redoAction();
+            }
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveProject();
+            }
+        });
+    }
+
+    function updateUndoRedoButtons() {
+        const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+        undoBtn.disabled = undoStack.length === 0;
+        redoBtn.disabled = redoStack.length === 0;
+    }
+
+    function undoAction() {
+        if (undoStack.length > 0) {
+            isUndoing = true;
+            redoStack.push(editor.value);
+            editor.value = undoStack.pop();
+            lastContent = editor.value;
+            isUndoing = false;
+            updateUndoRedoButtons();
+            toast('Undo', 'info');
+        }
+    }
+
+    function redoAction() {
+        if (redoStack.length > 0) {
+            isUndoing = true;
+            undoStack.push(editor.value);
+            editor.value = redoStack.pop();
+            lastContent = editor.value;
+            isUndoing = false;
+            updateUndoRedoButtons();
+            toast('Redo', 'info');
+        }
+    }
+
+    editor.addEventListener('input', () => {
+        updateCursorPosition();
+        calculateStats();
+    });
+
+    editor.addEventListener('click', updateCursorPosition);
+    editor.addEventListener('keyup', updateCursorPosition);
+
+    function updateCursorPosition() {
+        const pos = document.getElementById('cursor-position');
+        const start = editor.selectionStart;
+        const text = editor.value.substring(0, start);
+        const lines = text.split('\n');
+        const line = lines.length;
+        const col = lines[lines.length - 1].length + 1;
+        pos.textContent = `Ln ${line}, Col ${col}`;
+    }
+
+    function calculateStats() {
+        const content = editor.value;
+        
+        let mathCount = (content.match(/\$[^\$]+\$|\\\[[^\]]+\\\]|\\\([^)]+\\\)/g) || []).length;
+        let sectionCount = (content.match(/\\section\{|\\subsection\{|\\subsubsection\{/g) || []).length;
+        let citationCount = (content.match(/\\cite\{|\\citep\{|\\citet\{|\\bibitem\{/g) || []).length;
+        
+        const envMatch = content.match(/\\begin\{(equation|align|gather|eqnarray)/g);
+        if (envMatch) mathCount += envMatch.length;
+        
+        document.getElementById('stat-math').textContent = mathCount > 0 ? mathCount : '--';
+        document.getElementById('stat-sections').textContent = sectionCount > 0 ? sectionCount : '--';
+        document.getElementById('stat-citations').textContent = citationCount > 0 ? citationCount : '--';
+        
+        if (content.length > 100) {
+            document.getElementById('stat-confidence').textContent = 'High';
+        }
+    }
+
+    function toggleFolder(element, event) {
+        event.stopPropagation();
+        toast('Multi-file folders coming soon!', 'info');
+    }
+
+    function selectFile(filename) {
+        if (filename !== 'main.tex') {
+            toast('Multi-file projects coming soon!', 'info');
+        }
+    }
+
+    function toggleEditorMode(mode) {
+        const sourceBtn = document.getElementById('mode-source');
+        const visualBtn = document.getElementById('mode-visual');
+        const sourcePane = document.getElementById('editor-source-pane');
+        const visualPane = document.getElementById('editor-visual-pane');
+        
+        if (mode === 'source') {
+            sourceBtn.classList.add('bg-white', 'dark:bg-slate-600', 'shadow-sm', 'text-primary', 'dark:text-white');
+            sourceBtn.classList.remove('text-slate-500', 'dark:text-slate-400');
+            visualBtn.classList.remove('bg-white', 'dark:bg-slate-600', 'shadow-sm', 'text-primary', 'dark:text-white');
+            visualBtn.classList.add('text-slate-500', 'dark:text-slate-400');
+            sourcePane.classList.remove('hidden');
+            visualPane.classList.add('hidden');
+        } else {
+            visualBtn.classList.add('bg-white', 'dark:bg-slate-600', 'shadow-sm', 'text-primary', 'dark:text-white');
+            visualBtn.classList.remove('text-slate-500', 'dark:text-slate-400');
+            sourceBtn.classList.remove('bg-white', 'dark:bg-slate-600', 'shadow-sm', 'text-primary', 'dark:text-white');
+            sourceBtn.classList.add('text-slate-500', 'dark:text-slate-400');
+            sourcePane.classList.add('hidden');
+            visualPane.classList.remove('hidden');
+        }
+    }
+
+    function zoomPreview(factor) {
+        const iframe = document.getElementById('preview-iframe');
+        previewZoom = Math.max(0.25, Math.min(3.0, previewZoom * factor));
+        iframe.style.transform = `scale(${previewZoom})`;
+    }
+
+    function toggleEditorFullscreen() {
+        const pane = document.getElementById('editor-source-pane');
+        if (!document.fullscreenElement) {
+            pane.requestFullscreen().catch(() => {
+                toast('Fullscreen not supported', 'error');
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    function togglePreviewFullscreen() {
+        const container = document.getElementById('preview-container');
+        if (!document.fullscreenElement) {
+            container.requestFullscreen().catch(() => {
+                toast('Fullscreen not supported', 'error');
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    function openShareModal() {
+        const overlay = document.getElementById('share-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        loadShareData();
+    }
+
+    function closeShareModal() {
+        const overlay = document.getElementById('share-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    async function loadShareData() {
+        const invitationsList = document.getElementById('pending-invitations');
+        const collaboratorsList = document.getElementById('collaborators-list');
+        
+        try {
+            const response = await fetch(`/editor/${projectId}/share/`);
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                if (data.invitations && data.invitations.length > 0) {
+                    invitationsList.innerHTML = data.invitations.map(inv => `
+                        <div class="flex items-center justify-between p-3 bg-surface dark:bg-slate-700 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium dark:text-white">${inv.email}</p>
+                                <p class="text-xs text-slate-400">${inv.permission} • ${inv.status}</p>
+                            </div>
+                            ${inv.status === 'pending' ? `<button onclick="revokeInvitation('${inv.id}')" class="text-xs text-error hover:underline">Revoke</button>` : ''}
+                        </div>
+                    `).join('');
+                }
+                
+                if (data.collaborators && data.collaborators.length > 0) {
+                    collaboratorsList.innerHTML = data.collaborators.map(collab => `
+                        <div class="flex items-center justify-between p-3 bg-surface dark:bg-slate-700 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-sm text-primary">person</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium dark:text-white">${collab.name}</p>
+                                    <p class="text-xs text-slate-400">${collab.email}</p>
+                                </div>
+                            </div>
+                            <button onclick="removeCollaborator('${collab.id}')" class="text-xs text-error hover:underline">Remove</button>
+                        </div>
+                    `).join('');
+                }
+            }
+        } catch (e) {
+            console.log('Share data not available');
+        }
+    }
+
+    async function sendShareInvitation() {
+        const email = document.getElementById('share-email').value.trim();
+        const permission = document.getElementById('share-permission').value;
+        
+        if (!email) {
+            toast('Please enter an email', 'error');
+            return;
+        }
+        
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const response = await fetch(`/editor/${projectId}/share/create/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ email: email, permission: permission })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                toast('Invitation sent!', 'success');
+                document.getElementById('share-email').value = '';
+                loadShareData();
+            } else {
+                toast(data.message || 'Failed to send invitation', 'error');
+            }
+        } catch (e) {
+            toast('Project sharing is a Pro feature. Upgrade to collaborate.', 'info');
+        }
+    }
+
+    function openHistoryModal() {
+        const overlay = document.getElementById('history-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        loadVersions();
+    }
+
+    function closeHistoryModal() {
+        const overlay = document.getElementById('history-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    async function loadVersions() {
+        const versionsList = document.getElementById('versions-list');
+        
+        try {
+            const response = await fetch(`/editor/${projectId}/versions/`);
+            const data = await response.json();
+            
+            if (data.status === 'success' && data.versions && data.versions.length > 0) {
+                versionsList.innerHTML = data.versions.map(version => `
+                    <div class="flex items-start justify-between p-4 bg-surface dark:bg-slate-700 rounded-lg hover:bg-surface-variant dark:hover:bg-slate-600 transition-colors">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-primary">history</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium dark:text-white">Version ${version.version}</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">${version.message || 'Auto-saved'}</p>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">${new Date(version.created_at).toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <button onclick="restoreVersion(${version.version})" class="px-3 py-1.5 text-xs text-primary border border-primary/30 rounded-lg hover:bg-primary/5 transition-colors">
+                            Restore
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                versionsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-4 block">history</span>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">No versions yet</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Save your project to create version history.</p>
+                    </div>
+                `;
+            }
+        } catch (e) {
+            versionsList.innerHTML = `
+                <div class="text-center py-8">
+                    <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600 mb-4 block">info</span>
+                    <p class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Version History is a Pro feature</p>
+                    <p class="text-xs text-slate-400 dark:text-slate-500">Upgrade to access previous versions of your documents.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function restoreVersion(versionNumber) {
+        if (!confirm(`Restore to version ${versionNumber}? Current changes will be saved first.`)) {
+            return;
+        }
+        
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const response = await fetch(`/editor/${projectId}/versions/${versionNumber}/restore/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                editor.value = data.content;
+                lastContent = data.content;
+                undoStack = [];
+                redoStack = [];
+                updateUndoRedoButtons();
+                toast(`Restored to version ${versionNumber}`, 'success');
+                closeHistoryModal();
+            } else {
+                toast('Failed to restore version', 'error');
+            }
+        } catch (e) {
+            toast('Version restore is a Pro feature', 'info');
+        }
+    }
+
+    function showNewFileModal() {
+        const overlay = document.getElementById('new-file-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNewFileModal() {
+        const overlay = document.getElementById('new-file-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function createNewFile() {
+        toast('Multi-file projects coming soon!', 'info');
+        closeNewFileModal();
+    }
+
+    function showNewFolderModal() {
+        const overlay = document.getElementById('new-folder-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNewFolderModal() {
+        const overlay = document.getElementById('new-folder-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function createNewFolder() {
+        toast('Multi-file projects coming soon!', 'info');
+        closeNewFolderModal();
+    }
+
+    function openReprocessModal() {
+        const overlay = document.getElementById('reprocess-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeReprocessModal() {
+        const overlay = document.getElementById('reprocess-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    async function reprocessDocument() {
+        const fileInput = document.getElementById('reprocess-file');
+        const note = document.getElementById('reprocess-note').value;
+        
+        if (!fileInput.files.length) {
+            toast('Please select a document to re-process', 'error');
+            return;
+        }
+        
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('document', file);
+        if (note) formData.append('note', note);
+        
+        const csrftoken = getCookie('csrftoken');
+        
+        try {
+            const response = await fetch(`/editor/${projectId}/reprocess/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                editor.value = data.content;
+                lastContent = data.content;
+                undoStack = [];
+                redoStack = [];
+                updateUndoRedoButtons();
+                toast(data.message || 'Document re-processed successfully!', 'success');
+                closeReprocessModal();
+            } else {
+                toast(data.message || 'AI re-processing failed. Please try again.', 'error');
+            }
+        } catch (e) {
+            toast('Network error. Please try again.', 'error');
+        }
+    }
 
     async function fetchWithRetry(url, options = {}, retries = 3, backoff = 1000) {
         try {
@@ -334,6 +1041,24 @@
             if (response.ok) {
                 statusBadge.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
                 toast('Project saved successfully', 'success');
+                
+                try {
+                    const csrftoken = getCookie('csrftoken');
+                    await fetch(`/editor/${projectId}/versions/create/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify({
+                            content: editor.value,
+                            message: 'Auto-save'
+                        })
+                    });
+                } catch (e) {
+                    console.log('Version tracking not available');
+                }
+                
                 return true;
             } else {
                 const data = await response.json().catch(() => ({}));
@@ -411,6 +1136,8 @@
 
                 currentPdfUrl = window.URL.createObjectURL(blob);
                 pdfIframe.src = currentPdfUrl;
+                previewZoom = 1.0;
+                pdfIframe.style.transform = 'scale(1)';
 
                 placeholder.classList.add('hidden');
                 downloadBtn.classList.remove('hidden');
@@ -555,6 +1282,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        initUndoRedo();
+        calculateStats();
+        
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('autocompile') === 'true') {
             setTimeout(() => {
@@ -562,5 +1292,47 @@
             }, 500);
         }
     });
+
+    document.getElementById('share-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeShareModal();
+    });
+
+    document.getElementById('history-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeHistoryModal();
+    });
+
+    document.getElementById('new-file-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeNewFileModal();
+    });
+
+    document.getElementById('new-folder-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeNewFolderModal();
+    });
+
+    document.getElementById('reprocess-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeReprocessModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeShareModal();
+            closeHistoryModal();
+            closeNewFileModal();
+            closeNewFolderModal();
+            closeReprocessModal();
+        }
+    });
+
+    function toast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-24 right-4 px-6 py-3 rounded-xl text-white font-medium z-50 shadow-lg ${type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-red-500' : 'bg-primary'}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
 </script>
 {% endblock %}

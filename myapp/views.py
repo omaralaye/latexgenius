@@ -246,6 +246,9 @@ def dashboard_page(request):
 
     shared_projects_count = services.get_shared_projects_count(request.user.id)
     templates = services.get_templates()
+    notifications = services.get_user_notifications(request.user.id, limit=5)
+    unread_count = services.get_unread_notification_count(request.user.id)
+    api_keys = services.get_user_api_keys(request.user.id)
 
     context = {
         'projects': projects,
@@ -253,6 +256,9 @@ def dashboard_page(request):
         'recent_activity': recent_activity,
         'shared_projects': shared_projects_count,
         'templates': templates,
+        'notifications': notifications,
+        'unread_notification_count': unread_count,
+        'api_keys': api_keys,
         'app_settings': services.get_all_settings(),
     }
     if request.GET.get('format') == 'json':
@@ -260,8 +266,339 @@ def dashboard_page(request):
     return render(request, 'pages/dashboardpage.html', context)
 
 @login_required
-def settings_page(request):
+def create_api_key_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', 'Default Key')
+        api_key = services.create_api_key(request.user.id, name)
+        if api_key:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'api_key': {
+                        'id': api_key['id'],
+                        'key': api_key['key'],
+                        'name': api_key['name']
+                    }
+                })
+            messages.success(request, f"API Key created: {api_key['key']}")
+            return redirect('dashboard')
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': 'Failed to create API key'}, status=400)
+            messages.error(request, 'Failed to create API key')
+            return redirect('dashboard')
+    return redirect('dashboard')
+
+@login_required
+def revoke_api_key_view(request, key_id):
+    if request.method == 'POST':
+        success = services.revoke_api_key(request.user.id, key_id)
+        if success:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'success'})
+            messages.success(request, 'API key revoked successfully')
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': 'API key not found'}, status=404)
+            messages.error(request, 'API key not found')
+    return redirect('dashboard')
+
+@login_required
+def mark_notification_read_view(request, notification_id):
+    if request.method == 'POST':
+        success = services.mark_notification_read(request.user.id, notification_id)
+        if success:
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'error'}, status=404)
+    return redirect('dashboard')
+
+@login_required
+def save_preferences_view(request):
+    if request.method == 'POST':
+        from .models import UserPreference
+        prefs, created = UserPreference.objects.get_or_create(user=request.user)
+        
+        if 'dark_mode' in request.POST:
+            prefs.dark_mode = request.POST.get('dark_mode') == 'true'
+        if 'auto_compile' in request.POST:
+            prefs.auto_compile = request.POST.get('auto_compile') == 'true'
+        if 'font_size' in request.POST:
+            prefs.font_size = request.POST.get('font_size')
+        
+        prefs.save()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success'})
+        return redirect('settings')
+    
+    return redirect('settings')
+
+@login_required
+def create_version_view(request, project_id):
+    if request.method == 'POST':
+        from .models import Project, ProjectVersion
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            content = request.POST.get('content', project.content)
+            message = request.POST.get('message', 'Auto-save version')
+            
+            last_version = ProjectVersion.objects.filter(project=project).order_by('-version_number').first()
+            next_version = (last_version.version_number + 1) if last_version else 1
+            
+            ProjectVersion.objects.create(
+                project=project,
+                content=content,
+                version_number=next_version,
+                message=message,
+                created_by=request.user
+            )
+            
+            return JsonResponse({'status': 'success', 'version': next_version})
+        except Project.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def get_versions_view(request, project_id):
+    from .models import Project, ProjectVersion
+    try:
+        project = Project.objects.get(id=project_id, owner=request.user)
+        versions = ProjectVersion.objects.filter(project=project).order_by('-version_number')
+        
+        return JsonResponse({
+            'status': 'success',
+            'versions': [{
+                'version': v.version_number,
+                'message': v.message,
+                'created_at': v.created_at.isoformat(),
+                'created_by': v.created_by.username if v.created_by else 'Unknown'
+            } for v in versions]
+        })
+    except Project.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+
+@login_required
+def restore_version_view(request, project_id, version_number):
+    from .models import Project, ProjectVersion
+    if request.method == 'POST':
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            version = ProjectVersion.objects.get(project=project, version_number=version_number)
+            
+            project.content = version.content
+            project.save()
+            
+            last_version = ProjectVersion.objects.filter(project=project).order_by('-version_number').first()
+            next_version = (last_version.version_number + 1) if last_version else 1
+            ProjectVersion.objects.create(
+                project=project,
+                content=version.content,
+                version_number=next_version,
+                message=f"Restored from version {version_number}",
+                created_by=request.user
+            )
+            
+            return JsonResponse({'status': 'success', 'content': version.content})
+        except (Project.DoesNotExist, ProjectVersion.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def create_share_invitation_view(request, project_id):
+    if request.method == 'POST':
+        from .models import Project, ShareInvitation
+        import json
+        
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            data = json.loads(request.body) if request.body else {}
+            email = data.get('email', '').strip()
+            permission = data.get('permission', 'read')
+            
+            if not email:
+                return JsonResponse({'status': 'error', 'message': 'Email required'}, status=400)
+            
+            invitation = ShareInvitation.objects.create(
+                project=project,
+                inviter=request.user,
+                invitee_email=email,
+                permission=permission
+            )
+            
+            services.create_notification(
+                request.user.id,
+                'Share Invitation Sent',
+                f"Invitation sent to {email}",
+                'success'
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'invitation': {
+                    'id': str(invitation.id),
+                    'email': invitation.invitee_email,
+                    'permission': invitation.permission,
+                    'status': invitation.status
+                }
+            })
+        except Project.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def get_share_invitations_view(request, project_id):
+    from .models import Project, ShareInvitation
+    try:
+        project = Project.objects.get(id=project_id, owner=request.user)
+        invitations = ShareInvitation.objects.filter(project=project)
+        collaborators = [{
+            'id': str(c.id),
+            'name': c.get_full_name() or c.username,
+            'email': c.email,
+            'permission': 'write'
+        } for c in project.collaborators.all()]
+        
+        return JsonResponse({
+            'status': 'success',
+            'invitations': [{
+                'id': str(i.id),
+                'email': i.invitee_email,
+                'permission': i.permission,
+                'status': i.status,
+                'created_at': i.created_at.isoformat()
+            } for i in invitations],
+            'collaborators': collaborators
+        })
+    except Project.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+
+@login_required
+def revoke_share_invitation_view(request, project_id, invitation_id):
+    if request.method == 'POST':
+        from .models import Project, ShareInvitation
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            invitation = ShareInvitation.objects.get(id=invitation_id, project=project)
+            invitation.status = 'declined'
+            invitation.save()
+            return JsonResponse({'status': 'success'})
+        except (Project.DoesNotExist, ShareInvitation.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def remove_collaborator_view(request, project_id, user_id):
+    if request.method == 'POST':
+        from .models import Project, User
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            user = User.objects.get(id=user_id)
+            project.collaborators.remove(user)
+            return JsonResponse({'status': 'success'})
+        except (Project.DoesNotExist, User.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def reprocess_with_ai_view(request, project_id):
+    if request.method == 'POST':
+        from .models import Project, ProjectVersion
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            
+            if request.FILES.get('document'):
+                uploaded_file = request.FILES['document']
+                
+                last_version = ProjectVersion.objects.filter(project=project).order_by('-version_number').first()
+                next_version = (last_version.version_number + 1) if last_version else 1
+                ProjectVersion.objects.create(
+                    project=project,
+                    content=project.content,
+                    version_number=next_version,
+                    message="Before AI re-processing",
+                    created_by=request.user
+                )
+                
+                import tempfile
+                import os
+                
+                suffix = os.path.splitext(uploaded_file.name)[1]
+                with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
+                    for chunk in uploaded_file.chunks():
+                        tmp_file.write(chunk)
+                    temp_path = tmp_file.name
+                
+                try:
+                    latex_code = services.convert_to_latex_ai(file_path=temp_path)
+                    
+                    if latex_code:
+                        project.content = latex_code
+                        project.save()
+                        
+                        services.create_notification(
+                            request.user.id,
+                            'AI Re-Processing Complete',
+                            f"Project '{project.title}' has been re-processed with AI",
+                            'success'
+                        )
+                        
+                        return JsonResponse({
+                            'status': 'success',
+                            'content': latex_code,
+                            'message': 'Document re-processed successfully'
+                        })
+                    else:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': 'AI conversion failed. Please try again.'
+                        }, status=400)
+                finally:
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'No document uploaded'
+                }, status=400)
+                
+        except Project.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
+def get_preferences_view(request):
+    from .models import UserPreference
+    prefs, created = UserPreference.objects.get_or_create(user=request.user)
+    return JsonResponse({
+        'status': 'success',
+        'preferences': {
+            'dark_mode': prefs.dark_mode,
+            'auto_compile': prefs.auto_compile,
+            'font_size': prefs.font_size,
+            'editor_theme': prefs.editor_theme
+        }
+    })
+
+@login_required
+def upgrade_to_pro_view(request):
     context = {
+        'app_settings': services.get_all_settings(),
+        'user': request.user,
+    }
+    return render(request, 'pages/upgrade.html', context)
+
+@login_required
+def settings_page(request):
+    from .models import UserPreference, Profile, APIKey
+    
+    prefs, created = UserPreference.objects.get_or_create(user=request.user)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    api_keys = services.get_user_api_keys(request.user.id)
+    
+    context = {
+        'profile': profile,
+        'preferences': prefs,
+        'api_keys': api_keys,
         'app_settings': services.get_all_settings(),
     }
     if request.GET.get('format') == 'json':
@@ -371,6 +708,22 @@ def templates_page(request):
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)
     return render(request, 'pages/templatespage.html', context)
+
+def pricing_page(request):
+    context = {
+        'app_settings': services.get_all_settings(),
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/pricing.html', context)
+
+def documentation_page(request):
+    context = {
+        'app_settings': services.get_all_settings(),
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/documentation.html', context)
 
 @ratelimit(key='user', rate='20/m', block=False)
 @login_required

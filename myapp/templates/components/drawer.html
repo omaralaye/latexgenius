@@ -46,9 +46,12 @@
     <!-- Drawer Footer -->
     <div class="border-t border-outline-variant dark:border-slate-800 p-4">
         <div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
-            <p class="text-xs font-bold text-primary dark:text-primary mb-1">PRO FEATURES (COMING SOON)</p>
-            <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-tight">Unlock unlimited compiles and custom PDF themes.</p>
-            <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors">Upgrade to Pro</button>
+            <p class="text-xs font-bold text-primary dark:text-primary mb-1">UPGRADE TO PRO</p>
+            <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-tight">Unlock unlimited conversions, API access, version history, and more.</p>
+            <a href="{% url 'upgrade' %}" class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-sm">workspace_premium</span>
+                Upgrade Now
+            </a>
         </div>
         <button onclick="toggleTheme()" class="w-full flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-primary dark:hover:text-white transition-all rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800">
             <span class="material-symbols-outlined dark:hidden">dark_mode</span>

@@ -4,8 +4,8 @@
         <div class="hidden md:flex items-center space-x-8 font-serif font-medium">
             <a class="{% if request.resolver_match.url_name == 'landing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'landing' %}">Features</a>
             <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'templates' %}">Templates</a>
-            <a class="text-on-surface-variant dark:text-slate-400 hover:text-primary dark:hover:text-white transition-colors duration-300" href="#">Pricing</a>
-            <a class="text-on-surface-variant dark:text-slate-400 hover:text-primary dark:hover:text-white transition-colors duration-300" href="#">Documentation</a>
+            <a class="{% if request.resolver_match.url_name == 'pricing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'pricing' %}">Pricing</a>
+            <a class="{% if request.resolver_match.url_name == 'documentation' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'documentation' %}">Documentation</a>
         </div>
         <div class="flex items-center gap-4">
             <button onclick="toggleTheme()" class="p-2 text-on-surface-variant dark:text-slate-400 hover:bg-surface-variant dark:hover:bg-slate-800 rounded-lg transition-colors" aria-label="Toggle Theme">

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
-from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial
+from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial, APIKey, Notification
 from django.contrib.auth.models import User
 import logging
 import openai
@@ -230,3 +230,111 @@ def convert_to_latex_ai(content=None, file_path=None, template_content=None):
     except Exception as e:
         logger.error(f"OpenAI API error: {e}")
         return None
+
+import secrets
+import hashlib
+
+def generate_api_key():
+    return "lg_" + secrets.token_urlsafe(48)
+
+def hash_api_key(key):
+    return hashlib.sha256(key.encode()).hexdigest()
+
+def create_api_key(user_id, name="Default Key"):
+    from django.contrib.auth.models import User
+    try:
+        user = User.objects.get(id=user_id)
+        raw_key = generate_api_key()
+        hashed_key = hash_api_key(raw_key)
+        api_key = APIKey.objects.create(
+            user=user,
+            key=hashed_key,
+            name=name,
+            is_active=True
+        )
+        return {
+            "id": str(api_key.id),
+            "key": raw_key,
+            "name": api_key.name,
+            "created_at": api_key.created_at,
+        }
+    except Exception as e:
+        logger.error(f"Failed to create API key: {e}")
+        return None
+
+def get_user_api_keys(user_id):
+    from django.contrib.auth.models import User
+    try:
+        keys = APIKey.objects.filter(user_id=user_id).order_by('-created_at')
+        return [{
+            "id": str(k.id),
+            "name": k.name,
+            "key_prefix": k.key[:8] + "...",
+            "is_active": k.is_active,
+            "created_at": k.created_at,
+            "last_used_at": k.last_used_at,
+            "usage_count": k.usage_count,
+        } for k in keys]
+    except Exception as e:
+        logger.error(f"Failed to get API keys: {e}")
+        return []
+
+def revoke_api_key(user_id, key_id):
+    try:
+        api_key = APIKey.objects.get(id=key_id, user_id=user_id)
+        api_key.is_active = False
+        api_key.save()
+        return True
+    except APIKey.DoesNotExist:
+        return False
+
+def get_user_notifications(user_id, unread_only=False, limit=10):
+    try:
+        queryset = Notification.objects.filter(user_id=user_id)
+        if unread_only:
+            queryset = queryset.filter(is_read=False)
+        queryset = queryset.order_by('-created_at')
+        if limit:
+            queryset = queryset[:limit]
+        return [{
+            "id": str(n.id),
+            "title": n.title,
+            "message": n.message,
+            "type": n.type,
+            "is_read": n.is_read,
+            "created_at": n.created_at,
+        } for n in queryset]
+    except Exception as e:
+        logger.error(f"Failed to get notifications: {e}")
+        return []
+
+def get_unread_notification_count(user_id):
+    try:
+        return Notification.objects.filter(user_id=user_id, is_read=False).count()
+    except:
+        return 0
+
+def mark_notification_read(user_id, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, user_id=user_id)
+        notification.is_read = True
+        notification.save()
+        return True
+    except Notification.DoesNotExist:
+        return False
+
+def create_notification(user_id, title, message, type='info'):
+    from django.contrib.auth.models import User
+    try:
+        user = User.objects.get(id=user_id)
+        Notification.objects.create(
+            user=user,
+            title=title,
+            message=message,
+            type=type,
+            is_read=False
+        )
+        return True
+    except Exception as e:
+        logger.error(f"Failed to create notification: {e}")
+        return False

@@ -26,14 +26,114 @@
                 <span class="xs:hidden">New</span>
             </a>
             <div class="flex items-center gap-1 sm:gap-2 border-l border-slate-200 dark:border-slate-800 pl-2 sm:pl-4">
-                <button class="p-1 sm:p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
-                    <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
-                </button>
-                <a href="{% url 'settings' %}" class="hidden sm:block p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
-                    <span class="material-symbols-outlined">settings</span>
-                </a>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                     <span class="material-symbols-outlined text-primary">person</span>
+                <!-- Notification Dropdown -->
+                <div class="relative" id="notification-dropdown-container">
+                    <button onclick="toggleNotificationDropdown()" class="relative p-1 sm:p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" aria-label="Notifications">
+                        <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
+                        {% if unread_notification_count > 0 %}
+                        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ unread_notification_count }}
+                        </span>
+                        {% endif %}
+                    </button>
+                    <div id="notification-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-outline-variant dark:border-slate-700 z-50 overflow-hidden">
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-outline-variant dark:border-slate-700">
+                            <h3 class="font-serif font-semibold dark:text-white">Notifications</h3>
+                            {% if unread_notification_count > 0 %}
+                            <span class="text-xs text-primary font-medium">{{ unread_notification_count }} unread</span>
+                            {% endif %}
+                        </div>
+                        <div class="max-h-80 overflow-y-auto">
+                            {% if notifications %}
+                                {% for notification in notifications %}
+                                <div class="notification-item px-4 py-3 hover:bg-surface-variant dark:hover:bg-slate-700 border-b border-outline-variant/50 dark:border-slate-700/50 cursor-pointer {% if not notification.is_read %}bg-primary/5 dark:bg-primary/10{% endif %}" data-id="{{ notification.id }}" onclick="markNotificationAsRead('{{ notification.id }}')">
+                                    <div class="flex items-start gap-3">
+                                        <div class="flex-shrink-0 mt-0.5">
+                                            {% if notification.type == 'success' %}
+                                            <span class="material-symbols-outlined text-green-600 text-lg">check_circle</span>
+                                            {% elif notification.type == 'error' %}
+                                            <span class="material-symbols-outlined text-error text-lg">error</span>
+                                            {% elif notification.type == 'warning' %}
+                                            <span class="material-symbols-outlined text-amber-600 text-lg">warning</span>
+                                            {% else %}
+                                            <span class="material-symbols-outlined text-primary text-lg">info</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium dark:text-white {% if not notification.is_read %}font-semibold{% endif %}">{{ notification.title }}</p>
+                                            <p class="text-xs text-on-surface-variant dark:text-slate-400 mt-0.5 line-clamp-2">{{ notification.message }}</p>
+                                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">{{ notification.created_at|timesince }} ago</p>
+                                        </div>
+                                        {% if not notification.is_read %}
+                                        <div class="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                            <div class="px-4 py-8 text-center">
+                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-4xl mb-2 block">notifications_none</span>
+                                <p class="text-sm text-on-surface-variant dark:text-slate-400">No notifications yet</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="px-4 py-3 border-t border-outline-variant dark:border-slate-700">
+                            <a href="#" class="text-sm text-primary font-medium hover:underline">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="relative" id="profile-dropdown-container">
+                    <button onclick="toggleProfileDropdown()" class="flex items-center gap-2 sm:gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors p-1" aria-label="Profile menu">
+                        <a href="{% url 'settings' %}" class="hidden sm:flex p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" onclick="event.stopPropagation()">
+                            <span class="material-symbols-outlined">settings</span>
+                        </a>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                            {% if user.first_name %}
+                            {{ user.first_name|slice:"1" }}{% else %}{{ user.username|slice:"1"|upper }}{% endif %}
+                        </div>
+                    </button>
+                    <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-outline-variant dark:border-slate-700 z-50 overflow-hidden">
+                        <div class="px-4 py-4 border-b border-outline-variant dark:border-slate-700">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold shadow-sm">
+                                    {% if user.first_name %}
+                                    {{ user.first_name|slice:"1" }}{% else %}{{ user.username|slice:"1"|upper }}{% endif %}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold dark:text-white text-sm truncate">
+                                        {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
+                                    </p>
+                                    <p class="text-xs text-on-surface-variant dark:text-slate-400 truncate">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="py-2">
+                            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-primary text-lg">dashboard</span>
+                                Dashboard
+                            </a>
+                            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-primary text-lg">person</span>
+                                Profile
+                            </a>
+                            <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-primary text-lg">settings</span>
+                                Settings
+                            </a>
+                            <button onclick="toggleProfileDropdown(); openApiKeyModal()" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-slate-300 hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors text-left">
+                                <span class="material-symbols-outlined text-primary text-lg">key</span>
+                                API Keys
+                            </button>
+                        </div>
+                        <div class="border-t border-outline-variant dark:border-slate-700 py-2">
+                            <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-lg">logout</span>
+                                Sign Out
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,9 +249,9 @@
                             <span class="material-symbols-outlined text-primary">upload_file</span>
                             Upload Document
                         </button>
-                        <button class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
-                            <span class="material-symbols-outlined text-primary">token</span>
-                            Generate API Key
+                        <button onclick="openApiKeyModal()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
+                            <span class="material-symbols-outlined text-primary">key</span>
+                            Manage API Keys
                         </button>
                         <a href="{% url 'templates' %}" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">auto_awesome</span>
@@ -159,10 +259,155 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- API Keys Panel -->
+                <div class="bg-surface dark:bg-slate-800/50 p-6 rounded-xl border border-outline-variant dark:border-slate-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">API Keys</h4>
+                        <button onclick="openApiKeyModal()" class="text-xs text-primary font-medium hover:underline">Manage</button>
+                    </div>
+                    {% if api_keys %}
+                    <div class="space-y-3">
+                        {% for key in api_keys|slice:":3" %}
+                        <div class="bg-white dark:bg-slate-900 p-3 rounded-lg border border-outline-variant dark:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-sm">key</span>
+                                    <span class="text-sm font-medium dark:text-white">{{ key.name }}</span>
+                                </div>
+                                {% if key.is_active %}
+                                <span class="px-2 py-0.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs font-medium rounded-full">Active</span>
+                                {% else %}
+                                <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-medium rounded-full">Revoked</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-xs font-mono text-on-surface-variant dark:text-slate-400 mt-1">{{ key.key_prefix }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if api_keys|length > 3 %}
+                    <button onclick="openApiKeyModal()" class="w-full mt-3 text-xs text-primary font-medium hover:underline">
+                        View all {{ api_keys|length }} keys
+                    </button>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-4">
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-3xl mb-2 block">key</span>
+                        <p class="text-sm text-on-surface-variant dark:text-slate-400 mb-3">No API keys yet</p>
+                        <button onclick="openApiKeyModal()" class="text-xs text-primary font-medium hover:underline">
+                            Create your first API key
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </main>
+
+<!-- API Key Modal -->
+<div id="api-key-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div id="api-key-modal" class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-xl font-serif font-bold dark:text-white">API Keys</h3>
+            <button onclick="closeApiKeyModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- Create New Key Form -->
+            <div class="bg-surface dark:bg-slate-800/50 p-5 rounded-xl border border-outline-variant dark:border-slate-700 mb-6">
+                <h4 class="font-serif font-semibold dark:text-white mb-4">Create New API Key</h4>
+                <form id="create-api-key-form" class="flex flex-col sm:flex-row gap-3">
+                    {% csrf_token %}
+                    <input type="text" id="api-key-name" name="name" placeholder="Key name (e.g., Production, Development)" 
+                           class="flex-1 px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white"
+                           required>
+                    <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-variant transition-colors whitespace-nowrap">
+                        Generate Key
+                    </button>
+                </form>
+            </div>
+
+            <!-- New Key Display (shown after creation) -->
+            <div id="new-key-display" class="hidden bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-5 rounded-xl mb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                    <span class="text-sm font-medium text-green-800 dark:text-green-300">New API Key Created</span>
+                </div>
+                <p class="text-xs text-green-700 dark:text-green-400 mb-2">Make sure to copy your API key now. You won't be able to see it again!</p>
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 bg-white dark:bg-slate-900 border border-green-200 dark:border-green-800 rounded-lg px-4 py-2.5 overflow-x-auto">
+                        <code id="new-api-key-value" class="text-sm font-mono text-green-800 dark:text-green-300 whitespace-nowrap"></code>
+                    </div>
+                    <button onclick="copyNewApiKey()" class="p-2.5 bg-white dark:bg-slate-900 border border-green-200 dark:border-green-800 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors" title="Copy to clipboard">
+                        <span id="copy-icon" class="material-symbols-outlined text-green-600 dark:text-green-400">content_copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Existing Keys List -->
+            <div>
+                <h4 class="font-serif font-semibold dark:text-white mb-4">Existing Keys</h4>
+                {% if api_keys %}
+                <div class="space-y-3">
+                    {% for key in api_keys %}
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-outline-variant dark:border-slate-700">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="material-symbols-outlined text-primary text-sm">key</span>
+                                    <span class="font-medium dark:text-white">{{ key.name }}</span>
+                                    {% if key.is_active %}
+                                    <span class="px-2 py-0.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs font-medium rounded-full">Active</span>
+                                    {% else %}
+                                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs font-medium rounded-full">Revoked</span>
+                                    {% endif %}
+                                </div>
+                                <p class="text-xs font-mono text-on-surface-variant dark:text-slate-400">
+                                    {{ key.key_prefix }}
+                                </p>
+                                <div class="flex flex-wrap items-center gap-4 mt-2 text-xs text-slate-400">
+                                    <span>Created: {{ key.created_at|date:"M d, Y" }}</span>
+                                    {% if key.last_used_at %}
+                                    <span>Last used: {{ key.last_used_at|timesince }} ago</span>
+                                    {% endif %}
+                                    <span>Used {{ key.usage_count }} time{{ key.usage_count|pluralize }}</span>
+                                </div>
+                            </div>
+                            {% if key.is_active %}
+                            <form action="{% url 'revoke_api_key' key.id %}" method="POST" class="flex-shrink-0">
+                                {% csrf_token %}
+                                <button type="submit" onclick="return confirm('Are you sure you want to revoke this API key? This action cannot be undone.')" 
+                                        class="px-3 py-1.5 text-xs font-medium text-error border border-error/30 rounded-lg hover:bg-error/5 transition-colors">
+                                    Revoke
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 bg-surface dark:bg-slate-800/50 rounded-xl border border-dashed border-outline-variant dark:border-slate-700">
+                    <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-4xl mb-3 block">key</span>
+                    <p class="text-sm text-on-surface-variant dark:text-slate-400">No API keys yet. Create one above to get started.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="px-6 py-4 border-t border-outline-variant dark:border-slate-700 bg-surface/50 dark:bg-slate-900/50">
+            <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-primary text-lg flex-shrink-0 mt-0.5">info</span>
+                <p class="text-xs text-on-surface-variant dark:text-slate-400 leading-relaxed">
+                    API keys provide full access to your account. Keep them secure and never share them in public code repositories or client-side code.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function updateFileName(input) {
@@ -272,6 +517,138 @@
             toast.style.transition = 'opacity 0.3s';
             setTimeout(() => toast.remove(), 300);
         }, 2000);
+    }
+
+    function toggleNotificationDropdown() {
+        const dropdown = document.getElementById('notification-dropdown');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        profileDropdown.classList.add('hidden');
+        dropdown.classList.toggle('hidden');
+    }
+
+    function toggleProfileDropdown() {
+        const dropdown = document.getElementById('profile-dropdown');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        notificationDropdown.classList.add('hidden');
+        dropdown.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+        const notificationContainer = document.getElementById('notification-dropdown-container');
+        const profileContainer = document.getElementById('profile-dropdown-container');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (notificationContainer && !notificationContainer.contains(e.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+        if (profileContainer && !profileContainer.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+    });
+
+    async function markNotificationAsRead(notificationId) {
+        try {
+            await fetch(`/notifications/${notificationId}/read/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+        } catch (e) {
+            console.error('Failed to mark notification as read:', e);
+        }
+    }
+
+    function openApiKeyModal() {
+        const overlay = document.getElementById('api-key-modal-overlay');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeApiKeyModal() {
+        const overlay = document.getElementById('api-key-modal-overlay');
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.style.overflow = '';
+        const newKeyDisplay = document.getElementById('new-key-display');
+        if (newKeyDisplay) {
+            newKeyDisplay.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('api-key-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            closeApiKeyModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeApiKeyModal();
+        }
+    });
+
+    document.getElementById('create-api-key-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('api-key-name').value.trim();
+        
+        if (!name) {
+            toast('Please enter a key name', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('{% url "create_api_key" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                const newKeyValue = document.getElementById('new-api-key-value');
+                const newKeyDisplay = document.getElementById('new-key-display');
+                const copyIcon = document.getElementById('copy-icon');
+                
+                newKeyValue.textContent = data.api_key.key;
+                newKeyDisplay.classList.remove('hidden');
+                copyIcon.textContent = 'content_copy';
+                document.getElementById('api-key-name').value = '';
+                
+                toast('API key created successfully. Copy it now!', 'success');
+                
+                setTimeout(() => {
+                    location.reload();
+                }, 5000);
+            } else {
+                toast(data.message || 'Failed to create API key', 'error');
+            }
+        } catch (error) {
+            toast('Network error. Please try again.', 'error');
+        }
+    });
+
+    function copyNewApiKey() {
+        const keyValue = document.getElementById('new-api-key-value').textContent;
+        const copyIcon = document.getElementById('copy-icon');
+        
+        navigator.clipboard.writeText(keyValue).then(() => {
+            copyIcon.textContent = 'check';
+            toast('API key copied to clipboard', 'success');
+            setTimeout(() => {
+                copyIcon.textContent = 'content_copy';
+            }, 2000);
+        }).catch(() => {
+            toast('Failed to copy. Please copy manually.', 'error');
+        });
     }
 </script>
 
