@@ -1,7 +1,7 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, TransactionTestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
-from myapp.models import Project, Template
+from myapp.models import Project, Template, ConversionJob
 from myapp import services
 from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -151,80 +151,62 @@ class DocumentUploadTests(TestCase):
             self.assertEqual(project.filename, 'test_md.tex')
             self.assertRedirects(response, f'/editor/{project.id}/')
 
-class AIConversionTests(TestCase):
+class AIConversionTests(TransactionTestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testai@example.com', password='password123')
         self.client.login(username='testai@example.com', password='password123')
-
-    @patch('myapp.views.services.convert_to_latex_ai')
-    def test_ai_convert_text_success(self, mock_convert):
-        mock_convert.return_value = "\\documentclass{article}\n\\begin{document}\nAI Generated\n\\end{document}"
-
-        # Create a template for the test
-        template = Template.objects.create(
+        self.template = Template.objects.create(
             name='Test Template',
             category='Test',
             image_url='http://example.com/test.png',
             content='\\documentclass{article}'
         )
 
-        with self.settings(OPENAI_API_KEY='fake-key'):
-            response = self.client.post(reverse('ai_convert'), {
-                'content': 'Convert this text to LaTeX',
-                'template_id': template.id
-            })
+    def test_ai_convert_text_creates_project_and_job(self):
+        response = self.client.post(reverse('ai_convert'), {
+            'content': 'Convert this text to LaTeX',
+            'template_id': self.template.id
+        })
 
         self.assertEqual(response.status_code, 302)
-        # Check that the redirect URL contains the autocompile parameter
         location = response.get('Location', '')
-        self.assertIn('autocompile=true', location)
+        self.assertIn('/convert/', location)
 
         project = Project.objects.filter(owner=self.user).last()
         self.assertIsNotNone(project)
         self.assertEqual(project.title, 'Convert this text to...')
-        self.assertIn('\\documentclass', project.content)
 
-    @patch('myapp.services.convert_to_latex_ai')
-    def test_ai_convert_file_success(self, mock_convert):
-        mock_convert.return_value = "\\documentclass{article}\n\\begin{document}\nFile Content\n\\end{document}"
-        template = Template.objects.create(
-            name='Conference Paper',
-            category='Academic',
-            image_url='http://example.com/template.png',
-            content='\\documentclass{article}\\n% Conference paper template'
-        )
+        job = ConversionJob.objects.filter(project=project).last()
+        self.assertIsNotNone(job)
+        self.assertEqual(job.status, 'pending')
+        self.assertEqual(job.progress_percent, 0)
 
+    def test_ai_convert_file_creates_project_and_job(self):
         content = b"Some document content"
         uploaded_file = SimpleUploadedFile("test_doc.txt", content, content_type="text/plain")
 
-        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file, 'template_id': template.id})
+        response = self.client.post(reverse('ai_convert'), {
+            'document': uploaded_file,
+            'template_id': self.template.id
+        })
 
         self.assertEqual(response.status_code, 302)
+        location = response.get('Location', '')
+        self.assertIn('/convert/', location)
+
         project = Project.objects.filter(owner=self.user).last()
         self.assertIsNotNone(project)
         self.assertEqual(project.title, 'test_doc')
 
-    @patch('myapp.services.convert_to_latex_ai')
-    def test_ai_convert_file_with_template_success(self, mock_convert):
-        template = Template.objects.create(
-            name='Conference Paper',
-            category='Academic',
-            image_url='http://example.com/template.png',
-            content='\\documentclass{article}\\n% Conference paper template'
-        )
-        mock_convert.return_value = "\\documentclass{article}\\n\\begin{document}\\nTemplate AI\\n\\end{document}"
+        job = ConversionJob.objects.filter(project=project).last()
+        self.assertIsNotNone(job)
+        self.assertEqual(job.status, 'pending')
 
-        content = b"Some document content"
-        uploaded_file = SimpleUploadedFile("test_doc.txt", content, content_type="text/plain")
-        response = self.client.post(reverse('ai_convert'), {'document': uploaded_file, 'template_id': template.id})
-
+    def test_ai_convert_fails_without_template(self):
+        response = self.client.post(reverse('ai_convert'), {'content': 'Some content'})
         self.assertEqual(response.status_code, 302)
-        project = Project.objects.filter(owner=self.user).last()
-        self.assertIsNotNone(project)
-        self.assertEqual(project.title, 'test_doc')
-        self.assertIn('\\documentclass', project.content)
-        mock_convert.assert_called_once()
-        self.assertEqual(mock_convert.call_args.kwargs.get('template_content'), template.content)
+        location = response.get('Location', '')
+        self.assertEqual(location, '/dashboard/')
 
 from unittest.mock import patch, MagicMock
 

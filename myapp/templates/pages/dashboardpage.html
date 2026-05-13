@@ -249,6 +249,10 @@
                             <span class="material-symbols-outlined text-primary">upload_file</span>
                             Upload Document
                         </button>
+                        <button onclick="openAIConvertModal()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
+                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                            Convert with Kimi AI
+                        </button>
                         <button onclick="openApiKeyModal()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-slate-900 hover:bg-surface dark:hover:bg-slate-800 border border-outline-variant dark:border-slate-700 rounded-lg text-sm font-semibold text-on-surface-variant dark:text-slate-400 transition-all text-left">
                             <span class="material-symbols-outlined text-primary">key</span>
                             Manage API Keys
@@ -409,7 +413,95 @@
     </div>
 </div>
 
+<!-- AI Convert Modal -->
+<div id="ai-convert-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-slate-700">
+            <h3 class="text-xl font-serif font-bold dark:text-white">Convert with Kimi K2.6</h3>
+            <button onclick="closeAIConvertModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="ai-convert-form" action="{% url 'ai_convert' %}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-6">
+            {% csrf_token %}
+            <div class="mb-6 p-4 bg-primary/5 dark:bg-primary/10 rounded-lg border border-primary/20 dark:border-primary/30">
+                <h4 class="font-medium text-primary dark:text-white mb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    How it works
+                </h4>
+                <p class="text-sm text-on-surface-variant dark:text-slate-400 leading-relaxed">
+                    Paste your document text or upload a file. Kimi K2.6 will analyze your content and convert it into clean, publication-ready LaTeX code. You'll see the conversion progress in real-time.
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Select Template <span class="text-error">*</span></label>
+                <select name="template_id" id="ai-template-select" required
+                        class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
+                    <option value="">-- Select a template --</option>
+                    {% for template in templates %}
+                    <option value="{{ template.id }}">{{ template.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Or upload a document</label>
+                <input type="file" name="document" accept=".docx,.odt,.pdf,.md,.markdown,.txt,.html"
+                       class="w-full text-sm text-on-surface-variant dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-variant cursor-pointer">
+            </div>
+
+            <div class="relative mb-4">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-outline-variant dark:border-slate-700"></div>
+                </div>
+                <div class="relative flex justify-center text-xs uppercase">
+                    <span class="bg-white dark:bg-slate-800 px-3 text-on-surface-variant dark:text-slate-500">or paste text</span>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface-variant dark:text-slate-400 mb-2">Document Content</label>
+                <textarea name="content" rows="8" placeholder="Paste your document text here... (or upload a file above)"
+                          class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white dark:placeholder-slate-600 resize-y"></textarea>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" onclick="closeAIConvertModal()"
+                        class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-slate-700 text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-slate-700 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit"
+                        class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">auto_fix</span>
+                    Convert with Kimi K2.6
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+    function openAIConvertModal() {
+        document.getElementById('ai-convert-modal-overlay').classList.remove('hidden');
+        document.getElementById('ai-convert-modal-overlay').classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAIConvertModal() {
+        document.getElementById('ai-convert-modal-overlay').classList.add('hidden');
+        document.getElementById('ai-convert-modal-overlay').classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('ai-convert-modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeAIConvertModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAIConvertModal();
+    });
+
     function updateFileName(input) {
         const display = document.getElementById('fileNameDisplay');
         if (input.files && input.files[0]) {

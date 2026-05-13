@@ -553,7 +553,7 @@
                     What does Re-Process do?
                 </h4>
                 <p class="text-sm text-on-surface-variant dark:text-slate-400 leading-relaxed">
-                    Upload a new document (Word, PDF, Markdown, text) and our AI will convert it to LaTeX, replacing the current content of this project. 
+                    Upload a new document (Word, PDF, Markdown, text) and Kimi K2.6 will convert it to LaTeX, replacing the current content of this project. 
                     <strong>A version of your current content will be saved</strong> before the replacement.
                 </p>
             </div>
@@ -582,6 +582,35 @@
                 Re-Process
             </button>
         </div>
+    </div>
+</div>
+
+<!-- Conversion Progress Overlay -->
+<div id="conversion-overlay" class="fixed inset-0 bg-black/50 z-[250] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-8 text-center">
+        <div id="conv-spinner" class="w-16 h-16 mx-auto relative mb-5">
+            <div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <span class="material-symbols-outlined text-2xl text-primary">sync</span>
+            </div>
+        </div>
+        <div id="conv-success" class="w-16 h-16 mx-auto mb-5 hidden">
+            <div class="w-full h-full rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                <span class="material-symbols-outlined text-3xl text-emerald-500">check_circle</span>
+            </div>
+        </div>
+        <div id="conv-error" class="w-16 h-16 mx-auto mb-5 hidden">
+            <div class="w-full h-full rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <span class="material-symbols-outlined text-3xl text-error">error</span>
+            </div>
+        </div>
+        <h3 id="conv-title" class="text-lg font-bold text-on-surface dark:text-white mb-2">Processing with Kimi K2.6</h3>
+        <p id="conv-message" class="text-sm text-on-surface-variant dark:text-slate-400 mb-5 min-h-[1.25rem]">Starting conversion...</p>
+        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden mb-1">
+            <div id="conv-bar" class="h-full bg-primary rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+        </div>
+        <p id="conv-pct" class="text-xs font-mono text-slate-400 dark:text-slate-500">0%</p>
     </div>
 </div>
 
@@ -992,6 +1021,58 @@
         document.body.style.overflow = '';
     }
 
+    let convJobId = null;
+    let convPollTimer = null;
+
+    function showConversionOverlay() {
+        document.getElementById('conversion-overlay').classList.remove('hidden');
+        document.getElementById('conversion-overlay').classList.add('flex');
+    }
+
+    function hideConversionOverlay() {
+        document.getElementById('conversion-overlay').classList.add('hidden');
+        document.getElementById('conversion-overlay').classList.remove('flex');
+        if (convPollTimer) { clearInterval(convPollTimer); convPollTimer = null; }
+    }
+
+    function updateConvOverlay(data) {
+        document.getElementById('conv-bar').style.width = data.progress_percent + '%';
+        document.getElementById('conv-pct').textContent = data.progress_percent + '%';
+        document.getElementById('conv-message').textContent = data.progress_message;
+    }
+
+    function pollConversionStatus() {
+        if (!convJobId) return;
+        fetch(`/convert/${projectId}/status/`)
+            .then(r => r.json())
+            .then(data => {
+                updateConvOverlay(data);
+                if (data.status === 'completed') {
+                    document.getElementById('conv-spinner').classList.add('hidden');
+                    document.getElementById('conv-success').classList.remove('hidden');
+                    document.getElementById('conv-title').textContent = 'Conversion Complete!';
+                    document.getElementById('conv-message').textContent = 'Loading result...';
+                    clearInterval(convPollTimer);
+                    convPollTimer = null;
+                    fetchEditorContent();
+                } else if (data.status === 'failed') {
+                    document.getElementById('conv-spinner').classList.add('hidden');
+                    document.getElementById('conv-error').classList.remove('hidden');
+                    document.getElementById('conv-title').textContent = 'Conversion Failed';
+                    document.getElementById('conv-message').textContent = data.error_message || data.progress_message;
+                    document.getElementById('conv-bar').classList.remove('bg-primary');
+                    document.getElementById('conv-bar').classList.add('bg-error');
+                    clearInterval(convPollTimer);
+                    convPollTimer = null;
+                }
+            })
+            .catch(() => {});
+    }
+
+    async function fetchEditorContent() {
+        window.location.href = `/editor/${projectId}/?autocompile=true`;
+    }
+
     async function reprocessDocument() {
         const fileInput = document.getElementById('reprocess-file');
         const note = document.getElementById('reprocess-note').value;
@@ -1011,22 +1092,18 @@
         try {
             const response = await fetch(`/editor/${projectId}/reprocess/`, {
                 method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                },
+                headers: { 'X-CSRFToken': csrftoken },
                 body: formData
             });
             
             const data = await response.json();
             
-            if (data.status === 'success') {
-                editor.value = data.content;
-                lastContent = data.content;
-                undoStack = [];
-                redoStack = [];
-                updateUndoRedoButtons();
-                toast(data.message || 'Document re-processed successfully!', 'success');
+            if (data.status === 'started') {
+                convJobId = data.job_id;
                 closeReprocessModal();
+                showConversionOverlay();
+                convPollTimer = setInterval(pollConversionStatus, 2000);
+                pollConversionStatus();
             } else {
                 toast(data.message || 'AI re-processing failed. Please try again.', 'error');
             }

@@ -32,4 +32,6 @@ urlpatterns = [
     path('editor/<str:project_id>/share/<str:invitation_id>/revoke/', views.revoke_share_invitation_view, name='revoke_share_invitation'),
     path('editor/<str:project_id>/collaborators/<str:user_id>/remove/', views.remove_collaborator_view, name='remove_collaborator'),
     path('editor/<str:project_id>/reprocess/', views.reprocess_with_ai_view, name='reprocess_with_ai'),
+    path('convert/<str:project_id>/', views.conversion_page, name='conversion_page'),
+    path('convert/<str:project_id>/status/', views.conversion_status_json, name='conversion_status_json'),
 ]

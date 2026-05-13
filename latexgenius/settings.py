@@ -156,9 +156,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # LaTeX Compiler Settings
 LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.cc/compile')
 
-# OpenAI Settings
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'gpt-4o')
+# Kimi (Moonshot AI via NVIDIA) Settings
+KIMI_API_KEY = os.environ.get('KIMI_API_KEY')
+KIMI_BASE_URL = os.environ.get('KIMI_BASE_URL', 'https://integrate.api.nvidia.com/v1')
+KIMI_MODEL = os.environ.get('KIMI_MODEL', 'moonshotai/kimi-k2.6')
 
 # Logging configuration
 LOGGING = {

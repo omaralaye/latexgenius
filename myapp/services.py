@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
-from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial, APIKey, Notification
+from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial, APIKey, Notification, ConversionJob
 from django.contrib.auth.models import User
 import logging
 import openai
@@ -171,37 +171,57 @@ def get_testimonials():
     return [serialize_testimonial(t) for t in Testimonial.objects.all()]
 
 # AI Conversion
-def convert_to_latex_ai(content=None, file_path=None, template_content=None):
+def update_job_progress(job_id, status, message, percent):
+    try:
+        ConversionJob.objects.filter(id=job_id).update(
+            status=status,
+            progress_message=message,
+            progress_percent=percent
+        )
+    except Exception as e:
+        logger.error(f"Failed to update conversion job {job_id}: {e}")
+
+def convert_to_latex_ai(content=None, file_path=None, template_content=None, conversion_job_id=None):
     """
-    Converts document content or a file to LaTeX using OpenAI, optionally respecting a selected template.
+    Converts document content or a file to LaTeX using Kimi K2.6 via NVIDIA API,
+    optionally reporting progress to a ConversionJob.
     """
     input_text = ""
     if file_path:
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'processing', 'Extracting text from document...', 10)
         try:
-            # Try to convert to markdown first as it's a good intermediate format for LLMs
             input_text = pypandoc.convert_file(file_path, 'markdown')
         except Exception as e:
             logger.error(f"Pandoc conversion failed: {e}")
-            # Fallback to reading as text
             try:
                 with open(file_path, 'r', errors='ignore') as f:
                     input_text = f.read()
             except Exception as read_err:
                 logger.error(f"Failed to read file: {read_err}")
+                if conversion_job_id:
+                    update_job_progress(conversion_job_id, 'failed', f'Failed to read file: {read_err}', 0)
                 return None
     else:
         input_text = content
 
     if not input_text:
         logger.warning("AI conversion attempted with empty input.")
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'failed', 'No content provided for conversion.', 0)
         return None
 
-    if not settings.OPENAI_API_KEY:
-        logger.error("OPENAI_API_KEY is not configured.")
+    if not settings.KIMI_API_KEY:
+        logger.error("KIMI_API_KEY is not configured.")
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'failed', 'KIMI_API_KEY is not configured.', 0)
         return None
+
+    if conversion_job_id:
+        update_job_progress(conversion_job_id, 'processing', 'Sending to Kimi K2.6 for LaTeX conversion...', 30)
 
     try:
-        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+        client = openai.OpenAI(api_key=settings.KIMI_API_KEY, base_url=settings.KIMI_BASE_URL)
 
         prompt = "Convert the following document into a high-quality, valid LaTeX document. Return ONLY the LaTeX code, starting from \\documentclass and ending with \\end{document}."
         if template_content:
@@ -209,18 +229,26 @@ def convert_to_latex_ai(content=None, file_path=None, template_content=None):
             prompt += f"\n\nTemplate Content:\n{template_content}"
         prompt += f"\n\nDocument Content:\n{input_text}"
 
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'processing', 'Kimi K2.6 is analyzing and generating LaTeX code...', 50)
+
         response = client.chat.completions.create(
-            model=settings.OPENAI_MODEL,
+            model=settings.KIMI_MODEL,
             messages=[
                 {"role": "system", "content": "You are a LaTeX expert. Your task is to convert any provided document into a clean, well-structured LaTeX source code in accordance with the requested template."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.2
+            temperature=0.6,
+            top_p=1.00,
+            extra_body={"chat_template_kwargs": {"thinking": False}},
+            max_tokens=16384
         )
+
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'processing', 'Post-processing generated LaTeX code...', 80)
 
         latex_code = response.choices[0].message.content
 
-        # Clean up Markdown code blocks if present
         if "```latex" in latex_code:
             latex_code = latex_code.split("```latex")[1].split("```")[0]
         elif "```" in latex_code:
@@ -228,8 +256,40 @@ def convert_to_latex_ai(content=None, file_path=None, template_content=None):
 
         return latex_code.strip()
     except Exception as e:
-        logger.error(f"OpenAI API error: {e}")
+        logger.error(f"Kimi API error: {e}")
+        if conversion_job_id:
+            update_job_progress(conversion_job_id, 'failed', f'Kimi AI error: {str(e)}', 0)
         return None
+
+def run_conversion_job(job_id, project_id, file_path=None, content=None, template_content=None, delete_file=False):
+    try:
+        project = Project.objects.get(id=project_id)
+        update_job_progress(job_id, 'processing', 'Starting conversion with Kimi K2.6...', 5)
+
+        latex_code = convert_to_latex_ai(
+            content=content,
+            file_path=file_path,
+            template_content=template_content,
+            conversion_job_id=job_id
+        )
+
+        if delete_file and file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except:
+                pass
+
+        if latex_code:
+            project.content = latex_code
+            project.save()
+            update_job_progress(job_id, 'completed', 'LaTeX conversion complete!', 100)
+        else:
+            update_job_progress(job_id, 'failed', 'AI conversion returned no output.', 0)
+    except Project.DoesNotExist:
+        update_job_progress(job_id, 'failed', 'Project not found.', 0)
+    except Exception as e:
+        logger.error(f"Conversion job {job_id} failed: {e}")
+        update_job_progress(job_id, 'failed', f'Unexpected error: {str(e)}', 0)
 
 import secrets
 import hashlib

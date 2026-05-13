@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.conf import settings
 from django_ratelimit.decorators import ratelimit
 from . import services
-from .models import Profile
+from .models import Profile, ConversionJob, Project, ProjectVersion
 from datetime import datetime
 import httpx
 import logging
@@ -17,11 +17,42 @@ import tarfile
 import pypandoc
 import os
 import tempfile
-import tempfile
+import shutil
+import threading
 from urllib.parse import urlencode
 
 User = get_user_model()
 logger = logging.getLogger('myapp')
+
+@login_required
+def conversion_page(request, project_id):
+    try:
+        job = ConversionJob.objects.filter(project_id=project_id).latest('created_at')
+    except ConversionJob.DoesNotExist:
+        messages.error(request, "No conversion job found for this project.")
+        return redirect('dashboard')
+    context = {
+        'project_id': project_id,
+        'job_id': job.id,
+    }
+    return render(request, 'pages/conversion.html', context)
+
+@login_required
+def conversion_status_json(request, project_id):
+    try:
+        project = Project.objects.get(id=project_id, owner=request.user)
+        job = ConversionJob.objects.filter(project=project).latest('created_at')
+        return JsonResponse({
+            'status': job.status,
+            'progress_message': job.progress_message,
+            'progress_percent': job.progress_percent,
+            'error_message': job.error_message,
+            'project_id': project_id,
+        })
+    except Project.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+    except ConversionJob.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'No conversion job found'}, status=404)
 
 def landing_page(request):
     features = services.get_features()
@@ -123,55 +154,63 @@ def ai_convert(request):
             return redirect('dashboard')
         template_content = template.get('content')
 
+        project_id = services.create_project(
+            owner_id=request.user.id,
+            title=title,
+            content="",
+            filename="main.tex"
+        )
+        project = Project.objects.get(id=project_id)
+        job = ConversionJob.objects.create(
+            project=project,
+            status='pending',
+            progress_message='Preparing conversion...',
+            progress_percent=0
+        )
+        logger.info(f"User {request.user.id} created AI project {project_id} with conversion job {job.id}")
+
         if uploaded_file:
-            # Check file size (limit to 5MB)
             if uploaded_file.size > 5 * 1024 * 1024:
+                job.status = 'failed'
+                job.progress_message = 'File size exceeds the 5MB limit.'
+                job.save()
                 messages.error(request, "File size exceeds the 5MB limit.")
                 return redirect('dashboard')
 
             title, _ = os.path.splitext(uploaded_file.name)
+            Project.objects.filter(id=project_id).update(title=title)
 
-            # Save temporary file for Pandoc/Processing using tempfile to avoid collisions
             suffix = os.path.splitext(uploaded_file.name)[1]
             with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
                 for chunk in uploaded_file.chunks():
                     tmp_file.write(chunk)
                 temp_path = tmp_file.name
 
-            try:
-                latex_code = services.convert_to_latex_ai(file_path=temp_path, template_content=template_content)
-            finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+            t = threading.Thread(
+                target=services.run_conversion_job,
+                args=(job.id, project_id, temp_path, None, template_content, True),
+                daemon=True
+            )
+            t.start()
         elif content:
-            if not template_content:
-                messages.error(request, "Please select a template before converting.")
-                return redirect('dashboard')
-            latex_code = services.convert_to_latex_ai(content=content, template_content=template_content)
-            # Try to extract a title from the content if it's long, else use default
             if len(content) > 20:
                 title = content[:20].strip() + "..."
+                Project.objects.filter(id=project_id).update(title=title)
+
+            t = threading.Thread(
+                target=services.run_conversion_job,
+                args=(job.id, project_id, None, content, template_content, False),
+                daemon=True
+            )
+            t.start()
         else:
+            job.status = 'failed'
+            job.progress_message = 'No content provided for AI conversion.'
+            job.save()
             messages.error(request, "No content provided for AI conversion.")
             return redirect('dashboard')
 
-        if latex_code:
-            project_id = services.create_project(
-                owner_id=request.user.id,
-                title=title,
-                content=latex_code,
-                filename="main.tex"
-            )
-            logger.info(f"User {request.user.id} created AI project: {project_id}")
-
-            # Construct redirect URL with query parameter properly
-            from django.urls import reverse
-            url = reverse('editor_with_id', kwargs={'project_id': project_id})
-            params = urlencode({'autocompile': 'true'})
-            return redirect(f"{url}?{params}")
-        else:
-            messages.error(request, "AI conversion failed. Please try again or check your API key.")
-            return redirect('dashboard')
+        return redirect('conversion_page', project_id=project_id)
 
     return redirect('dashboard')
 
@@ -502,25 +541,19 @@ def remove_collaborator_view(request, project_id, user_id):
 @login_required
 def reprocess_with_ai_view(request, project_id):
     if request.method == 'POST':
-        from .models import Project, ProjectVersion
         try:
             project = Project.objects.get(id=project_id, owner=request.user)
             
             if request.FILES.get('document'):
                 uploaded_file = request.FILES['document']
                 
-                last_version = ProjectVersion.objects.filter(project=project).order_by('-version_number').first()
-                next_version = (last_version.version_number + 1) if last_version else 1
                 ProjectVersion.objects.create(
                     project=project,
                     content=project.content,
-                    version_number=next_version,
+                    version_number=(ProjectVersion.objects.filter(project=project).order_by('-version_number').first().version_number + 1) if ProjectVersion.objects.filter(project=project).exists() else 1,
                     message="Before AI re-processing",
                     created_by=request.user
                 )
-                
-                import tempfile
-                import os
                 
                 suffix = os.path.splitext(uploaded_file.name)[1]
                 with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
@@ -528,33 +561,26 @@ def reprocess_with_ai_view(request, project_id):
                         tmp_file.write(chunk)
                     temp_path = tmp_file.name
                 
-                try:
-                    latex_code = services.convert_to_latex_ai(file_path=temp_path)
-                    
-                    if latex_code:
-                        project.content = latex_code
-                        project.save()
-                        
-                        services.create_notification(
-                            request.user.id,
-                            'AI Re-Processing Complete',
-                            f"Project '{project.title}' has been re-processed with AI",
-                            'success'
-                        )
-                        
-                        return JsonResponse({
-                            'status': 'success',
-                            'content': latex_code,
-                            'message': 'Document re-processed successfully'
-                        })
-                    else:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': 'AI conversion failed. Please try again.'
-                        }, status=400)
-                finally:
-                    if os.path.exists(temp_path):
-                        os.remove(temp_path)
+                job = ConversionJob.objects.create(
+                    project=project,
+                    status='pending',
+                    progress_message='Reprocessing document with Kimi K2.6...',
+                    progress_percent=0
+                )
+                
+                t = threading.Thread(
+                    target=services.run_conversion_job,
+                    args=(job.id, project_id, temp_path, None, None, True),
+                    daemon=True
+                )
+                t.start()
+                
+                return JsonResponse({
+                    'status': 'started',
+                    'job_id': job.id,
+                    'project_id': project_id,
+                    'message': 'AI re-processing started'
+                })
             else:
                 return JsonResponse({
                     'status': 'error',
@@ -774,22 +800,17 @@ def compile_project(request, project_id):
     filename = project.get('filename', 'main.tex')
     logger.info(f"Compiling project {project_id} for user {request.user.id}")
 
+    # Try latex-online service first, fall back to Docker-based direct compilation
     try:
-        # We use a POST request to the /data endpoint with the content as a file.
-        # This avoids 414 Request-URI Too Large errors for long documents.
-        # The /data endpoint expects a tarball or a single file and a 'target' parameter.
         tar_stream = io.BytesIO()
         with tarfile.open(fileobj=tar_stream, mode='w:gz') as tar:
             content_bytes = content.encode('utf-8')
             tar_info = tarfile.TarInfo(name=filename)
             tar_info.size = len(content_bytes)
             tar.addfile(tarinfo=tar_info, fileobj=io.BytesIO(content_bytes))
-
         tar_stream.seek(0)
 
-        # The /data endpoint is usually at /data, not /compile
         compiler_url = settings.LATEX_COMPILER_URL.replace('/compile', '/data')
-
         response = httpx.post(
             compiler_url,
             params={"target": filename},
@@ -803,12 +824,75 @@ def compile_project(request, project_id):
             pdf_response['Content-Disposition'] = f'inline; filename="{filename.replace(".tex", ".pdf")}"'
             return pdf_response
         else:
-            # On failure, LaTeX.Online often returns the log in the body
             logger.error(f"Compilation failed for project {project_id}: {response.text[:100]}...")
             return HttpResponse(f"Compilation failed:\n\n{response.text}", content_type="text/plain", status=400)
-    except httpx.RequestError as e:
-        logger.error(f"Error connecting to LaTeX.Online for project {project_id}: {str(e)}")
-        return HttpResponse("LaTeX compilation service is not available. Please ensure Docker is running with: docker-compose up -d", status=503)
+    except httpx.RequestError:
+        logger.warning(f"latex-online service unavailable for project {project_id}, trying Docker direct compilation...")
+
+    # Fallback: compile directly via Docker using the latex-online image's texlive
+    import subprocess
+    import shutil
+    tmp_dir = tempfile.mkdtemp(prefix="latex_")
+    tex_path = os.path.join(tmp_dir, filename)
+    try:
+        with open(tex_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        docker_cmd = [
+            "docker", "run", "--rm",
+            "--network", "none",
+            "-v", f"{tmp_dir}:/data",
+            "--entrypoint", "",
+            "-w", "/data",
+            "aslushnikov/latex-online",
+            "pdflatex", "-interaction=nonstopmode", filename
+        ]
+        result = subprocess.run(
+            docker_cmd,
+            capture_output=True,
+            text=True,
+            timeout=120
+        )
+        logger.info(f"Docker pdflatex exited with code {result.returncode}")
+
+        pdf_path = os.path.join(tmp_dir, filename.replace('.tex', '.pdf'))
+        if os.path.exists(pdf_path):
+            with open(pdf_path, 'rb') as f:
+                pdf_content = f.read()
+            logger.info(f"Docker compilation successful for project {project_id}")
+            pdf_response = HttpResponse(pdf_content, content_type='application/pdf')
+            pdf_response['Content-Disposition'] = f'inline; filename="{filename.replace(".tex", ".pdf")}"'
+            return pdf_response
+
+        # pdflatex might need multiple passes; try second pass
+        result = subprocess.run(docker_cmd, capture_output=True, text=True, timeout=120)
+        if os.path.exists(pdf_path):
+            with open(pdf_path, 'rb') as f:
+                pdf_content = f.read()
+            logger.info(f"Docker compilation (pass 2) successful for project {project_id}")
+            pdf_response = HttpResponse(pdf_content, content_type='application/pdf')
+            pdf_response['Content-Disposition'] = f'inline; filename="{filename.replace(".tex", ".pdf")}"'
+            return pdf_response
+
+        log_path = os.path.join(tmp_dir, filename.replace('.tex', '.log'))
+        log_text = ""
+        if os.path.exists(log_path):
+            with open(log_path, 'r', errors='ignore') as f:
+                log_text = f.read()[-2000:]
+        logger.error(f"Docker pdflatex failed for project {project_id}")
+        return HttpResponse(f"LaTeX compilation error:\n\n{log_text}", content_type="text/plain", status=400)
+    except subprocess.TimeoutExpired:
+        logger.error(f"Docker pdflatex timed out for project {project_id}")
+        return HttpResponse("LaTeX compilation timed out.", status=503)
+    except FileNotFoundError:
+        logger.error("Docker is not available for direct compilation")
+        return HttpResponse("LaTeX compilation service is not available. Please ensure Docker is running.", status=503)
+    except Exception as e:
+        logger.error(f"Docker compilation error for project {project_id}: {str(e)}")
+        return HttpResponse(f"LaTeX compilation error: {str(e)}", status=500)
+    finally:
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)

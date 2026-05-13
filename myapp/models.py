@@ -215,6 +215,24 @@ class ShareInvitation(models.Model):
     def __str__(self):
         return f"Invitation for {self.invitee_email} to {self.project.title}"
 
+class ConversionJob(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='conversion_jobs')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    progress_message = models.TextField(default='Initializing conversion...')
+    progress_percent = models.IntegerField(default=0)
+    error_message = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"ConversionJob {self.id} for {self.project.title} - {self.status}"
+
 class ConversionStats(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE, related_name='conversion_stats')
     confidence_score = models.FloatField(null=True, blank=True)
