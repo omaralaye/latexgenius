@@ -92,8 +92,43 @@
             <span class="material-symbols-outlined text-sm">bolt</span>
             Compile
         </button>
-        <div class="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center border border-white/20 ml-2">
-            <span class="material-symbols-outlined text-sm text-white">person</span>
+        <div class="relative" id="profile-dropdown-container">
+            <button onclick="toggleProfileDropdown()" class="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center hover:opacity-90 transition-opacity border border-white/20 ml-2 shrink-0" aria-label="Profile menu">
+                <span class="text-[10px] font-bold text-white">
+                    {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                </span>
+            </button>
+            <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden">
+                <div class="px-4 py-4 border-b border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold shadow-sm shrink-0">
+                            {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-semibold text-slate-900 dark:text-white text-sm truncate">
+                                {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
+                            </p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-2">
+                    <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-lg">dashboard</span>
+                        Dashboard
+                    </a>
+                    <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-lg">settings</span>
+                        Settings
+                    </a>
+                </div>
+                <div class="border-t border-slate-200 dark:border-slate-700 py-2">
+                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-lg">logout</span>
+                        Sign Out
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </header>
@@ -105,7 +140,7 @@
             {% csrf_token %}
             <input type="file" id="documentInput" name="document" accept=".tex,.md,.markdown,.docx,.odt,.html,.txt" onchange="document.getElementById('uploadForm').submit()">
         </form>
-        <button onclick="document.getElementById('documentInput').click()" class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-md text-[11px] font-bold hover:bg-primary-variant transition-colors shadow-sm">
+        <button onclick="document.getElementById('documentInput').click()" class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-md text-xs font-bold hover:bg-primary-variant transition-colors shadow-sm">
             <span class="material-symbols-outlined text-sm">cloud_upload</span>
             Upload Document
         </button>
@@ -126,8 +161,8 @@
     </div>
     <div class="flex items-center gap-2">
         <div class="flex bg-slate-100 dark:bg-slate-700 p-0.5 rounded-lg border border-slate-200 dark:border-slate-600">
-            <button id="mode-source" onclick="toggleEditorMode('source')" class="px-3 py-1 bg-white dark:bg-slate-600 shadow-sm rounded-md text-[11px] font-bold text-primary dark:text-white">Source</button>
-            <button id="mode-visual" onclick="toggleEditorMode('visual')" class="px-3 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white">Visual</button>
+            <button id="mode-source" onclick="toggleEditorMode('source')" class="px-3 py-1 bg-white dark:bg-slate-600 shadow-sm rounded-md text-xs font-bold text-primary dark:text-white">Source</button>
+            <button id="mode-visual" onclick="toggleEditorMode('visual')" class="px-3 py-1 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white">Visual</button>
         </div>
         <button id="save-button" onclick="saveProject()" class="flex items-center gap-1 px-2 py-1 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors">
             <span class="material-symbols-outlined text-sm">save</span>
@@ -149,7 +184,7 @@
             <div class="bg-white dark:bg-slate-700 p-3 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm mb-4">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Source Document</span>
-                    <span class="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[9px] font-bold rounded">TEX</span>
+                    <span class="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-bold rounded">TEX</span>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded flex items-center justify-center shrink-0">
@@ -166,7 +201,7 @@
                         Re-Process
                     </button>
                 </div>
-                <div class="mt-2 text-[9px] text-slate-400 dark:text-slate-500">
+                <div class="mt-2 text-[10px] text-slate-400 dark:text-slate-500">
                     <span class="font-semibold">What is Re-Process?</span> Upload a new document to replace the current content using AI conversion.
                 </div>
             </div>
@@ -175,29 +210,29 @@
         <nav class="flex-1 overflow-y-auto py-2 custom-scrollbar" id="project-files-nav">
             <div class="px-2 space-y-0.5">
                 <button class="file-active w-full flex items-center gap-2 px-2 py-1.5 rounded group" onclick="selectFile('main.tex')">
-                    <span class="material-symbols-outlined text-[18px] text-indigo-400 dark:text-indigo-500">description</span>
+                    <span class="material-symbols-outlined text-lg text-indigo-400 dark:text-indigo-500">description</span>
                     <span class="text-xs font-medium truncate">main.tex</span>
                 </button>
                 <div class="folder-collapsible" onclick="toggleFolder(this, event)">
                     <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
-                        <span class="material-symbols-outlined text-[18px] text-slate-400 folder-arrow transition-transform">chevron_right</span>
-                        <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
+                        <span class="material-symbols-outlined text-lg text-slate-400 folder-arrow transition-transform">chevron_right</span>
+                        <span class="material-symbols-outlined text-lg text-slate-400">folder</span>
                         <span class="text-xs font-medium truncate">sections</span>
-                        <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
+                        <span class="ml-auto text-[10px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
                     </button>
                 </div>
                 <div class="folder-collapsible" onclick="toggleFolder(this, event)">
                     <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
-                        <span class="material-symbols-outlined text-[18px] text-slate-400 folder-arrow transition-transform">chevron_right</span>
-                        <span class="material-symbols-outlined text-[18px] text-slate-400">folder</span>
+                        <span class="material-symbols-outlined text-lg text-slate-400 folder-arrow transition-transform">chevron_right</span>
+                        <span class="material-symbols-outlined text-lg text-slate-400">folder</span>
                         <span class="text-xs font-medium truncate">images</span>
-                        <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
+                        <span class="ml-auto text-[10px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
                     </button>
                 </div>
                 <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 rounded group">
-                    <span class="material-symbols-outlined text-[18px] text-slate-400">menu_book</span>
+                    <span class="material-symbols-outlined text-lg text-slate-400">menu_book</span>
                     <span class="text-xs font-medium truncate">references.bib</span>
-                    <span class="ml-auto text-[9px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
+                    <span class="ml-auto text-[10px] text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">Coming Soon</span>
                 </button>
             </div>
         </nav>
@@ -239,8 +274,8 @@
                 <span id="cursor-position" class="text-[10px] text-slate-500 dark:text-slate-600 font-mono self-center">Ln 1, Col 1</span>
             </div>
         </div>
-        <div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[13px] leading-relaxed">
-            <textarea id="latex-editor" class="w-full h-full bg-transparent text-slate-300 dark:text-slate-400 font-mono text-[13px] leading-relaxed focus:ring-0 border-none resize-none outline-none custom-scrollbar" spellcheck="false">{{ project.content }}</textarea>
+        <div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-sm leading-relaxed">
+            <textarea id="latex-editor" class="w-full h-full bg-transparent text-slate-300 dark:text-slate-400 font-mono text-sm leading-relaxed focus:ring-0 border-none resize-none outline-none custom-scrollbar" spellcheck="false">{{ project.content }}</textarea>
         </div>
         <div class="h-6 bg-slate-800 dark:bg-slate-900 flex items-center px-3 border-t border-white/5 dark:border-slate-800 shrink-0">
             <div class="flex items-center gap-4">
@@ -248,12 +283,12 @@
                     <span class="relative flex h-1.5 w-1.5">
                         <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                     </span>
-                    <p class="text-[9px] text-slate-400 dark:text-slate-500 font-medium">Ready</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Ready</p>
                 </div>
             </div>
             <div class="ml-auto flex items-center gap-4">
-                <span class="text-[9px] text-slate-400 dark:text-slate-500">UTF-8</span>
-                <span class="text-[9px] text-slate-400 dark:text-slate-500">LaTeX</span>
+                <span class="text-[10px] text-slate-400 dark:text-slate-500">UTF-8</span>
+                <span class="text-[10px] text-slate-400 dark:text-slate-500">LaTeX</span>
             </div>
         </div>
     </section>
@@ -280,22 +315,22 @@
             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Final PDF Output</span>
             <div class="flex gap-2">
                 <button id="download-pdf-btn" onclick="downloadPdf()" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-300 hidden" title="Download PDF">
-                    <span class="material-symbols-outlined text-[18px]">download</span>
+                    <span class="material-symbols-outlined text-lg">download</span>
                 </button>
                 <button id="mode-pdf" onclick="togglePreviewMode('pdf')" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-primary dark:text-white" title="PDF View">
-                    <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                    <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
                 </button>
                 <button id="mode-log" onclick="togglePreviewMode('log')" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Log View">
-                    <span class="material-symbols-outlined text-[18px]">description</span>
+                    <span class="material-symbols-outlined text-lg">description</span>
                 </button>
                 <button id="zoom-in-btn" onclick="zoomPreview(1.1)" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Zoom In">
-                    <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+                    <span class="material-symbols-outlined text-lg">zoom_in</span>
                 </button>
                 <button id="zoom-out-btn" onclick="zoomPreview(0.9)" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Zoom Out">
-                    <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+                    <span class="material-symbols-outlined text-lg">zoom_out</span>
                 </button>
                 <button id="fullscreen-preview-btn" onclick="togglePreviewFullscreen()" class="p-1 hover:bg-white/40 dark:hover:bg-slate-600 rounded transition-colors text-slate-600 dark:text-slate-400" title="Fullscreen">
-                    <span class="material-symbols-outlined text-[18px]">fullscreen</span>
+                    <span class="material-symbols-outlined text-lg">fullscreen</span>
                 </button>
             </div>
         </div>
@@ -324,7 +359,7 @@
 
         <div id="conversion-bridge" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-indigo-900 dark:bg-indigo-950 text-white rounded-full shadow-2xl flex items-center gap-3 border border-white/20 dark:border-indigo-800">
             <span class="material-symbols-outlined text-sm text-indigo-300 dark:text-indigo-400">check_circle</span>
-            <span class="text-[11px] font-medium">Conversion Bridge: Source -> LaTeX -> PDF</span>
+            <span class="text-xs font-medium">Conversion Bridge: Source -> LaTeX -> PDF</span>
             <div class="h-3 w-[1px] bg-white/20 dark:border-indigo-800"></div>
             <button onclick="togglePreviewMode('log')" class="text-[10px] font-bold text-indigo-200 dark:text-indigo-300 hover:text-white uppercase tracking-tighter">View Logs</button>
         </div>
@@ -334,7 +369,7 @@
 <!-- Bottom Status Bar -->
 <footer class="h-6 bg-primary dark:bg-primary-variant text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
     <div class="flex items-center gap-4">
-        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">cloud_done</span> Pipeline active</span>
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">cloud_done</span> Pipeline active</span>
         <span class="opacity-70" id="footer-editing">Editing: {{ project.title }}</span>
     </div>
     <div class="flex items-center gap-4">
@@ -1311,6 +1346,19 @@
 
     document.getElementById('reprocess-modal-overlay').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeReprocessModal();
+    });
+
+    function toggleProfileDropdown() {
+        const dropdown = document.getElementById('profile-dropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+        const container = document.getElementById('profile-dropdown-container');
+        const dropdown = document.getElementById('profile-dropdown');
+        if (container && !container.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
     });
 
     document.addEventListener('keydown', (e) => {

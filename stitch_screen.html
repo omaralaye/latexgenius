@@ -149,7 +149,7 @@
 <!-- Project Controls Bar -->
 <nav class="h-12 bg-white border-b border-outline-variant/20 flex items-center justify-between px-4">
 <div class="flex items-center gap-1">
-<button class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-md text-[11px] font-bold hover:bg-primary-container transition-colors shadow-sm">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-md text-xs font-bold hover:bg-primary-container transition-colors shadow-sm">
 <span class="material-symbols-outlined text-sm">cloud_upload</span>
                 Upload Document
             </button>
@@ -170,8 +170,8 @@
 </div>
 <div class="flex items-center gap-2">
 <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-<button class="px-3 py-1 bg-white shadow-sm rounded-md text-[11px] font-bold text-primary">Source</button>
-<button class="px-3 py-1 text-[11px] font-medium text-slate-500 hover:text-slate-700">Visual</button>
+<button class="px-3 py-1 bg-white shadow-sm rounded-md text-xs font-bold text-primary">Source</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-500 hover:text-slate-700">Visual</button>
 </div>
 <button class="flex items-center gap-1 px-2 py-1 text-slate-600 hover:bg-slate-100 rounded text-xs transition-colors">
 <span class="material-symbols-outlined text-sm" data-icon="history">history</span>
@@ -187,7 +187,7 @@
 <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm mb-4">
 <div class="flex items-center justify-between mb-2">
 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Source Document</span>
-<span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-bold rounded">DOCX</span>
+<span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded">DOCX</span>
 </div>
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 bg-blue-50 rounded flex items-center justify-center">
@@ -210,19 +210,19 @@
 <nav class="flex-1 overflow-y-auto py-2 custom-scrollbar">
 <div class="px-2 space-y-0.5">
 <button class="w-full flex items-center gap-2 px-2 py-1.5 bg-indigo-50 text-indigo-700 rounded group">
-<span class="material-symbols-outlined text-[18px] text-indigo-400" data-icon="description">description</span>
+<span class="material-symbols-outlined text-lg text-indigo-400" data-icon="description">description</span>
 <span class="text-xs font-medium truncate">main.tex</span>
 </button>
 <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-200/50 rounded group">
-<span class="material-symbols-outlined text-[18px] text-slate-400" data-icon="folder">folder</span>
+<span class="material-symbols-outlined text-lg text-slate-400" data-icon="folder">folder</span>
 <span class="text-xs font-medium truncate">sections</span>
 </button>
 <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-200/50 rounded group">
-<span class="material-symbols-outlined text-[18px] text-slate-400" data-icon="folder">folder</span>
+<span class="material-symbols-outlined text-lg text-slate-400" data-icon="folder">folder</span>
 <span class="text-xs font-medium truncate">images</span>
 </button>
 <button class="w-full flex items-center gap-2 px-2 py-1.5 text-slate-600 hover:bg-slate-200/50 rounded group">
-<span class="material-symbols-outlined text-[18px] text-slate-400" data-icon="menu_book">menu_book</span>
+<span class="material-symbols-outlined text-lg text-slate-400" data-icon="menu_book">menu_book</span>
 <span class="text-xs font-medium truncate">references.bib</span>
 </button>
 </div>
@@ -254,7 +254,7 @@
 <span class="text-[10px] text-slate-500 font-mono">Ln 24, Col 12</span>
 </div>
 </div>
-<div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-[13px] leading-relaxed">
+<div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-sm leading-relaxed">
 <pre><code class="block">
 <span class="text-blue-400">\documentclass</span><span class="text-white">{</span><span class="text-amber-300">article</span><span class="text-white">}</span>
 <span class="text-blue-400">\usepackage</span><span class="text-white">[</span><span class="text-slate-400">utf8</span><span class="text-white">]{</span><span class="text-amber-300">inputenc</span><span class="text-white">}</span>
@@ -299,7 +299,7 @@ precision algorithms.
 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
 <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
 </span>
-<span class="text-[9px] text-slate-400 font-medium">Conversion completed at 14:22:15</span>
+<span class="text-[10px] text-slate-400 font-medium">Conversion completed at 14:22:15</span>
 </div>
 </div>
 </section>
@@ -309,13 +309,13 @@ precision algorithms.
 <span class="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Final PDF Output</span>
 <div class="flex gap-2">
 <button class="p-1 hover:bg-white/40 rounded transition-colors text-slate-600" title="Download PDF">
-<span class="material-symbols-outlined text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="material-symbols-outlined text-lg" data-icon="picture_as_pdf">picture_as_pdf</span>
 </button>
 <button class="p-1 hover:bg-white/40 rounded transition-colors text-slate-600">
-<span class="material-symbols-outlined text-[18px]" data-icon="zoom_in">zoom_in</span>
+<span class="material-symbols-outlined text-lg" data-icon="zoom_in">zoom_in</span>
 </button>
 <button class="p-1 hover:bg-white/40 rounded transition-colors text-slate-600">
-<span class="material-symbols-outlined text-[18px]" data-icon="fullscreen">fullscreen</span>
+<span class="material-symbols-outlined text-lg" data-icon="fullscreen">fullscreen</span>
 </button>
 </div>
 </div>
@@ -364,7 +364,7 @@ precision algorithms.
 <!-- Conversion Bridge Notification -->
 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-indigo-900 text-white rounded-full shadow-2xl flex items-center gap-3 border border-white/20">
 <span class="material-symbols-outlined text-sm text-indigo-300" data-icon="check_circle">check_circle</span>
-<span class="text-[11px] font-medium">Conversion Bridge: Source → LaTeX → PDF</span>
+<span class="text-xs font-medium">Conversion Bridge: Source → LaTeX → PDF</span>
 <div class="h-3 w-[1px] bg-white/20"></div>
 <button class="text-[10px] font-bold text-indigo-200 hover:text-white uppercase tracking-tighter">View Logs</button>
 </div>
@@ -373,7 +373,7 @@ precision algorithms.
 <!-- Bottom Status Bar -->
 <footer class="h-6 bg-primary text-white flex items-center justify-between px-3 text-[10px] font-medium">
 <div class="flex items-center gap-4">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]" data-icon="cloud_done">cloud_done</span> Pipeline active</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="cloud_done">cloud_done</span> Pipeline active</span>
 <span class="flex items-center gap-1 opacity-70">Processing: Structural_Analysis_Final.docx</span>
 </div>
 <div class="flex items-center gap-4">
