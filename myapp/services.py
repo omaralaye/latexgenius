@@ -128,12 +128,18 @@ def update_project(project_id, update_data):
 
 def delete_project(project_id):
     try:
-        Project.objects.filter(id=project_id).delete()
-        logger.info(f"Project {project_id} deleted.")
+        count, _ = Project.objects.filter(id=project_id).delete()
+        if count > 0:
+            logger.info(f"Project {project_id} deleted.")
+            return True
+        logger.warning(f"Project {project_id} not found for deletion.")
+        return False
     except ValueError as e:
         logger.error(f"Failed to delete project {project_id} due to value error: {str(e)}")
+        return False
     except Exception as e:
         logger.error(f"An unexpected error occurred while deleting project {project_id}: {str(e)}")
+        return False
 
 # Templates
 def get_templates(limit=None):
@@ -381,6 +387,14 @@ def mark_notification_read(user_id, notification_id):
         notification.save()
         return True
     except Notification.DoesNotExist:
+        return False
+
+def mark_all_notifications_read(user_id):
+    try:
+        Notification.objects.filter(user_id=user_id, is_read=False).update(is_read=True)
+        return True
+    except Exception as e:
+        logger.error(f"Failed to mark all notifications as read: {e}")
         return False
 
 def create_notification(user_id, title, message, type='info'):

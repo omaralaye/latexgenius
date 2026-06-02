@@ -352,6 +352,29 @@ def mark_notification_read_view(request, notification_id):
     return redirect('dashboard')
 
 @login_required
+def notifications_page(request):
+    notifications = services.get_user_notifications(request.user.id, limit=None)
+    unread_count = services.get_unread_notification_count(request.user.id)
+    recent_notifications = services.get_user_notifications(request.user.id, limit=5)
+    context = {
+        'notifications': notifications,
+        'unread_notification_count': unread_count,
+        'recent_notifications': recent_notifications,
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/notifications.html', context)
+
+@login_required
+def mark_all_notifications_read_view(request):
+    if request.method == 'POST':
+        success = services.mark_all_notifications_read(request.user.id)
+        if success:
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'error'}, status=500)
+    return redirect('notifications')
+
+@login_required
 def save_preferences_view(request):
     if request.method == 'POST':
         from .models import UserPreference
@@ -539,6 +562,18 @@ def remove_collaborator_view(request, project_id, user_id):
     return JsonResponse({'status': 'error'}, status=405)
 
 @login_required
+def delete_project_view(request, project_id):
+    if request.method == 'POST':
+        from .models import Project
+        try:
+            project = Project.objects.get(id=project_id, owner=request.user)
+            services.delete_project(project_id)
+            return JsonResponse({'status': 'success'})
+        except Project.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Project not found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
+
+@login_required
 def reprocess_with_ai_view(request, project_id):
     if request.method == 'POST':
         try:
@@ -620,11 +655,15 @@ def settings_page(request):
     prefs, created = UserPreference.objects.get_or_create(user=request.user)
     profile, _ = Profile.objects.get_or_create(user=request.user)
     api_keys = services.get_user_api_keys(request.user.id)
+    notifications = services.get_user_notifications(request.user.id, limit=5)
+    unread_count = services.get_unread_notification_count(request.user.id)
     
     context = {
         'profile': profile,
         'preferences': prefs,
         'api_keys': api_keys,
+        'notifications': notifications,
+        'unread_notification_count': unread_count,
         'app_settings': services.get_all_settings(),
     }
     if request.GET.get('format') == 'json':

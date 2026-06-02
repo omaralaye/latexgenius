@@ -78,7 +78,7 @@
                             {% endif %}
                         </div>
                         <div class="px-4 py-3 border-t border-outline-variant dark:border-dark-border">
-                            <a href="#" class="text-sm text-primary font-medium hover:underline">View all notifications</a>
+                            <a href="{% url 'notifications' %}" class="text-sm text-primary font-medium hover:underline">View all notifications</a>
                         </div>
                     </div>
                 </div>
@@ -188,15 +188,16 @@
                 </div>
                 <!-- List Header -->
                 <div class="grid grid-cols-12 px-6 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-dark-text-muted mb-2">
-                    <div class="col-span-6">Document Name</div>
+                    <div class="col-span-5">Document Name</div>
                     <div class="col-span-3 text-center">Status</div>
                     <div class="col-span-3 text-right">Modified</div>
+                    <div class="col-span-1"></div>
                 </div>
 
                 {% for project in projects %}
                 {% if project.id %}
-                <a href="{% url 'editor_with_id' project.id %}" class="group grid grid-cols-12 items-center px-6 py-4 bg-white dark:bg-dark-surface rounded-xl hover:bg-surface dark:hover:bg-dark-border/50 transition-all cursor-pointer shadow-sm border border-outline-variant dark:border-dark-border">
-                    <div class="col-span-6 flex items-center gap-4">
+                <div id="project-row-{{ project.id }}" class="group grid grid-cols-12 items-center px-6 py-4 bg-white dark:bg-dark-surface rounded-xl hover:bg-surface dark:hover:bg-dark-border/50 transition-all cursor-pointer shadow-sm border border-outline-variant dark:border-dark-border">
+                    <a href="{% url 'editor_with_id' project.id %}" class="col-span-5 flex items-center gap-4">
                         <div class="w-10 h-10 rounded-lg bg-surface dark:bg-dark-bg flex items-center justify-center text-primary">
                             <span class="material-symbols-outlined">{% if project.status == 'compiled' %}description{% else %}edit_note{% endif %}</span>
                         </div>
@@ -209,7 +210,7 @@
                             </div>
                             <p class="text-[10px] font-mono text-slate-400 uppercase">{{ project.filename }}</p>
                         </div>
-                    </div>
+                    </a>
                     <div class="col-span-3 flex justify-center">
                         {% if project.status == 'compiled' %}
                         <span class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold">
@@ -226,7 +227,12 @@
                     <div class="col-span-3 text-right">
                         <p class="text-xs font-medium dark:text-dark-text-muted">{{ project.last_modified|timesince }} ago</p>
                     </div>
-                </a>
+                    <div class="col-span-1 flex justify-center">
+                        <button onclick="deleteProject('{{ project.id }}', '{{ project.title|escapejs }}')" class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-error/10 rounded-lg transition-opacity" title="Delete project">
+                            <span class="material-symbols-outlined text-lg text-slate-400 hover:text-error">delete</span>
+                        </button>
+                    </div>
+                </div>
                 {% endif %}
                 {% empty %}
                 <div class="p-12 text-center bg-white dark:bg-dark-surface rounded-xl border-2 border-dashed border-outline-variant dark:border-dark-border">
@@ -581,6 +587,44 @@
         } catch (error) {
             toast('Network error while renaming', 'error');
             cancelRename();
+        }
+    }
+
+    async function deleteProject(projectId, projectTitle) {
+        if (!confirm(`Delete "${projectTitle}"? This action cannot be undone.`)) return;
+
+        try {
+            const response = await fetch(`/editor/${projectId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                console.error('Delete failed:', response.status, text);
+                toast('Failed to delete project (server error)', 'error');
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                const projectDiv = document.getElementById(`project-row-${projectId}`);
+                if (projectDiv) {
+                    projectDiv.remove();
+                } else {
+                    location.reload();
+                }
+                toast('Project deleted', 'success');
+            } else {
+                toast(data.message || 'Failed to delete project', 'error');
+            }
+        } catch (e) {
+            console.error('Delete error:', e);
+            toast('Network error while deleting project', 'error');
         }
     }
 

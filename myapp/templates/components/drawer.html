@@ -33,6 +33,10 @@
             <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'templates' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>library_books</span>
             <span class="font-body text-sm font-medium">Templates</span>
         </a>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'notifications' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'notifications' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'notifications' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>notifications</span>
+            <span class="font-body text-sm font-medium">Notifications</span>
+        </a>
         <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'settings' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'settings' %}" onclick="closeDrawer()">
             <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'settings' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>settings</span>
             <span class="font-body text-sm font-medium">Settings</span>
