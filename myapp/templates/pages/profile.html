@@ -9,26 +9,23 @@
 {% block layout %}
 {% include "components/drawer.html" %}
 
-<main class="min-h-screen flex flex-col bg-background dark:bg-dark-bg transition-colors duration-300">
-    <!-- TopAppBar -->
-    <header class="fixed top-0 right-0 left-0 z-40 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-outline-variant dark:border-dark-surface">
+<main class="min-h-screen flex flex-col bg-secondary-light dark:bg-surface-dark transition-colors duration-300">
+    <header class="fixed top-0 right-0 left-0 z-40 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-border dark:border-border-dark">
         <div class="flex items-center gap-4">
-            <button onclick="openDrawer()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-dark-surface rounded-lg transition-colors text-slate-500 dark:text-dark-text-muted">
+            <button onclick="openDrawer()" class="p-1.5 hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors text-secondary dark:text-secondary-dark">
                 <span class="material-symbols-outlined text-xl">menu</span>
             </button>
-            <h1 class="text-xl font-bold tracking-tighter text-primary dark:text-white">LaTeXGenius</h1>
+            <h1 class="text-xl font-extrabold text-primary">LaTeXGenius</h1>
         </div>
         <div class="flex items-center gap-2">
-            <a href="{% url 'dashboard' %}" class="text-sm text-slate-600 dark:text-dark-text-muted hover:text-primary dark:hover:text-white transition-colors">Dashboard</a>
+            <a href="{% url 'dashboard' %}" class="text-sm text-secondary dark:text-secondary-dark hover:text-primary transition-colors">Dashboard</a>
         </div>
     </header>
 
-    <!-- Content -->
     <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-5xl mx-auto flex-1">
-        <!-- Page Header -->
         <div class="mb-8">
-            <h2 class="text-3xl font-bold tracking-tight text-on-surface dark:text-white">Your Profile</h2>
-            <p class="text-on-surface-variant dark:text-dark-text-muted mt-1">Manage your personal information and account settings.</p>
+            <h2 class="text-3xl font-bold tracking-tight text-accent dark:text-accent-dark">Profile</h2>
+            <p class="text-secondary dark:text-secondary-dark mt-1">Manage your personal information.</p>
         </div>
 
         {% if messages %}

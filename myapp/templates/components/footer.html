@@ -1,15 +1,14 @@
-<footer class="bg-surface dark:bg-dark-bg border-t border-outline-variant dark:border-dark-surface font-sans text-sm tracking-wide transition-colors duration-300">
-    <div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-10 gap-6 max-w-7xl mx-auto">
-        <div class="flex flex-col items-center md:items-start gap-2">
-            <div class="text-lg font-serif font-bold text-primary dark:text-white">LatexGenius</div>
-            <p class="text-on-surface-variant dark:text-dark-text-muted">© 2026 LatexGenius. Precision in Academic Publishing.</p>
+<footer class="bg-white dark:bg-surface-dark border-t border-border dark:border-border-dark text-sm transition-colors">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto gap-6">
+        <div class="flex flex-col items-center md:items-start gap-1">
+            <a href="{% url 'landing' %}" class="text-lg font-extrabold text-primary">LaTeXGenius</a>
+            <p class="text-secondary dark:text-secondary-dark">&copy; 2026 LaTeXGenius. All rights reserved.</p>
         </div>
-        <div class="flex flex-wrap justify-center gap-8 text-on-surface-variant dark:text-dark-text-muted">
-            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Privacy Policy</a>
-            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Terms of Service</a>
-            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">API Reference</a>
-            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Contact Research Team</a>
-            <a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Institutional Access</a>
+        <div class="flex flex-wrap justify-center gap-6 text-secondary dark:text-secondary-dark">
+            <a class="hover:text-primary transition-colors" href="{% url 'privacy' %}">Privacy</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'terms' %}">Terms</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'contact' %}">Contact</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'documentation' %}">Docs</a>
         </div>
     </div>
 </footer>

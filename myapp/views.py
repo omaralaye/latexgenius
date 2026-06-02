@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 from . import services
 from .models import Profile, ConversionJob, Project, ProjectVersion
@@ -19,6 +20,7 @@ import os
 import tempfile
 import shutil
 import threading
+import json
 from urllib.parse import urlencode
 
 User = get_user_model()
@@ -139,6 +141,12 @@ import os
 @login_required
 def ai_convert(request):
     if request.method == 'POST':
+        is_pro = services.user_is_pro(request.user.id)
+        conversion_count = ConversionJob.objects.filter(project__owner=request.user).count()
+        if not is_pro and conversion_count >= 5:
+            messages.error(request, "You've reached the limit of 5 free AI conversions. Upgrade to Pro for unlimited conversions.")
+            return redirect('upgrade')
+
         content = request.POST.get('content')
         uploaded_file = request.FILES.get('document')
         title = "AI Project"
@@ -287,8 +295,8 @@ def dashboard_page(request):
     templates = services.get_templates()
     notifications = services.get_user_notifications(request.user.id, limit=5)
     unread_count = services.get_unread_notification_count(request.user.id)
-    api_keys = services.get_user_api_keys(request.user.id)
-
+    services.ensure_default_subscription(request.user)
+    user_sub = services.get_user_subscription(request.user.id)
     context = {
         'projects': projects,
         'total_projects': total_projects,
@@ -297,50 +305,13 @@ def dashboard_page(request):
         'templates': templates,
         'notifications': notifications,
         'unread_notification_count': unread_count,
-        'api_keys': api_keys,
         'app_settings': services.get_all_settings(),
+        'user_subscription': user_sub,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
     }
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)
     return render(request, 'pages/dashboardpage.html', context)
-
-@login_required
-def create_api_key_view(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', 'Default Key')
-        api_key = services.create_api_key(request.user.id, name)
-        if api_key:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'status': 'success',
-                    'api_key': {
-                        'id': api_key['id'],
-                        'key': api_key['key'],
-                        'name': api_key['name']
-                    }
-                })
-            messages.success(request, f"API Key created: {api_key['key']}")
-            return redirect('dashboard')
-        else:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'status': 'error', 'message': 'Failed to create API key'}, status=400)
-            messages.error(request, 'Failed to create API key')
-            return redirect('dashboard')
-    return redirect('dashboard')
-
-@login_required
-def revoke_api_key_view(request, key_id):
-    if request.method == 'POST':
-        success = services.revoke_api_key(request.user.id, key_id)
-        if success:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'status': 'success'})
-            messages.success(request, 'API key revoked successfully')
-        else:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'status': 'error', 'message': 'API key not found'}, status=404)
-            messages.error(request, 'API key not found')
-    return redirect('dashboard')
 
 @login_required
 def mark_notification_read_view(request, notification_id):
@@ -642,26 +613,30 @@ def get_preferences_view(request):
 
 @login_required
 def upgrade_to_pro_view(request):
+    services.ensure_default_subscription(request.user)
+    plans = services.get_subscription_plans()
+    user_sub = services.get_user_subscription(request.user.id)
     context = {
         'app_settings': services.get_all_settings(),
         'user': request.user,
+        'plans': plans,
+        'user_subscription': user_sub,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
     }
     return render(request, 'pages/upgrade.html', context)
 
 @login_required
 def settings_page(request):
-    from .models import UserPreference, Profile, APIKey
+    from .models import UserPreference, Profile
     
     prefs, created = UserPreference.objects.get_or_create(user=request.user)
     profile, _ = Profile.objects.get_or_create(user=request.user)
-    api_keys = services.get_user_api_keys(request.user.id)
     notifications = services.get_user_notifications(request.user.id, limit=5)
     unread_count = services.get_unread_notification_count(request.user.id)
     
     context = {
         'profile': profile,
         'preferences': prefs,
-        'api_keys': api_keys,
         'notifications': notifications,
         'unread_notification_count': unread_count,
         'app_settings': services.get_all_settings(),
@@ -775,8 +750,16 @@ def templates_page(request):
     return render(request, 'pages/templatespage.html', context)
 
 def pricing_page(request):
+    plans = services.get_subscription_plans()
+    user_sub = None
+    if request.user.is_authenticated:
+        services.ensure_default_subscription(request.user)
+        user_sub = services.get_user_subscription(request.user.id)
     context = {
         'app_settings': services.get_all_settings(),
+        'plans': plans,
+        'user_subscription': user_sub,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
     }
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)
@@ -932,6 +915,153 @@ def compile_project(request, project_id):
     finally:
         if os.path.exists(tmp_dir):
             shutil.rmtree(tmp_dir, ignore_errors=True)
+
+@login_required
+def create_checkout_session_view(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        data = request.POST.dict()
+
+    price_id = data.get('price_id')
+    if not price_id:
+        return JsonResponse({'status': 'error', 'message': 'Price ID required'}, status=400)
+
+    success_url = request.build_absolute_uri('/payment/success/')
+    cancel_url = request.build_absolute_uri('/payment/cancel/')
+
+    result = services.create_stripe_checkout_session(
+        user_id=request.user.id,
+        price_id=price_id,
+        success_url=success_url,
+        cancel_url=cancel_url,
+    )
+
+    if result:
+        return JsonResponse({'status': 'success', 'url': result['url']})
+    return JsonResponse({'status': 'error', 'message': 'Failed to create checkout session'}, status=500)
+
+
+@csrf_exempt
+def stripe_webhook_view(request):
+    import stripe
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', '')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError:
+        return HttpResponse(status=400)
+
+    event_type = event.get('type')
+
+    if event_type == 'checkout.session.completed':
+        session = event['data']['object']
+        user_id = session.get('metadata', {}).get('user_id')
+        customer_id = session.get('customer')
+        subscription_id = session.get('subscription')
+
+        if user_id:
+            from .models import UserSubscription
+            sub = UserSubscription.objects.filter(user_id=user_id).first()
+            if sub:
+                sub.stripe_customer_id = customer_id
+                sub.stripe_subscription_id = subscription_id
+                sub.save()
+
+            if subscription_id:
+                try:
+                    stripe_sub = stripe.subscriptions.retrieve(subscription_id)
+                    services.update_subscription_from_stripe(stripe_sub)
+                except Exception as e:
+                    logger.error(f"Failed to retrieve subscription: {e}")
+
+    elif event_type == 'invoice.paid':
+        invoice = event['data']['object']
+        subscription_id = invoice.get('subscription')
+        customer_id = invoice.get('customer')
+
+        if subscription_id:
+            try:
+                stripe_sub = stripe.subscriptions.retrieve(subscription_id)
+                services.update_subscription_from_stripe(stripe_sub)
+            except Exception as e:
+                logger.error(f"Failed to update subscription from invoice: {e}")
+
+    elif event_type == 'customer.subscription.updated':
+        stripe_subscription = event['data']['object']
+        services.update_subscription_from_stripe(stripe_subscription)
+
+    elif event_type == 'customer.subscription.deleted':
+        stripe_subscription = event['data']['object']
+        sub = services.update_subscription_from_stripe(stripe_subscription)
+        if sub:
+            from .models import SubscriptionPlan
+            free_plan = SubscriptionPlan.objects.filter(name__iexact='free').first()
+            sub.plan = free_plan
+            sub.status = 'canceled'
+            sub.save()
+
+    return HttpResponse(status=200)
+
+
+@login_required
+def customer_portal_view(request):
+    return_url = request.build_absolute_uri('/settings/')
+    result = services.create_stripe_customer_portal_session(
+        user_id=request.user.id,
+        return_url=return_url,
+    )
+
+    if result:
+        return redirect(result['url'])
+    messages.error(request, 'No active subscription found.')
+    return redirect('settings')
+
+
+@login_required
+def subscription_success_view(request):
+    services.ensure_default_subscription(request.user)
+    sub = services.get_user_subscription(request.user.id)
+    messages.success(request, 'Subscription successful! Welcome to Pro.')
+    return render(request, 'pages/subscription_success.html', {
+        'subscription': sub,
+        'app_settings': services.get_all_settings(),
+    })
+
+
+@login_required
+def subscription_cancel_view(request):
+    services.ensure_default_subscription(request.user)
+    messages.info(request, 'Subscription canceled. You can upgrade again anytime.')
+    return render(request, 'pages/subscription_cancel.html', {
+        'app_settings': services.get_all_settings(),
+    })
+
+
+def privacy_page(request):
+    return render(request, 'pages/privacy.html', {
+        'app_settings': services.get_all_settings(),
+    })
+
+def terms_page(request):
+    return render(request, 'pages/terms.html', {
+        'app_settings': services.get_all_settings(),
+    })
+
+def contact_page(request):
+    return render(request, 'pages/contact.html', {
+        'app_settings': services.get_all_settings(),
+    })
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)

@@ -3,94 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LatexGenius | Precision in Academic Publishing{% endblock %}</title>
+    <title>{% block title %}LatexGenius — Document to LaTeX Conversion{% endblock %}</title>
+    <meta name="description" content="Convert documents to publication-ready LaTeX. AI-powered conversion for researchers, academics, and students.">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232563eb'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>L</text></svg>">
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Work+Sans:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
-            "colors": {
-                    "primary": "#5B8DB8",
-                    "primary-variant": "#4A7A9E",
-                    "primary-container": "#D6E4F0",
-                    "inverse-primary": "#A8C8E0",
-                    "primary-fixed": "#E8F0F8",
-                    "primary-fixed-dim": "#D0E0EC",
-                    "on-primary": "#ffffff",
-                    "on-primary-fixed": "#1A3040",
-                    "on-primary-fixed-variant": "#3D6888",
-                    "on-primary-container": "#E8F0F8",
-                    "secondary": "#5A6B7E",
-                    "secondary-container": "#E0E8F0",
-                    "secondary-fixed": "#E0E8F0",
-                    "secondary-fixed-dim": "#C8D4E0",
-                    "on-secondary": "#ffffff",
-                    "on-secondary-container": "#4A5B6E",
-                    "on-secondary-fixed": "#2D3E50",
-                    "tertiary": "#5B8DB8",
-                    "tertiary-container": "#D6E4F0",
-                    "tertiary-fixed": "#E8F0F8",
-                    "tertiary-fixed-dim": "#D0E0EC",
-                    "on-tertiary": "#ffffff",
-                    "on-tertiary-container": "#3D6888",
-                    "on-tertiary-fixed": "#1A3040",
-                    "on-tertiary-fixed-variant": "#3D6888",
-                    "background": "#E8ECF0",
-                    "on-background": "#2D3E50",
-                    "surface": "#ffffff",
-                    "on-surface": "#2D3E50",
-                    "surface-variant": "#E8ECF0",
-                    "on-surface-variant": "#5A6B7E",
-                    "surface-dim": "#D8DEE4",
-                    "surface-bright": "#F0F4F8",
-                    "surface-container-lowest": "#ffffff",
-                    "surface-container-low": "#ECF0F4",
-                    "surface-container": "#E8ECF0",
-                    "surface-container-high": "#E0E6EC",
-                    "surface-container-highest": "#D8DEE4",
-                    "inverse-surface": "#2D3E50",
-                    "inverse-on-surface": "#E8ECF0",
-                    "outline": "#A0B0C0",
-                    "outline-variant": "#D0D8E0",
-                    "error": "#ef4444",
-                    "error-container": "#ffdad6",
-                    "on-error": "#ffffff",
-                    "on-error-container": "#93000a",
-                    "surface-tint": "#5B8DB8",
-                    "dark-bg": "#1E2836",
-                    "dark-surface": "#263442",
-                    "dark-surface-alt": "#2A3848",
-                    "dark-text": "#E8ECF0",
-                    "dark-text-dim": "#B0C0D0",
-                    "dark-text-muted": "#8A9AA8",
-                    "dark-border": "#3A4A5A",
-                    "dark-border-strong": "#4A5A6A"
+            colors: {
+              primary: { DEFAULT: "#2563eb", hover: "#1d4ed8", light: "#dbeafe", dark: "#60a5fa" },
+              secondary: { DEFAULT: "#475569", light: "#f1f5f9", dark: "#94a3b8" },
+              accent: { DEFAULT: "#0f172a", light: "#f8fafc", dark: "#e2e8f0" },
+              surface: { DEFAULT: "#ffffff", hover: "#f8fafc", dark: "#1e293b", "dark-hover": "#334155" },
+              error: { DEFAULT: "#ef4444", light: "#fef2f2", dark: "#fca5a5" },
+              border: { DEFAULT: "#e2e8f0", dark: "#334155" },
+              "on-surface": "#0f172a",
+              "on-surface-variant": "#475569",
+              "on-background": "#0f172a",
+              "dark-bg": "#1e293b",
+              "dark-surface": "#1e293b",
+              "dark-surface-alt": "#334155",
+              "dark-text": "#e2e8f0",
+              "dark-text-muted": "#94a3b8",
+              "dark-text-dim": "#94a3b8",
+              "dark-border": "#334155",
+              "dark-border-strong": "#334155",
+              "surface-variant": "#f1f5f9",
+              "outline-variant": "#e2e8f0",
+              "background": "#f8fafc",
             },
-            "borderRadius": {
-                    "DEFAULT": "0.125rem",
-                    "lg": "0.25rem",
-                    "xl": "0.5rem",
-                    "full": "0.75rem"
+            fontFamily: {
+              body: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
             },
-            "fontFamily": {
-                    "headline": ["Newsreader", "serif"],
-                    "body": ["Inter", "sans-serif"],
-                    "label": ["Work Sans", "sans-serif"],
-                    "mono": ["JetBrains Mono", "monospace"]
+            fontSize: {
+              xs: ["0.75rem", { lineHeight: "1rem" }],
+              sm: ["0.875rem", { lineHeight: "1.25rem" }],
+              base: ["1rem", { lineHeight: "1.5rem" }],
+              lg: ["1.125rem", { lineHeight: "1.75rem" }],
+              xl: ["1.25rem", { lineHeight: "1.75rem" }],
+              "2xl": ["1.5rem", { lineHeight: "2rem" }],
+              "3xl": ["1.875rem", { lineHeight: "2.25rem" }],
+              "4xl": ["2.25rem", { lineHeight: "2.5rem" }],
+              "5xl": ["3rem", { lineHeight: "1.1" }],
             },
-            "screens": {
-                "xs": "475px",
-                "sm": "640px",
-                "md": "768px",
-                "lg": "1024px",
-                "xl": "1280px",
-                "2xl": "1536px",
-            }
           },
         },
       }
@@ -101,14 +63,7 @@
             vertical-align: middle;
         }
         body { font-family: 'Inter', sans-serif; }
-        .font-serif { font-family: 'Newsreader', serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* Dark mode overrides for custom background and surfaces */
-        .dark body {
-            background-color: #1E2836;
-            color: #E8ECF0;
-        }
 
         @keyframes slideIn {
             from { transform: translateX(100%); }
@@ -117,10 +72,48 @@
         .animate-toast {
             animation: slideIn 0.3s ease-out forwards;
         }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #f8fafc;
+        }
+        .dark .btn-secondary {
+            border-color: #334155;
+            color: #94a3b8;
+        }
+        .dark .btn-secondary:hover:not(:disabled) {
+            background-color: #334155;
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-background dark:bg-dark-bg font-body text-on-background dark:text-dark-text antialiased transition-colors duration-300">
+<body class="bg-surface text-accent antialiased transition-colors duration-300 dark:bg-surface-dark dark:text-accent-dark">
     {% block layout %}
     {% include "components/navbar.html" %}
 
@@ -132,12 +125,10 @@
     {% include "components/footer.html" %}
     {% endblock %}
 
-    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3"></div>
 
     {% block extra_scripts %}{% endblock %}
     <script>
-        // Check for saved theme preference, otherwise use system preference
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -154,37 +145,15 @@
             }
         }
 
-        /**
-         * toast function to show notifications
-         * @param {string} message - The message to display
-         * @param {'success' | 'error' | 'info'} type - The type of toast
-         */
         function toast(message, type = 'info') {
             const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-
-            const bgClass = type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-error' : 'bg-primary';
-            const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
-
-            toast.className = `${bgClass} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-toast transform transition-all duration-300`;
-
-            const iconSpan = document.createElement('span');
-            iconSpan.className = 'material-symbols-outlined text-xl';
-            iconSpan.textContent = icon;
-
-            const messageSpan = document.createElement('span');
-            messageSpan.className = 'text-sm font-bold';
-            messageSpan.textContent = message;
-
-            toast.appendChild(iconSpan);
-            toast.appendChild(messageSpan);
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-x-full');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            const el = document.createElement('div');
+            const bgMap = { success: 'bg-emerald-500', error: 'bg-red-500', info: 'bg-blue-600' };
+            const iconMap = { success: 'check_circle', error: 'error', info: 'info' };
+            el.className = `${bgMap[type] || bgMap.info} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-toast`;
+            el.innerHTML = `<span class="material-symbols-outlined text-xl">${iconMap[type] || iconMap.info}</span><span class="text-sm font-semibold">${message}</span>`;
+            container.appendChild(el);
+            setTimeout(() => { el.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => el.remove(), 300); }, 4000);
         }
     </script>
 </body>

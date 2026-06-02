@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import json
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -92,18 +93,6 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-class APIKey(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='api_keys')
-    key = models.CharField(max_length=64, unique=True)
-    name = models.CharField(max_length=100, default='Default Key')
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_used_at = models.DateTimeField(null=True, blank=True)
-    usage_count = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.name} ({self.user.username})"
-
 class Notification(models.Model):
     TYPE_CHOICES = [
         ('info', 'Information'),
@@ -183,6 +172,16 @@ def create_user_preferences(sender, instance, created, **kwargs):
     if created:
         UserPreference.objects.create(user=instance)
 
+@receiver(post_save, sender=User)
+def create_user_subscription(sender, instance, created, **kwargs):
+    if created:
+        free_plan = SubscriptionPlan.objects.filter(name__iexact='free').first()
+        UserSubscription.objects.create(
+            user=instance,
+            plan=free_plan,
+            status='active',
+        )
+
 class ShareInvitation(models.Model):
     PERMISSION_CHOICES = [
         ('read', 'Read Only'),
@@ -246,3 +245,67 @@ class ConversionStats(models.Model):
 
     def __str__(self):
         return f"Stats for {self.project.title}"
+
+class SubscriptionPlan(models.Model):
+    name = models.CharField(max_length=100)
+    stripe_price_id_monthly = models.CharField(max_length=100, blank=True, default='')
+    stripe_price_id_yearly = models.CharField(max_length=100, blank=True, default='')
+    description = models.TextField(blank=True, default='')
+    features = models.TextField(blank=True, default='[]', help_text="JSON array of feature strings")
+    monthly_price_cents = models.IntegerField(default=0)
+    yearly_price_cents = models.IntegerField(default=0)
+    sort_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['sort_order']
+
+    def get_features(self):
+        try:
+            return json.loads(self.features) if self.features else []
+        except (json.JSONDecodeError, TypeError):
+            return []
+
+    def set_features(self, features_list):
+        self.features = json.dumps(features_list)
+
+    def monthly_price_dollars(self):
+        return self.monthly_price_cents / 100
+
+    def yearly_price_dollars(self):
+        return self.yearly_price_cents / 100
+
+    def __str__(self):
+        return self.name
+
+class UserSubscription(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('canceled', 'Canceled'),
+        ('past_due', 'Past Due'),
+        ('trialing', 'Trialing'),
+        ('unpaid', 'Unpaid'),
+        ('incomplete', 'Incomplete'),
+        ('incomplete_expired', 'Incomplete Expired'),
+        ('paused', 'Paused'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription')
+    plan = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True, blank=True, related_name='subscriptions')
+    stripe_subscription_id = models.CharField(max_length=100, blank=True, default='')
+    stripe_customer_id = models.CharField(max_length=100, blank=True, default='')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='active')
+    current_period_start = models.DateTimeField(null=True, blank=True)
+    current_period_end = models.DateTimeField(null=True, blank=True)
+    cancel_at_period_end = models.BooleanField(default=False)
+    trial_end = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def is_active(self):
+        return self.status in ('active', 'trialing')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.plan.name if self.plan else 'No Plan'} ({self.status})"

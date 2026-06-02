@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'myapp.context_processors.subscription_context',
             ],
         },
     },
@@ -160,6 +161,11 @@ LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.c
 KIMI_API_KEY = os.environ.get('KIMI_API_KEY')
 KIMI_BASE_URL = os.environ.get('KIMI_BASE_URL', 'https://integrate.api.nvidia.com/v1')
 KIMI_MODEL = os.environ.get('KIMI_MODEL', 'moonshotai/kimi-k2.6')
+
+# Stripe Settings
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 
 # Logging configuration
 LOGGING = {

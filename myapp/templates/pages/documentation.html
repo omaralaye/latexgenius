@@ -1,59 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Documentation | LatexGenius{% endblock %}
+{% block title %}Documentation — LaTeXGenius{% endblock %}
 
 {% block content %}
-<section class="pt-20 bg-background dark:bg-dark-bg">
-    <div class="max-w-7xl mx-auto px-8">
-        <div class="text-center py-16 border-b border-outline-variant dark:border-dark-surface">
-            <h1 class="text-5xl font-serif font-bold text-on-background dark:text-white mb-4">
-                LatexGenius <span class="text-primary italic">Documentation</span>
+<section class="pt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center py-16 border-b border-border dark:border-border-dark">
+            <h1 class="text-5xl font-extrabold text-accent dark:text-accent-dark mb-4">
+                Documentation
             </h1>
-            <p class="text-xl text-on-surface-variant dark:text-dark-text-muted max-w-2xl mx-auto">
-                Everything you need to know about converting documents into beautiful LaTeX
+            <p class="text-xl text-secondary dark:text-secondary-dark max-w-2xl mx-auto">
+                How to convert documents to LaTeX
             </p>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="flex flex-col lg:flex-row gap-12">
             <aside class="lg:w-64 flex-shrink-0">
                 <div class="lg:sticky lg:top-24">
-                    <button id="sidebar-toggle" class="lg:hidden w-full flex items-center justify-between p-4 bg-white dark:bg-dark-surface rounded-xl border border-outline-variant dark:border-dark-border mb-4">
-                        <span class="font-label text-sm font-bold dark:text-white">Navigation</span>
+                    <button id="sidebar-toggle" class="lg:hidden w-full flex items-center justify-between p-4 bg-white dark:bg-surface-dark rounded-xl border border-border dark:border-border-dark mb-4">
+                        <span class="text-sm font-semibold text-accent dark:text-accent-dark">Navigation</span>
                         <span class="material-symbols-outlined text-primary">menu</span>
                     </button>
                     
                     <nav id="sidebar-nav" class="hidden lg:block space-y-1">
-                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-dark-text-muted px-4 py-2">GETTING STARTED</p>
-                        <a href="#introduction" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Introduction
-                        </a>
-                        <a href="#quickstart" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Quick Start
-                        </a>
-                        <a href="#installation" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Installation
-                        </a>
-                        
-                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-dark-text-muted px-4 py-2 mt-6">GUIDES</p>
-                        <a href="#first-conversion" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            First Conversion
-                        </a>
-                        <a href="#templates" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Using Templates
-                        </a>
-                        <a href="#editor" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Editor Basics
-                        </a>
-                        
-                        <p class="font-label text-xs font-bold tracking-wider uppercase text-on-surface-variant dark:text-dark-text-muted px-4 py-2 mt-6">REFERENCE</p>
-                        <a href="#export" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Export Options
-                        </a>
-                        <a href="#troubleshooting" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors font-medium">
-                            Troubleshooting
-                        </a>
+                        <p class="text-xs font-semibold tracking-wider uppercase text-secondary dark:text-secondary-dark px-4 py-2">Getting started</p>
+                        <a href="#introduction" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Introduction</a>
+                        <a href="#quickstart" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Quick Start</a>
+                        <a href="#installation" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Installation</a>
+                        <p class="text-xs font-semibold tracking-wider uppercase text-secondary dark:text-secondary-dark px-4 py-2 mt-6">Guides</p>
+                        <a href="#first-conversion" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">First Conversion</a>
+                        <a href="#templates" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Using Templates</a>
+                        <a href="#editor" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Editor Basics</a>
+                        <p class="text-xs font-semibold tracking-wider uppercase text-secondary dark:text-secondary-dark px-4 py-2 mt-6">Reference</p>
+                        <a href="#export" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Export Options</a>
+                        <a href="#troubleshooting" class="toc-link block px-4 py-2.5 rounded-lg text-sm text-accent dark:text-accent-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-colors">Troubleshooting</a>
                     </nav>
                 </div>
             </aside>
@@ -62,31 +44,31 @@
                 <section id="introduction" class="mb-16 scroll-mt-24">
                     <div class="flex items-center gap-4 mb-6">
                         <span class="material-symbols-outlined text-primary text-4xl">auto_stories</span>
-                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Introduction</h2>
+                        <h2 class="text-3xl md:text-4xl font-bold text-accent dark:text-accent-dark">Introduction</h2>
                     </div>
-                    <p class="text-lg text-on-surface dark:text-dark-text-dim leading-relaxed mb-6">
-                        LatexGenius is an AI-powered document conversion platform that transforms your manuscripts, notes, and equations into publication-ready LaTeX files. Built for researchers, students, and academic institutions, LatexGenius combines the precision of LaTeX with the accessibility of modern document editing.
+                    <p class="text-lg text-accent dark:text-accent-dark leading-relaxed mb-6">
+                        LaTeXGenius converts documents into publication-ready LaTeX. Designed for researchers, students, and academics.
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="bg-white dark:bg-dark-surface p-6 rounded-xl border border-outline-variant dark:border-dark-border">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-border dark:border-border-dark">
                             <span class="material-symbols-outlined text-primary text-lg mb-4 block">smart_toy</span>
-                            <h4 class="font-serif font-semibold dark:text-white mb-2">AI-Powered Conversion</h4>
-                            <p class="text-sm text-on-surface-variant dark:text-dark-text-muted">Our specialized academic AI detects symbols, structure, and citations with unmatched accuracy.</p>
+                            <h4 class="font-semibold text-accent dark:text-accent-dark mb-2">AI conversion</h4>
+                            <p class="text-sm text-secondary dark:text-secondary-dark">Detects symbols, structure, and citations from your source documents.</p>
                         </div>
-                        <div class="bg-white dark:bg-dark-surface p-6 rounded-xl border border-outline-variant dark:border-dark-border">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-border dark:border-border-dark">
                             <span class="material-symbols-outlined text-primary text-lg mb-4 block">visibility</span>
-                            <h4 class="font-serif font-semibold dark:text-white mb-2">Live Preview</h4>
-                            <p class="text-sm text-on-surface-variant dark:text-dark-text-muted">See your LaTeX rendered in real-time as you edit. No more compile-wait cycles.</p>
+                            <h4 class="font-semibold text-accent dark:text-accent-dark mb-2">Live preview</h4>
+                            <p class="text-sm text-secondary dark:text-secondary-dark">See your LaTeX rendered in real time as you edit.</p>
                         </div>
-                        <div class="bg-white dark:bg-dark-surface p-6 rounded-xl border border-outline-variant dark:border-dark-border">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-border dark:border-border-dark">
                             <span class="material-symbols-outlined text-primary text-lg mb-4 block">description</span>
-                            <h4 class="font-serif font-semibold dark:text-white mb-2">Multiple Formats</h4>
-                            <p class="text-sm text-on-surface-variant dark:text-dark-text-muted">Import from Word, PDF, Markdown, or plain text. Export to LaTeX, PDF, or source archives.</p>
+                            <h4 class="font-semibold text-accent dark:text-accent-dark mb-2">Multiple formats</h4>
+                            <p class="text-sm text-secondary dark:text-secondary-dark">Import from Word, PDF, Markdown, or plain text. Export to LaTeX or PDF.</p>
                         </div>
-                        <div class="bg-white dark:bg-dark-surface p-6 rounded-xl border border-outline-variant dark:border-dark-border">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-xl border border-border dark:border-border-dark">
                             <span class="material-symbols-outlined text-primary text-lg mb-4 block">article</span>
-                            <h4 class="font-serif font-semibold dark:text-white mb-2">Journal Templates</h4>
-                            <p class="text-sm text-on-surface-variant dark:text-dark-text-muted">Pre-built templates for IEEE, ACM, Elsevier, Springer, and many more academic publishers.</p>
+                            <h4 class="font-semibold text-accent dark:text-accent-dark mb-2">Journal templates</h4>
+                            <p class="text-sm text-secondary dark:text-secondary-dark">Pre-built templates for IEEE, ACM, Elsevier, Springer, and more.</p>
                         </div>
                     </div>
                 </section>
@@ -94,7 +76,7 @@
                 <section id="quickstart" class="mb-16 scroll-mt-24">
                     <div class="flex items-center gap-4 mb-6">
                         <span class="material-symbols-outlined text-primary text-4xl">rocket_launch</span>
-                        <h2 class="text-3xl md:text-4xl font-serif font-bold dark:text-white">Quick Start</h2>
+                        <h2 class="text-3xl md:text-4xl font-bold text-accent dark:text-accent-dark">Quick Start</h2>
                     </div>
                     <p class="text-lg text-on-surface dark:text-dark-text-dim leading-relaxed mb-8">
                         Get up and running in under 5 minutes with this quick start guide.

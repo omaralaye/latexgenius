@@ -31,3 +31,4 @@ httpx
 django-ratelimit
 openai
 pypandoc
+stripe

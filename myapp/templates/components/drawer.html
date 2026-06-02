@@ -1,70 +1,75 @@
-<!-- Drawer Overlay -->
 <div id="drawer-overlay" class="drawer-overlay fixed inset-0 bg-black/40 z-[100]" onclick="closeDrawer()"></div>
 
-<!-- Drawer Panel -->
-<div id="drawer-panel" class="drawer-panel fixed top-0 left-0 h-full w-72 bg-slate-50 dark:bg-dark-bg z-[110] flex flex-col shadow-2xl">
-    <!-- Drawer Header -->
-    <div class="flex items-center justify-between p-4 border-b border-outline-variant dark:border-dark-surface">
+<div id="drawer-panel" class="drawer-panel fixed top-0 left-0 h-full w-72 bg-white dark:bg-surface-dark z-[110] flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between p-4 border-b border-border dark:border-border-dark">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <span class="material-symbols-outlined text-white text-sm">terminal</span>
             </div>
             <div>
-                <h2 class="font-headline text-lg font-black text-primary dark:text-white">LaTeXGenius</h2>
-                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">V1.0.0</p>
+                <h2 class="text-lg font-extrabold text-primary">LaTeXGenius</h2>
             </div>
         </div>
-        <button onclick="closeDrawer()" class="p-1.5 hover:bg-slate-200 dark:hover:bg-dark-surface rounded-lg transition-colors text-slate-500 dark:text-dark-text-muted">
+        <button onclick="closeDrawer()" class="p-1.5 hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors text-secondary dark:text-secondary-dark">
             <span class="material-symbols-outlined text-xl">close</span>
         </button>
     </div>
 
-    <!-- Drawer Navigation -->
     <nav class="flex flex-col gap-1 p-4 flex-grow">
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'dashboard' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'dashboard' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'dashboard' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>dashboard</span>
-            <span class="font-body text-sm font-medium">Dashboard</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'dashboard' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'dashboard' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
         </a>
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'editor' or request.resolver_match.url_name == 'editor_with_id' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'editor' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'editor' or request.resolver_match.url_name == 'editor_with_id' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>terminal</span>
-            <span class="font-body text-sm font-medium">Editor</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'editor' or request.resolver_match.url_name == 'editor_with_id' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'editor' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">terminal</span>
+            Editor
         </a>
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'templates' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'templates' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'templates' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>library_books</span>
-            <span class="font-body text-sm font-medium">Templates</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'templates' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'templates' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">library_books</span>
+            Templates
         </a>
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'notifications' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'notifications' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'notifications' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>notifications</span>
-            <span class="font-body text-sm font-medium">Notifications</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'notifications' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'notifications' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">notifications</span>
+            Notifications
         </a>
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'settings' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'settings' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'settings' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>settings</span>
-            <span class="font-body text-sm font-medium">Settings</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'settings' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'settings' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">settings</span>
+            Settings
         </a>
-        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'profile' %}bg-white dark:bg-dark-surface text-primary dark:text-white rounded-lg shadow-sm border-l-4 border-primary{% else %}text-slate-500 dark:text-dark-text-muted hover:text-primary dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-dark-surface{% endif %} px-4 py-3 transition-all rounded-lg" href="{% url 'profile' %}" onclick="closeDrawer()">
-            <span class="material-symbols-outlined" {% if request.resolver_match.url_name == 'profile' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>person</span>
-            <span class="font-body text-sm font-medium">Profile</span>
+        <a class="flex items-center gap-3 {% if request.resolver_match.url_name == 'profile' %}bg-secondary-light dark:bg-surface-dark-hover text-primary font-semibold border-l-4 border-primary{% else %}text-secondary dark:text-secondary-dark hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover{% endif %} px-4 py-2.5 transition-all rounded-lg text-sm" href="{% url 'profile' %}" onclick="closeDrawer()">
+            <span class="material-symbols-outlined">person</span>
+            Profile
         </a>
     </nav>
 
-    <!-- Drawer Footer -->
-    <div class="border-t border-outline-variant dark:border-dark-surface p-4">
-        <div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
-            <p class="text-xs font-bold text-primary dark:text-primary mb-1">UPGRADE TO PRO</p>
-            <p class="text-xs text-slate-600 dark:text-dark-text-muted mb-3 leading-tight">Unlock unlimited conversions, API access, version history, and more.</p>
-            <a href="{% url 'upgrade' %}" class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-variant transition-colors flex items-center justify-center gap-1">
+    <div class="border-t border-border dark:border-border-dark p-4">
+        {% if not user_subscription or not user_subscription.is_active or user_subscription.plan_name == 'Free' %}
+        <div class="bg-primary-light dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
+            <p class="text-xs font-bold text-primary mb-1">Upgrade to Pro</p>
+            <p class="text-xs text-secondary dark:text-secondary-dark mb-3 leading-tight">Unlock unlimited conversions, API access, and version history.</p>
+            <a href="{% url 'upgrade' %}" class="w-full btn btn-primary justify-center text-xs py-2">
                 <span class="material-symbols-outlined text-sm">workspace_premium</span>
-                Upgrade Now
+                Upgrade
             </a>
         </div>
-        <button onclick="toggleTheme()" class="w-full flex items-center gap-3 text-slate-500 dark:text-dark-text-muted px-4 py-3 hover:text-primary dark:hover:text-white transition-all rounded-lg hover:bg-slate-200/50 dark:hover:bg-dark-surface">
+        {% else %}
+        <div class="bg-primary-light dark:bg-primary/20 rounded-xl p-4 mb-4 border border-primary/20">
+            <p class="text-xs font-bold text-primary mb-1">{{ user_subscription.plan_name }} Active</p>
+            <p class="text-xs text-secondary dark:text-secondary-dark mb-3 leading-tight">Your subscription is active.</p>
+            <a href="{% url 'customer_portal' %}" class="w-full btn btn-primary justify-center text-xs py-2">
+                <span class="material-symbols-outlined text-sm">settings</span>
+                Manage
+            </a>
+        </div>
+        {% endif %}
+        <button onclick="toggleTheme()" class="w-full flex items-center gap-3 text-secondary dark:text-secondary-dark px-4 py-2.5 hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-all rounded-lg text-sm">
             <span class="material-symbols-outlined dark:hidden">dark_mode</span>
             <span class="material-symbols-outlined hidden dark:block">light_mode</span>
-            <span class="font-body text-sm font-medium">Theme</span>
+            Theme
         </button>
-        <a href="{% url 'logout' %}" class="w-full flex items-center gap-3 text-slate-500 dark:text-dark-text-muted px-4 py-3 hover:text-primary dark:hover:text-white transition-all rounded-lg hover:bg-slate-200/50 dark:hover:bg-dark-surface">
+        <a href="{% url 'logout' %}" class="w-full flex items-center gap-3 text-secondary dark:text-secondary-dark px-4 py-2.5 hover:text-primary hover:bg-secondary-light dark:hover:bg-surface-dark-hover transition-all rounded-lg text-sm">
             <span class="material-symbols-outlined">logout</span>
-            <span class="font-body text-sm font-medium">Logout</span>
+            Logout
         </a>
     </div>
 </div>
@@ -84,8 +89,6 @@
     }
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeDrawer();
-        }
+        if (e.key === 'Escape') { closeDrawer(); }
     });
 </script>

@@ -9,35 +9,31 @@
 {% block layout %}
 {% include "components/drawer.html" %}
 
-<div class="bg-background dark:bg-dark-bg text-on-background transition-colors duration-300">
+<div class="bg-secondary-light dark:bg-surface-dark transition-colors duration-300">
 
-<!-- Main Content Canvas -->
-<main class="min-h-screen bg-background dark:bg-dark-bg">
-<!-- TopAppBar Shell -->
-<header class="w-full h-16 sticky top-0 z-10 flex justify-end items-center px-12 bg-transparent">
+<main class="min-h-screen">
+<header class="w-full h-16 sticky top-0 z-10 flex justify-end items-center px-4 lg:px-8">
     <div class="absolute left-4 top-1/2 -translate-y-1/2">
-        <button onclick="openDrawer()" class="p-1.5 hover:bg-slate-100 dark:hover:bg-dark-surface rounded-lg transition-colors text-slate-500 dark:text-dark-text-muted">
+        <button onclick="openDrawer()" class="p-1.5 hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors text-secondary dark:text-secondary-dark">
             <span class="material-symbols-outlined text-xl">menu</span>
         </button>
     </div>
-<div class="flex items-center gap-6">
-<div class="relative group">
-<input class="bg-white dark:bg-dark-surface border border-outline-variant dark:border-dark-border rounded-full px-6 py-1.5 text-sm w-64 focus:ring-1 focus:ring-primary transition-all font-label dark:text-white" placeholder="Search settings..." type="text"/>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant dark:text-dark-text-muted text-lg">search</span>
+<div class="flex items-center gap-4">
+<div class="relative">
+<input class="bg-white dark:bg-surface-dark border border-border dark:border-border-dark rounded-full px-5 py-1.5 text-sm w-48 lg:w-64 focus:ring-1 focus:ring-primary transition-all text-accent dark:text-accent-dark" placeholder="Search settings" type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-secondary dark:text-secondary-dark text-lg">search</span>
 </div>
-<div class="flex items-center gap-4 text-primary dark:text-white">
+<div class="flex items-center gap-2">
 <div class="relative" id="notification-dropdown-container">
-    <button onclick="toggleNotificationDropdown()" class="relative p-2 text-slate-500 dark:text-dark-text-muted hover:bg-slate-100 dark:hover:bg-dark-surface rounded-full transition-colors" aria-label="Notifications">
+    <button onclick="toggleNotificationDropdown()" class="relative p-2 text-secondary dark:text-secondary-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-full transition-colors" aria-label="Notifications">
         <span class="material-symbols-outlined text-xl">notifications</span>
         {% if unread_notification_count > 0 %}
-        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-            {{ unread_notification_count }}
-        </span>
+        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center">{{ unread_notification_count }}</span>
         {% endif %}
     </button>
-    <div id="notification-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white dark:bg-dark-surface rounded-xl shadow-xl border border-outline-variant dark:border-dark-border z-50 overflow-hidden">
-        <div class="flex items-center justify-between px-4 py-3 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="font-serif font-semibold dark:text-white">Notifications</h3>
+    <div id="notification-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white dark:bg-surface-dark rounded-xl shadow-xl border border-border dark:border-border-dark z-50 overflow-hidden">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-border dark:border-border-dark">
+            <h3 class="font-semibold text-accent dark:text-accent-dark">Notifications</h3>
             {% if unread_notification_count > 0 %}
             <span class="text-xs text-primary font-medium">{{ unread_notification_count }} unread</span>
             {% endif %}
@@ -137,10 +133,26 @@ Edit Info
 <div class="flex items-baseline gap-1 mt-4">
 <span class="text-4xl font-newsreader font-bold dark:text-white">Free</span>
 </div>
-<p class="text-sm text-on-surface-variant dark:text-dark-text-muted mt-2 font-label">Current Plan</p>
+<p class="text-sm text-on-surface-variant dark:text-dark-text-muted mt-2 font-label">
+{% if user_subscription and user_subscription.is_active and user_subscription.plan_name != 'Free' %}{{ user_subscription.plan_name }} Plan{% else %}Current Plan{% endif %}
+</p>
 </div>
 <div class="mt-8">
 <ul class="space-y-3 mb-6">
+{% if user_subscription and user_subscription.is_active and user_subscription.plan_name != 'Free' %}
+<li class="flex items-center gap-2 text-sm text-on-surface dark:text-dark-text-dim">
+<span class="material-symbols-outlined text-sm text-primary">check_circle</span>
+<strong>{{ user_subscription.plan_name }}</strong> - Active
+</li>
+<li class="flex items-center gap-2 text-sm text-on-surface-variant dark:text-dark-text-muted">
+<span class="material-symbols-outlined text-sm text-primary">schedule</span>
+Next billing: {{ user_subscription.current_period_end|date:"M d, Y" }}
+</li>
+<li class="flex items-center gap-2 text-sm text-on-surface-variant dark:text-dark-text-muted">
+<span class="material-symbols-outlined text-sm text-primary">info</span>
+{% if user_subscription.cancel_at_period_end %}Canceled - ends on {{ user_subscription.current_period_end|date:"M d, Y" }}{% else %}Renews automatically{% endif %}
+</li>
+{% else %}
 <li class="flex items-center gap-2 text-sm text-on-surface-variant dark:text-dark-text-muted">
 <span class="material-symbols-outlined text-sm text-primary">check_circle</span>
 5 AI conversions/month
@@ -149,11 +161,19 @@ Edit Info
 <span class="material-symbols-outlined text-sm text-primary">check_circle</span>
 1GB Cloud Storage
 </li>
+{% endif %}
 </ul>
+{% if user_subscription and user_subscription.is_active and user_subscription.plan_name != 'Free' %}
+<a href="{% url 'customer_portal' %}" class="w-full py-2.5 bg-primary text-white font-label text-sm font-bold rounded-lg hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">settings</span>
+Manage Subscription
+</a>
+{% else %}
 <a href="{% url 'upgrade' %}" class="w-full py-2.5 bg-primary text-white font-label text-sm font-bold rounded-lg hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
 <span class="material-symbols-outlined text-sm">workspace_premium</span>
 Upgrade to Pro
 </a>
+{% endif %}
 </div>
 </div>
 <div class="md:col-span-3 bg-white dark:bg-dark-surface p-8 rounded-xl shadow-sm border border-outline-variant dark:border-dark-border">
@@ -187,91 +207,6 @@ ENHANCED SECURITY ON
 </div>
 </div>
 </div>
-</div>
-</div>
-</section>
-<!-- Research API Section -->
-<section id="api-section" class="mb-16">
-<div class="flex items-center justify-between mb-8">
-<div>
-<h2 class="font-newsreader text-3xl font-bold text-on-background dark:text-white">Research API</h2>
-<p class="text-on-surface-variant dark:text-dark-text-muted mt-1">Manage API keys for automated document generation pipelines.</p>
-</div>
-<button onclick="openApiKeyModal()" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-<span class="material-symbols-outlined text-sm">add</span>
-Create API Key
-</button>
-</div>
-
-{% if api_keys %}
-<div class="space-y-4">
-{% for key in api_keys %}
-<div class="bg-white dark:bg-dark-surface p-6 rounded-xl border border-outline-variant dark:border-dark-border hover:shadow-md transition-shadow">
-<div class="flex items-start justify-between">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
-<span class="material-symbols-outlined text-primary text-xl">key</span>
-</div>
-<div>
-<div class="flex items-center gap-3">
-<h4 class="font-semibold dark:text-white">{{ key.name }}</h4>
-{% if key.is_active %}
-<span class="px-2 py-0.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs font-bold rounded">Active</span>
-{% else %}
-<span class="px-2 py-0.5 bg-slate-100 dark:bg-dark-surface-alt text-slate-500 text-xs font-bold rounded">Revoked</span>
-{% endif %}
-</div>
-<p class="text-xs font-mono text-on-surface-variant dark:text-dark-text-muted mt-1">
-Key: <span class="bg-slate-100 dark:bg-dark-surface-alt px-2 py-1 rounded">{{ key.key_prefix }}</span>
-</p>
-<p class="text-xs text-slate-400 dark:text-dark-text-muted mt-1">
-Created: {{ key.created_at|date:"M d, Y" }} | Used {{ key.usage_count }} time{{ key.usage_count|pluralize }}
-</p>
-</div>
-</div>
-{% if key.is_active %}
-<form action="{% url 'revoke_api_key' key.id %}" method="POST" onsubmit="return confirm('Are you sure you want to revoke this API key? This action cannot be undone.')">
-{% csrf_token %}
-<button type="submit" class="px-3 py-1.5 text-error border border-error/30 rounded-lg text-xs font-bold hover:bg-error/5 transition-colors">
-Revoke
-</button>
-</form>
-{% endif %}
-</div>
-</div>
-{% endfor %}
-</div>
-{% else %}
-<div class="bg-surface dark:bg-dark-surface/50 p-12 rounded-xl border border-dashed border-outline-variant dark:border-dark-border text-center">
-<span class="material-symbols-outlined text-slate-300 dark:text-dark-border-strong text-5xl mb-4 block">key</span>
-<h4 class="font-semibold dark:text-white mb-2">No API keys yet</h4>
-<p class="text-sm text-on-surface-variant dark:text-dark-text-muted mb-4">Create an API key to access LatexGenius programmatically.</p>
-<button onclick="openApiKeyModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-<span class="material-symbols-outlined text-sm">add</span>
-Create Your First API Key
-</button>
-</div>
-{% endif %}
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-<div class="bg-surface dark:bg-dark-surface/50 p-6 rounded-xl hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors cursor-pointer group border border-outline-variant dark:border-dark-border">
-<div class="w-10 h-10 bg-white dark:bg-dark-surface rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-primary">insights</span>
-</div>
-<h4 class="font-semibold dark:text-white mb-2">Usage Statistics</h4>
-<p class="text-xs text-on-surface-variant dark:text-dark-text-muted font-label">Track your API calls, compilation time, and token consumption.</p>
-<p class="text-xs text-primary font-medium mt-3 hover:underline cursor-pointer" onclick="showFeatureComingSoon('Usage Statistics')">View Stats &rarr;</p>
-</div>
-<div class="bg-surface dark:bg-dark-surface/50 p-6 rounded-xl hover:bg-surface-variant dark:hover:bg-dark-surface transition-colors cursor-pointer group border border-outline-variant dark:border-dark-border">
-<div class="w-10 h-10 bg-white dark:bg-dark-surface rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-primary">menu_book</span>
-</div>
-<h4 class="font-semibold dark:text-white mb-2">Documentation</h4>
-<p class="text-xs text-on-surface-variant dark:text-dark-text-muted font-label">Explore our technical guides for LaTeX schema and macro automation.</p>
-<a href="{% url 'documentation' %}" class="text-xs text-primary font-medium mt-3 hover:underline inline-flex items-center gap-1">
-View Docs
-<span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
 </div>
 </div>
 </section>
@@ -326,143 +261,9 @@ View Docs
 </main>
 </div>
 
-<!-- API Key Modal -->
-<div id="api-key-modal-settings-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-lg font-serif font-bold dark:text-white">Create API Key</h3>
-            <button onclick="closeApiKeyModalSettings()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-slate-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="p-6">
-            <form id="create-api-key-form-settings" class="space-y-4">
-                {% csrf_token %}
-                <div>
-                    <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Key Name</label>
-                    <input type="text" id="api-key-name-settings" name="name" placeholder="e.g., Production, Development" 
-                           class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white"
-                           required>
-                </div>
-                <p class="text-xs text-on-surface-variant dark:text-dark-text-muted">
-                    API keys provide full access to your account. Keep them secure and never share them in public code.
-                </p>
-                <button type="submit" class="w-full py-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-                    Generate API Key
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- New Key Display Modal -->
-<div id="new-key-display-modal-overlay" class="fixed inset-0 bg-black/50 z-[210] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10">
-            <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
-                <h3 class="text-lg font-serif font-bold text-green-800 dark:text-green-300">API Key Created</h3>
-            </div>
-        </div>
-        <div class="p-6">
-            <p class="text-sm text-on-surface-variant dark:text-dark-text-muted mb-4">
-                <strong class="text-error dark:text-red-400">Important:</strong> Make sure to copy your API key now. You won't be able to see it again!
-            </p>
-            <div class="flex items-center gap-2 mb-6">
-                <div class="flex-1 bg-slate-100 dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg px-4 py-3 overflow-x-auto">
-                    <code id="new-api-key-value-settings" class="text-sm font-mono text-primary break-all"></code>
-                </div>
-                <button onclick="copyNewApiKeySettings()" class="p-3 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg hover:bg-surface-variant dark:hover:bg-dark-border transition-colors" title="Copy to clipboard">
-                    <span id="copy-icon-settings" class="material-symbols-outlined text-primary">content_copy</span>
-                </button>
-            </div>
-            <button onclick="closeNewKeyModal()" class="w-full py-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-                Done
-            </button>
-        </div>
-    </div>
-</div>
-
 <script>
     function showFeatureComingSoon(featureName) {
         toast(`${featureName} is coming soon!`, 'info');
-    }
-
-    function openApiKeyModal() {
-        const overlay = document.getElementById('api-key-modal-settings-overlay');
-        overlay.classList.remove('hidden');
-        overlay.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeApiKeyModalSettings() {
-        const overlay = document.getElementById('api-key-modal-settings-overlay');
-        overlay.classList.add('hidden');
-        overlay.classList.remove('flex');
-        document.body.style.overflow = '';
-    }
-
-    function closeNewKeyModal() {
-        const overlay = document.getElementById('new-key-display-modal-overlay');
-        overlay.classList.add('hidden');
-        overlay.classList.remove('flex');
-        document.body.style.overflow = '';
-        location.reload();
-    }
-
-    document.getElementById('create-api-key-form-settings').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('api-key-name-settings').value.trim();
-        
-        if (!name) {
-            toast('Please enter a key name', 'error');
-            return;
-        }
-
-        try {
-            const csrftoken = getCookie('csrftoken');
-            const response = await fetch('{% url "create_api_key" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({ name: name })
-            });
-
-            const data = await response.json();
-
-            if (data.status === 'success') {
-                closeApiKeyModalSettings();
-                
-                const keyValue = document.getElementById('new-api-key-value-settings');
-                keyValue.textContent = data.api_key.key;
-                
-                const overlay = document.getElementById('new-key-display-modal-overlay');
-                overlay.classList.remove('hidden');
-                overlay.classList.add('flex');
-            } else {
-                toast(data.message || 'Failed to create API key', 'error');
-            }
-        } catch (error) {
-            toast('Network error. Please try again.', 'error');
-        }
-    });
-
-    function copyNewApiKeySettings() {
-        const keyValue = document.getElementById('new-api-key-value-settings').textContent;
-        const copyIcon = document.getElementById('copy-icon-settings');
-        
-        navigator.clipboard.writeText(keyValue).then(() => {
-            copyIcon.textContent = 'check';
-            toast('API key copied to clipboard', 'success');
-            setTimeout(() => {
-                copyIcon.textContent = 'content_copy';
-            }, 2000);
-        }).catch(() => {
-            toast('Failed to copy. Please copy manually.', 'error');
-        });
     }
 
     async function savePreference(key, value) {

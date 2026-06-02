@@ -1,7 +1,8 @@
 from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
-from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial, APIKey, Notification, ConversionJob
+from django.db.models import Q
+from .models import Project, Template, AppSetting, Feature, Statistic, Testimonial, Notification, ConversionJob
 from django.contrib.auth.models import User
 import logging
 import openai
@@ -296,64 +297,6 @@ def run_conversion_job(job_id, project_id, file_path=None, content=None, templat
     except Exception as e:
         logger.error(f"Conversion job {job_id} failed: {e}")
         update_job_progress(job_id, 'failed', f'Unexpected error: {str(e)}', 0)
-
-import secrets
-import hashlib
-
-def generate_api_key():
-    return "lg_" + secrets.token_urlsafe(48)
-
-def hash_api_key(key):
-    return hashlib.sha256(key.encode()).hexdigest()
-
-def create_api_key(user_id, name="Default Key"):
-    from django.contrib.auth.models import User
-    try:
-        user = User.objects.get(id=user_id)
-        raw_key = generate_api_key()
-        hashed_key = hash_api_key(raw_key)
-        api_key = APIKey.objects.create(
-            user=user,
-            key=hashed_key,
-            name=name,
-            is_active=True
-        )
-        return {
-            "id": str(api_key.id),
-            "key": raw_key,
-            "name": api_key.name,
-            "created_at": api_key.created_at,
-        }
-    except Exception as e:
-        logger.error(f"Failed to create API key: {e}")
-        return None
-
-def get_user_api_keys(user_id):
-    from django.contrib.auth.models import User
-    try:
-        keys = APIKey.objects.filter(user_id=user_id).order_by('-created_at')
-        return [{
-            "id": str(k.id),
-            "name": k.name,
-            "key_prefix": k.key[:8] + "...",
-            "is_active": k.is_active,
-            "created_at": k.created_at,
-            "last_used_at": k.last_used_at,
-            "usage_count": k.usage_count,
-        } for k in keys]
-    except Exception as e:
-        logger.error(f"Failed to get API keys: {e}")
-        return []
-
-def revoke_api_key(user_id, key_id):
-    try:
-        api_key = APIKey.objects.get(id=key_id, user_id=user_id)
-        api_key.is_active = False
-        api_key.save()
-        return True
-    except APIKey.DoesNotExist:
-        return False
-
 def get_user_notifications(user_id, unread_only=False, limit=10):
     try:
         queryset = Notification.objects.filter(user_id=user_id)
@@ -396,6 +339,220 @@ def mark_all_notifications_read(user_id):
     except Exception as e:
         logger.error(f"Failed to mark all notifications as read: {e}")
         return False
+
+def get_subscription_plans():
+    from .models import SubscriptionPlan
+    try:
+        plans = SubscriptionPlan.objects.filter(is_active=True).order_by('sort_order')
+        return [{
+            "id": str(p.id),
+            "name": p.name,
+            "stripe_price_id_monthly": p.stripe_price_id_monthly,
+            "stripe_price_id_yearly": p.stripe_price_id_yearly,
+            "description": p.description,
+            "features": p.get_features(),
+            "monthly_price_cents": p.monthly_price_cents,
+            "yearly_price_cents": p.yearly_price_cents,
+            "monthly_price_dollars": p.monthly_price_dollars(),
+            "yearly_price_dollars": p.yearly_price_dollars(),
+            "sort_order": p.sort_order,
+        } for p in plans]
+    except Exception as e:
+        logger.error(f"Failed to get subscription plans: {e}")
+        return []
+
+def get_user_subscription(user_id):
+    from .models import UserSubscription
+    try:
+        sub = UserSubscription.objects.filter(user_id=user_id).first()
+        if sub and sub.plan:
+            return {
+                "id": str(sub.id),
+                "plan_id": str(sub.plan.id),
+                "plan_name": sub.plan.name,
+                "status": sub.status,
+                "is_active": sub.is_active(),
+                "stripe_customer_id": sub.stripe_customer_id,
+                "stripe_subscription_id": sub.stripe_subscription_id,
+                "current_period_start": sub.current_period_start,
+                "current_period_end": sub.current_period_end,
+                "cancel_at_period_end": sub.cancel_at_period_end,
+                "trial_end": sub.trial_end,
+            }
+        return None
+    except Exception as e:
+        logger.error(f"Failed to get user subscription: {e}")
+        return None
+
+def user_is_pro(user_id):
+    sub = get_user_subscription(user_id)
+    if sub and sub.get("is_active"):
+        return True
+    return False
+
+def create_stripe_checkout_session(user_id, price_id, success_url, cancel_url):
+    import stripe
+    from django.conf import settings
+    from django.contrib.auth.models import User
+
+    try:
+        user = User.objects.get(id=user_id)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        sub = UserSubscription.objects.filter(user_id=user_id).first()
+        customer_id = sub.stripe_customer_id if sub and sub.stripe_customer_id else None
+
+        session = stripe.checkout.Session.create(
+            customer=customer_id,
+            customer_email=customer_id and None or user.email,
+            mode='subscription',
+            line_items=[{"price": price_id, "quantity": 1}],
+            metadata={"user_id": str(user_id)},
+            success_url=success_url,
+            cancel_url=cancel_url,
+            subscription_data={
+                "metadata": {"user_id": str(user_id)},
+            },
+        )
+
+        return {"url": session.url, "session_id": session.id}
+    except Exception as e:
+        logger.error(f"Failed to create Stripe checkout session: {e}")
+        return None
+
+def create_stripe_customer_portal_session(user_id, return_url):
+    import stripe
+    from django.conf import settings
+    from django.contrib.auth.models import User
+
+    try:
+        user = User.objects.get(id=user_id)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        sub = UserSubscription.objects.filter(user_id=user_id).first()
+        if not sub or not sub.stripe_customer_id:
+            return None
+
+        session = stripe.billing_portal.Session.create(
+            customer=sub.stripe_customer_id,
+            return_url=return_url,
+        )
+
+        return {"url": session.url}
+    except Exception as e:
+        logger.error(f"Failed to create customer portal session: {e}")
+        return None
+
+def cancel_subscription_at_period_end(user_id):
+    import stripe
+    from django.conf import settings
+
+    try:
+        sub = UserSubscription.objects.filter(user_id=user_id).first()
+        if not sub or not sub.stripe_subscription_id:
+            return False
+
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_sub = stripe.subscriptions.modify(
+            sub.stripe_subscription_id,
+            cancel_at_period_end=True,
+        )
+
+        sub.cancel_at_period_end = True
+        sub.save()
+        return True
+    except Exception as e:
+        logger.error(f"Failed to cancel subscription: {e}")
+        return False
+
+def reactivate_subscription(user_id):
+    import stripe
+    from django.conf import settings
+
+    try:
+        sub = UserSubscription.objects.filter(user_id=user_id).first()
+        if not sub or not sub.stripe_subscription_id:
+            return False
+
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe_sub = stripe.subscriptions.modify(
+            sub.stripe_subscription_id,
+            cancel_at_period_end=False,
+        )
+
+        sub.cancel_at_period_end = False
+        sub.save()
+        return True
+    except Exception as e:
+        logger.error(f"Failed to reactivate subscription: {e}")
+        return False
+
+def update_subscription_from_stripe(stripe_subscription, user_subscription=None):
+    from .models import SubscriptionPlan, UserSubscription
+    from django.utils import timezone
+    from datetime import datetime
+
+    customer_id = stripe_subscription.get('customer')
+    subscription_id = stripe_subscription.get('id')
+    status = stripe_subscription.get('status')
+    cancel_at_period_end = stripe_subscription.get('cancel_at_period_end', False)
+    current_period_start = stripe_subscription.get('current_period_start')
+    current_period_end = stripe_subscription.get('current_period_end')
+    trial_end = stripe_subscription.get('trial_end')
+    items = stripe_subscription.get('items', {}).get('data', [])
+    metadata = stripe_subscription.get('metadata', {})
+    user_id = metadata.get('user_id')
+
+    if not user_id:
+        return None
+
+    price_id = items[0]['price']['id'] if items else None
+
+    plan = None
+    if price_id:
+        plan = SubscriptionPlan.objects.filter(
+            Q(stripe_price_id_monthly=price_id) | Q(stripe_price_id_yearly=price_id)
+        ).first()
+
+    def ts_to_datetime(ts):
+        if ts:
+            return datetime.fromtimestamp(ts, tz=timezone.utc)
+        return None
+
+    defaults = {
+        'plan': plan,
+        'status': status,
+        'cancel_at_period_end': cancel_at_period_end,
+        'current_period_start': ts_to_datetime(current_period_start),
+        'current_period_end': ts_to_datetime(current_period_end),
+        'trial_end': ts_to_datetime(trial_end),
+        'stripe_customer_id': customer_id,
+    }
+
+    if user_subscription:
+        for key, value in defaults.items():
+            setattr(user_subscription, key, value)
+        user_subscription.save()
+        return user_subscription
+
+    sub, created = UserSubscription.objects.update_or_create(
+        stripe_subscription_id=subscription_id,
+        defaults={
+            'user_id': user_id,
+            **defaults,
+        }
+    )
+    return sub
+
+def ensure_default_subscription(user):
+    from .models import SubscriptionPlan, UserSubscription
+    if not UserSubscription.objects.filter(user=user).exists():
+        free_plan = SubscriptionPlan.objects.filter(name__iexact='free').first()
+        UserSubscription.objects.create(
+            user=user,
+            plan=free_plan,
+            status='active',
+        )
 
 def create_notification(user_id, title, message, type='info'):
     from django.contrib.auth.models import User

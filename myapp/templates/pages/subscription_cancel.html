@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Subscription Canceled | LatexGenius{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-20 bg-background dark:bg-dark-bg min-h-screen flex items-center justify-center">
+    <div class="max-w-md mx-auto px-8 text-center">
+        <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-dark-surface flex items-center justify-center mx-auto mb-8">
+            <span class="material-symbols-outlined text-5xl text-slate-500">info</span>
+        </div>
+        <h1 class="text-4xl font-serif font-bold dark:text-white mb-4">Upgrade Canceled</h1>
+        <p class="text-lg text-on-surface-variant dark:text-dark-text-muted mb-8">
+            No changes were made. You're still on the Free plan. When you're ready, you can upgrade anytime.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'pricing' %}" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-label font-bold transition-all hover:bg-primary-variant">
+                <span class="material-symbols-outlined">workspace_premium</span>
+                View Plans
+            </a>
+            <a href="{% url 'dashboard' %}" class="inline-flex items-center gap-2 bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white px-8 py-4 rounded-xl font-label font-bold transition-all hover:bg-surface-variant">
+                <span class="material-symbols-outlined">dashboard</span>
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
