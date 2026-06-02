@@ -4,7 +4,7 @@
 
 
 {% block layout %}
-<div class="bg-background dark:bg-slate-900 text-on-background dark:text-white min-h-screen flex flex-col transition-colors duration-300">
+<div class="bg-background dark:bg-dark-bg text-on-background dark:text-white min-h-screen flex flex-col transition-colors duration-300">
 <main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 relative overflow-hidden">
 <!-- Login Container -->
 <div class="w-full max-w-md z-10">
@@ -14,27 +14,27 @@
 <span class="material-symbols-outlined text-3xl" data-icon="functions">functions</span>
 </a>
 <h1 class="text-3xl font-extrabold tracking-tighter text-primary">LaTeXGenius</h1>
-<p class="text-on-surface-variant dark:text-slate-400 mt-2 font-medium">Precision typesetting for modern latex coders.</p>
+<p class="text-on-surface-variant dark:text-dark-text-muted mt-2 font-medium">Precision typesetting for modern latex coders.</p>
 </div>
 <!-- Login Card -->
-<div class="bg-white dark:bg-slate-800 rounded-xl p-8 md:p-10 shadow-sm border border-outline-variant dark:border-slate-700">
+<div class="bg-white dark:bg-dark-surface rounded-xl p-8 md:p-10 shadow-sm border border-outline-variant dark:border-dark-border">
 <div class="flex flex-col gap-6">
 <!-- Social Login -->
 <div class="grid grid-cols-2 gap-4">
-<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface dark:bg-slate-900 text-on-surface dark:text-white border border-outline-variant dark:border-slate-700 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95">
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface dark:bg-dark-bg text-on-surface dark:text-white border border-outline-variant dark:border-dark-border font-semibold text-sm hover:bg-slate-50 dark:hover:bg-dark-surface transition-all duration-200 active:scale-95">
 <img alt="Google Logo" class="w-5 h-5" data-alt="Official Google multicolored 'G' logo icon on white circular background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKWmt4CtFLZrstVnekWVX10NKe9nTE9ELi6334XyuE-cusVQ1leiIf_PVO8BJRCe6W7ZnfgiJ4oYky2QYSOdQ4YZAOZ5hx8j0KI3FemK2FppV3YR5M0fFU7Dy79tscepHM3qKFfqAkrJ3fo92-Ay5VsAajz1j5xAnYTHmcD8KfX-mNJ0MLWWysPHKAUzWh6j_s-4v8ae42i2yZmbtOuMqedswSHexBGqiQd4UV45dTPZ6Wp4dDCjVYU_IuxJ6tKmXByC2Eg1v5Jg"/>
 <span>Google</span>
 </button>
-<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface dark:bg-slate-900 text-on-surface dark:text-white border border-outline-variant dark:border-slate-700 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-95">
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface dark:bg-dark-bg text-on-surface dark:text-white border border-outline-variant dark:border-dark-border font-semibold text-sm hover:bg-slate-50 dark:hover:bg-dark-surface transition-all duration-200 active:scale-95">
 <span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
 <span>GitHub</span>
 </button>
 </div>
 <!-- Divider -->
 <div class="flex items-center gap-4">
-<div class="h-[1px] flex-grow bg-outline-variant dark:bg-slate-700"></div>
-<span class="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-500 font-bold">Or continue with</span>
-<div class="h-[1px] flex-grow bg-outline-variant dark:bg-slate-700"></div>
+<div class="h-[1px] flex-grow bg-outline-variant dark:bg-dark-surface-alt"></div>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-dark-text-muted font-bold">Or continue with</span>
+<div class="h-[1px] flex-grow bg-outline-variant dark:bg-dark-surface-alt"></div>
 </div>
 
 {% if messages %}
@@ -51,25 +51,25 @@
 <form action="{% url 'login' %}" class="flex flex-col gap-5" method="POST">
 {% csrf_token %}
 <div class="flex flex-col gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-slate-400 ml-1" for="username">Work Email</label>
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-dark-text-muted ml-1" for="username">Work Email</label>
 <div class="relative group soft-inset-focus rounded-xl">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant dark:text-slate-500">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant dark:text-dark-text-muted">
 <span class="material-symbols-outlined text-xl" data-icon="mail">mail</span>
 </div>
-<input class="w-full pl-12 pr-4 py-3.5 bg-surface dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface dark:text-white placeholder:text-slate-500 transition-all" id="username" name="username" placeholder="omara@gmail.com" type="email" required/>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface dark:text-white placeholder:text-slate-500 transition-all" id="username" name="username" placeholder="omara@gmail.com" type="email" required/>
 </div>
 </div>
 <div class="flex flex-col gap-2">
 <div class="flex justify-between items-center ml-1">
-<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-slate-400" for="password">Password</label>
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-dark-text-muted" for="password">Password</label>
 <a class="text-xs font-bold text-primary hover:text-primary-variant transition-colors" href="#">Forgot Password?</a>
 </div>
 <div class="relative group soft-inset-focus rounded-xl">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant dark:text-slate-500">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant dark:text-dark-text-muted">
 <span class="material-symbols-outlined text-xl" data-icon="lock">lock</span>
 </div>
-<input class="w-full pl-12 pr-12 py-3.5 bg-surface dark:bg-slate-900 border border-outline-variant dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface dark:text-white placeholder:text-slate-500 transition-all" id="password" name="password" placeholder="••••••••" type="password" required/>
-<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant dark:text-slate-500 hover:text-primary transition-colors" type="button">
+<input class="w-full pl-12 pr-12 py-3.5 bg-surface dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface dark:text-white placeholder:text-slate-500 transition-all" id="password" name="password" placeholder="••••••••" type="password" required/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant dark:text-dark-text-muted hover:text-primary transition-colors" type="button">
 <span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span>
 </button>
 </div>
@@ -82,15 +82,15 @@
 </div>
 </div>
 <!-- Footer / Redirect -->
-<p class="text-center mt-8 text-on-surface-variant dark:text-slate-400 text-sm font-medium">
+<p class="text-center mt-8 text-on-surface-variant dark:text-dark-text-muted text-sm font-medium">
                 New to the platform? <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4" href="{% url 'signup' %}">Create an account</a>
 </p>
 </div>
 </main>
 <!-- Shared Footer Anchor -->
-<footer class="w-full py-8 border-t border-outline-variant dark:border-slate-800 bg-surface dark:bg-slate-900">
+<footer class="w-full py-8 border-t border-outline-variant dark:border-dark-surface bg-surface dark:bg-dark-bg">
 <div class="flex flex-col md:flex-row justify-between items-center px-4 sm:px-8 w-full max-w-7xl mx-auto gap-4">
-<div class="text-on-surface-variant dark:text-slate-500 font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest text-center md:text-left">
+<div class="text-on-surface-variant dark:text-dark-text-muted font-['Inter'] text-[10px] sm:text-xs uppercase tracking-widest text-center md:text-left">
                 © 2026 LaTeXGenius. Built for Precision.
             </div>
 <div class="flex flex-wrap justify-center gap-4 sm:gap-8">

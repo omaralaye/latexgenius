@@ -1,14 +1,14 @@
-<header class="sticky top-0 z-50 bg-background dark:bg-slate-900 border-b border-outline-variant dark:border-slate-800">
+<header class="sticky top-0 z-50 bg-background dark:bg-dark-bg border-b border-outline-variant dark:border-dark-surface">
     <nav class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
         <a href="{% url 'landing' %}" class="text-xl font-bold font-serif text-primary dark:text-white">LatexGenius</a>
         <div class="hidden md:flex items-center space-x-8 font-serif font-medium">
-            <a class="{% if request.resolver_match.url_name == 'landing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'landing' %}">Features</a>
-            <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'templates' %}">Templates</a>
-            <a class="{% if request.resolver_match.url_name == 'pricing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'pricing' %}">Pricing</a>
-            <a class="{% if request.resolver_match.url_name == 'documentation' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-slate-400{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'documentation' %}">Documentation</a>
+            <a class="{% if request.resolver_match.url_name == 'landing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-dark-text-muted{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'landing' %}">Features</a>
+            <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-dark-text-muted{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'templates' %}">Templates</a>
+            <a class="{% if request.resolver_match.url_name == 'pricing' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-dark-text-muted{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'pricing' %}">Pricing</a>
+            <a class="{% if request.resolver_match.url_name == 'documentation' %}text-primary dark:text-white border-b-2 border-primary pb-1{% else %}text-on-surface-variant dark:text-dark-text-muted{% endif %} hover:text-primary dark:hover:text-white transition-colors duration-300" href="{% url 'documentation' %}">Documentation</a>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="toggleTheme()" class="p-2 text-on-surface-variant dark:text-slate-400 hover:bg-surface-variant dark:hover:bg-slate-800 rounded-lg transition-colors" aria-label="Toggle Theme">
+            <button onclick="toggleTheme()" class="p-2 text-on-surface-variant dark:text-dark-text-muted hover:bg-surface-variant dark:hover:bg-dark-surface rounded-lg transition-colors" aria-label="Toggle Theme">
                 <span class="material-symbols-outlined dark:hidden">dark_mode</span>
                 <span class="material-symbols-outlined hidden dark:block">light_mode</span>
             </button>
@@ -16,7 +16,7 @@
                 <a href="{% url 'dashboard' %}" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium transition-all hover:bg-primary-variant whitespace-nowrap">
                     Dashboard
                 </a>
-                <a href="{% url 'logout' %}" class="text-on-surface-variant dark:text-slate-400 hover:text-primary dark:hover:text-white transition-colors duration-300 font-serif font-medium">Logout</a>
+                <a href="{% url 'logout' %}" class="text-on-surface-variant dark:text-dark-text-muted hover:text-primary dark:hover:text-white transition-colors duration-300 font-serif font-medium">Logout</a>
             {% else %}
                 <a href="{% url 'login' %}" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-medium transition-all hover:bg-primary-variant whitespace-nowrap">
                     Get Started
