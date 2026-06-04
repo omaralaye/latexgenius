@@ -78,9 +78,6 @@ def create_project(owner_id, title, content, filename='main.tex', status='draft'
 def get_projects(filter_query=None, sort=None, limit=None):
     queryset = Project.objects.all().prefetch_related('collaborators')
     if filter_query:
-        # Compatibility with the previous dict-based filter_query used by MongoDB
-        # Views currently use: get_projects({"owner_id": owner_id}, sort=[("last_modified", -1)])
-        # which translates well to Django's .filter(**{"owner_id": owner_id})
         queryset = queryset.filter(**filter_query)
     if sort:
         sort_args = []

@@ -63,14 +63,30 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'myapp.middleware.RateLimitMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'myapp.middleware.RowLevelSecurityMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+RATE_LIMITS = [
+    (r'^/login/', 10, 60),
+    (r'^/signup/', 5, 60),
+    (r'^/password-reset/', 5, 60),
+    (r'^/ai-convert/', 5, 60),
+    (r'^/editor/[^/]+/reprocess/', 5, 60),
+    (r'^/upload/', 10, 60),
+    (r'^/editor/[^/]+/save/', 20, 60),
+    (r'^/editor/[^/]+/compile/', 10, 60),
+    (r'^/payment/create-checkout-session/', 10, 60),
+    (r'^/payment/webhook/', 30, 60),
+    (r'.*', 60, 60),
 ]
 
 SITE_ID = 1
