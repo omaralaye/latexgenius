@@ -1,74 +1,73 @@
-# Docker Integration Guide
+# Docker Setup
 
-This document explains how Docker is integrated into LaTeXGenius and how the multi-container architecture works.
+LaTeXGenius runs in three containers:
 
-## 1. Architecture Overview
+- **web** — Django app served by Gunicorn with Whitenoise
+- **db** — PostgreSQL 16 (production only)
+- **latex-online** — LaTeX compilation microservice
 
-The application uses **Docker Compose** to orchestrate two primary services. This ensures that the Django application and its LaTeX compilation backend run in a consistent, isolated environment.
+## Quick Start (Development)
 
-### Services
-*   **`web`**: The Django application.
-    *   **Image**: Built from the local `Dockerfile` (Python 3.11-slim).
-    *   **Role**: Handles user authentication, project management, and proxies compilation requests.
-    *   **Port**: `8000`
-*   **`latex-online`**: The LaTeX compilation microservice.
-    *   **Image**: `aslushnikov/latex-online`
-    *   **Role**: Standalone service that compiles LaTeX source into PDF.
-    *   **Port**: `2700` (Internal)
+```bash
+docker compose up --build
+```
 
-## 2. Integration Mechanics
+The app is available at `http://localhost:8000`.
 
-The integration relies on Docker's internal networking and environment-based configuration.
+Migrations run automatically on startup. Source code is mounted as a volume, so changes take effect immediately.
 
-### Internal Networking
-Docker Compose creates a shared network. The `web` service communicates with the compiler using its service name: `http://latex-online:2700`.
+## Production Deployment
 
-### Environment Configuration
-The connection is configured via the `LATEX_COMPILER_URL` environment variable:
-1.  **Compose Level**: Defined in `docker-compose.yml`.
-2.  **Django Level**: Read in `latexgenius/settings.py` via `os.environ.get('LATEX_COMPILER_URL')`.
-3.  **App Level**: Used in `myapp/views.py` within the `compile_project` function to proxy requests to the compiler.
+### 1. Set environment variables
 
-## 3. Workflow: Compiling a Document
+Create a `.env` file in the project root:
 
-1.  **User Action**: The user clicks "Compile" in the editor.
-2.  **Request**: The frontend sends an AJAX request to the Django backend (`/project/<id>/compile/`).
-3.  **Proxying**: The Django `web` container sends a `POST` request containing the LaTeX source to `http://latex-online:2700/compile`.
-4.  **Compilation**: The `latex-online` container processes the source using its internal LaTeX distribution (TeX Live).
-5.  **Response**: The PDF binary is sent back to the `web` container, which then serves it to the user.
+```env
+SECRET_KEY=your-random-secret-key-here
+DEBUG=False
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+DB_NAME=latexgenius
+DB_USER=latexgenius
+DB_PASSWORD=your-strong-db-password
+KIMI_API_KEY=your-nvapi-key
+KIMI_MODEL=moonshotai/kimi-k2.6
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
 
-## 4. Getting Started
+### 2. Build and start
 
-### Prerequisites
-- Docker and Docker Compose installed.
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env up --build -d
+```
 
-### Setup Instructions
+### 3. Create a superuser (first run)
 
-1.  **Prepare Environment**:
-    ```bash
-    cp .env.example .env
-    ```
-    *Note: Ensure `DEBUG=True` is set in your `.env` file for local development to see detailed error messages. You must also set a `SECRET_KEY`.*
+```bash
+docker compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+```
 
-2.  **Build and Launch**:
-    ```bash
-    docker compose up --build
-    ```
+### 4. Stop
 
-3.  **Initialize Database**:
-    In a new terminal, run migrations inside the container:
-    ```bash
-    docker compose exec web python manage.py migrate
-    ```
+```bash
+docker compose -f docker-compose.prod.yml down
+```
 
-4.  **Access the Application**:
-    Navigate to `http://localhost:8000`.
+## Architecture
 
-## 5. Development Tips
+```
+Browser ──► Gunicorn (:8000) ──► PostgreSQL (:5432)
+                │
+                └──► latex-online (:2700)
+```
 
-- **Hot Reloading**: The `web` service uses a volume mapping (`.:/app`), so changes to your Python code or templates will trigger a Django server restart automatically inside the container.
-- **Logs**: View logs for all services using `docker compose logs -f`.
-- **Shell Access**: To run commands inside the web container:
-    ```bash
-    docker compose exec web bash
-    ```
+## Useful Commands
+
+| Action | Command |
+|--------|---------|
+| View logs | `docker compose logs -f` |
+| Shell into web | `docker compose exec web bash` |
+| Run migrations | `docker compose exec web python manage.py migrate` |
+| Rebuild | `docker compose up --build -d` |

@@ -6,9 +6,10 @@ services:
     volumes:
       - .:/app
     environment:
-      - LATEX_COMPILER_URL=http://latex-online:2700/compile
-      - SECRET_KEY=dummy-secret-key-for-docker-compose
+      - SECRET_KEY=dev-secret-key-change-in-production
       - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - LATEX_COMPILER_URL=http://latex-online:2700/compile
     depends_on:
       - latex-online
 

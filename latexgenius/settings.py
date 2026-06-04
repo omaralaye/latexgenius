@@ -53,6 +53,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     'myapp',
 ]
 
@@ -62,9 +68,47 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_OAUTH_CLIENT_ID', ''),
+            'secret': os.environ.get('GOOGLE_OAUTH_SECRET', ''),
+            'key': '',
+        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    },
+    'github': {
+        'APP': {
+            'client_id': os.environ.get('GITHUB_OAUTH_CLIENT_ID', ''),
+            'secret': os.environ.get('GITHUB_OAUTH_SECRET', ''),
+            'key': '',
+        },
+        'SCOPE': ['user:email'],
+    },
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_UNIQUE_EMAIL = True
+LOGIN_REDIRECT_URL = '/dashboard/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_ADAPTER = 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter'
 
 ROOT_URLCONF = 'latexgenius.urls'
 
@@ -150,6 +194,12 @@ LOGOUT_REDIRECT_URL = '/'
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -161,6 +211,15 @@ LATEX_COMPILER_URL = os.environ.get('LATEX_COMPILER_URL', 'https://latexonline.c
 KIMI_API_KEY = os.environ.get('KIMI_API_KEY')
 KIMI_BASE_URL = os.environ.get('KIMI_BASE_URL', 'https://integrate.api.nvidia.com/v1')
 KIMI_MODEL = os.environ.get('KIMI_MODEL', 'moonshotai/kimi-k2.6')
+
+# Email settings (set EMAIL_BACKEND env var to 'smtp' for production)
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@latexgenius.com')
 
 # Stripe Settings
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')

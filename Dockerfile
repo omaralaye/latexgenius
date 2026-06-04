@@ -1,31 +1,26 @@
-# Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=latexgenius.settings
 
-# Set work directory
 WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    pandoc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project
 COPY . /app/
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+RUN addgroup --system django && adduser --system --ingroup django django
+RUN chown -R django:django /app
+USER django
 
-# Expose port
 EXPOSE 8000
 
-# Start server with Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "latexgenius.wsgi:application"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
