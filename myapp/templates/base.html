@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LatexGenius — Document to LaTeX Conversion{% endblock %}</title>
     <meta name="description" content="Convert documents to publication-ready LaTeX. AI-powered conversion for researchers, academics, and students.">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232563eb'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>L</text></svg>">
+    <meta name="theme-color" content="#8b6f47">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%238b6f47'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>L</text></svg>">
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -17,26 +17,26 @@
         theme: {
           extend: {
             colors: {
-              primary: { DEFAULT: "#2563eb", hover: "#1d4ed8", light: "#dbeafe", dark: "#60a5fa" },
-              secondary: { DEFAULT: "#475569", light: "#f1f5f9", dark: "#94a3b8" },
-              accent: { DEFAULT: "#0f172a", light: "#f8fafc", dark: "#e2e8f0" },
-              surface: { DEFAULT: "#ffffff", hover: "#f8fafc", dark: "#1e293b", "dark-hover": "#334155" },
-              error: { DEFAULT: "#ef4444", light: "#fef2f2", dark: "#fca5a5" },
-              border: { DEFAULT: "#e2e8f0", dark: "#334155" },
-              "on-surface": "#0f172a",
-              "on-surface-variant": "#475569",
-              "on-background": "#0f172a",
-              "dark-bg": "#1e293b",
-              "dark-surface": "#1e293b",
-              "dark-surface-alt": "#334155",
-              "dark-text": "#e2e8f0",
-              "dark-text-muted": "#94a3b8",
-              "dark-text-dim": "#94a3b8",
-              "dark-border": "#334155",
-              "dark-border-strong": "#334155",
-              "surface-variant": "#f1f5f9",
-              "outline-variant": "#e2e8f0",
-              "background": "#f8fafc",
+              primary: { DEFAULT: "#8b6f47", hover: "#735a38", light: "#ede4d8", dark: "#c4a87c" },
+              secondary: { DEFAULT: "#7a6b5d", light: "#f0eae0", dark: "#a69581" },
+              accent: { DEFAULT: "#2c241b", light: "#faf7f2", dark: "#e5ddd3" },
+              surface: { DEFAULT: "#ffffff", hover: "#faf7f2", dark: "#231e18", "dark-hover": "#2c241b" },
+              error: { DEFAULT: "#b44a3a", light: "#f5e6e2", dark: "#e8977a" },
+              border: { DEFAULT: "#e5ddd3", dark: "#3d3228" },
+              "on-surface": "#2c241b",
+              "on-surface-variant": "#7a6b5d",
+              "on-background": "#2c241b",
+              "dark-bg": "#1a1510",
+              "dark-surface": "#231e18",
+              "dark-surface-alt": "#2c241b",
+              "dark-text": "#e5ddd3",
+              "dark-text-muted": "#a69581",
+              "dark-text-dim": "#a69581",
+              "dark-border": "#3d3228",
+              "dark-border-strong": "#4a3d32",
+              "surface-variant": "#f0eae0",
+              "outline-variant": "#e5ddd3",
+              "background": "#faf7f2",
             },
             fontFamily: {
               body: ["Inter", "sans-serif"],
@@ -57,60 +57,7 @@
         },
       }
     </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        body { font-family: 'Inter', sans-serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-        .animate-toast {
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.15s ease;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-        }
-        .btn-primary:hover:not(:disabled) {
-            background-color: #1d4ed8;
-        }
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid #e2e8f0;
-            color: #475569;
-        }
-        .btn-secondary:hover:not(:disabled) {
-            background-color: #f8fafc;
-        }
-        .dark .btn-secondary {
-            border-color: #334155;
-            color: #94a3b8;
-        }
-        .dark .btn-secondary:hover:not(:disabled) {
-            background-color: #334155;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'myapp/css/static.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-surface text-accent antialiased transition-colors duration-300 dark:bg-surface-dark dark:text-accent-dark">
@@ -128,33 +75,6 @@
     <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3"></div>
 
     {% block extra_scripts %}{% endblock %}
-    <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        function toast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const el = document.createElement('div');
-            const bgMap = { success: 'bg-emerald-500', error: 'bg-red-500', info: 'bg-blue-600' };
-            const iconMap = { success: 'check_circle', error: 'error', info: 'info' };
-            el.className = `${bgMap[type] || bgMap.info} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-toast`;
-            el.innerHTML = `<span class="material-symbols-outlined text-xl">${iconMap[type] || iconMap.info}</span><span class="text-sm font-semibold">${message}</span>`;
-            container.appendChild(el);
-            setTimeout(() => { el.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => el.remove(), 300); }, 4000);
-        }
-    </script>
+    <script src="{% static 'myapp/js/static.js' %}"></script>
 </body>
 </html>

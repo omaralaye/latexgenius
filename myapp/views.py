@@ -120,6 +120,7 @@ def signup_page(request):
             messages.error(request, "User already exists.")
         else:
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name)
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
             logger.info(f"New user signed up: {username}")
             if request.GET.get('format') == 'json':
@@ -359,12 +360,9 @@ def save_preferences_view(request):
             prefs.font_size = request.POST.get('font_size')
         
         prefs.save()
-        
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'status': 'success'})
-        return redirect('settings')
+        return JsonResponse({'status': 'success'})
     
-    return redirect('settings')
+    return JsonResponse({'status': 'error'}, status=405)
 
 @login_required
 def create_version_view(request, project_id):
@@ -717,17 +715,38 @@ def editor_page(request, project_id=None):
             logger.error(f"Error accessing project {project_id}: {str(e)}")
             return JsonResponse({"status": "error", "message": "Invalid project ID."}, status=400)
     else:
-        # Always create a new project when "New Project" is clicked
+        template_id = request.GET.get('template_id')
+        if template_id:
+            template = services.get_template_by_id(template_id)
+            if template:
+                title = template['name']
+                content = template['content']
+            else:
+                title = "Untitled Project"
+                content = "\\documentclass{article}\n\\begin{document}\n\n\\end{document}".replace('\\n', '\n')
+        else:
+            title = "Untitled Project"
+            content = "\\documentclass{article}\n\\begin{document}\n\n\\end{document}".replace('\\n', '\n')
+
         logger.info(f"Creating new project for user {request.user.id}")
         project_id = services.create_project(
             owner_id=request.user.id,
-            title="Untitled Project",
-            content="\\documentclass{article}\n\\begin{document}\n\n\\end{document}".replace('\\n', '\n')
+            title=title,
+            content=content
         )
         return redirect('editor_with_id', project_id=project_id)
 
+    from .models import UserPreference
+    prefs = UserPreference.objects.filter(user=request.user).first()
     context = {
-        'project': project
+        'project': project,
+        'preferences': prefs,
+        'preferences_json': json.dumps({
+            'dark_mode': prefs.dark_mode if prefs else False,
+            'auto_compile': prefs.auto_compile if prefs else True,
+            'font_size': prefs.font_size if prefs else '14px',
+            'editor_theme': prefs.editor_theme if prefs else 'default',
+        }) if prefs else '{}',
     }
     if request.GET.get('format') == 'json':
         return JsonResponse(context, safe=False)

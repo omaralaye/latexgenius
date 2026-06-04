@@ -18,7 +18,7 @@
             <h1 class="text-xl font-extrabold text-primary">LaTeXGenius</h1>
         </div>
         <div class="flex items-center gap-3">
-            <button class="btn btn-primary text-sm">New Project</button>
+            <a href="{% url 'editor' %}" class="btn btn-primary text-sm">New Project</a>
         </div>
     </header>
 
@@ -40,7 +40,7 @@
                     <h3 class="text-xl font-bold mt-3 text-accent dark:text-accent-dark">{{ template.name }}</h3>
                 </div>
                 <p class="text-secondary dark:text-secondary-dark text-sm mb-6 flex-grow">Template for {{ template.name|lower }} projects.</p>
-                <button class="w-full btn btn-secondary justify-center group-hover:btn-primary">Select</button>
+                <a href="{% url 'editor' %}?template_id={{ template.id }}" class="w-full btn btn-secondary justify-center group-hover:btn-primary">Select</a>
             </div>
         </div>
         {% endfor %}

@@ -273,10 +273,16 @@ ENHANCED SECURITY ON
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRFToken': csrftoken,
                 },
                 body: `${key}=${value}`
             });
+
+            if (!response.ok) {
+                toast('Failed to save preference', 'error');
+                return;
+            }
 
             const data = await response.json();
             
@@ -317,7 +323,7 @@ ENHANCED SECURITY ON
 
     function toast(message, type) {
         const toast = document.createElement('div');
-        toast.className = `fixed top-24 right-4 px-6 py-3 rounded-xl text-white font-medium z-50 shadow-lg ${type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-red-500' : 'bg-primary'}`;
+        toast.className = `fixed top-24 right-4 px-6 py-3 rounded-xl text-white font-medium z-50 shadow-lg ${type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-error' : 'bg-primary'}`;
         toast.textContent = message;
         document.body.appendChild(toast);
         setTimeout(() => {
