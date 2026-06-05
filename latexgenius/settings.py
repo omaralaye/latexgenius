@@ -44,10 +44,12 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
-# Auto-add Render.com hostname if deployed on Render
-render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if render_hostname:
-    ALLOWED_HOSTS.append(render_hostname)
+# Auto-add Render.com hostname(s) if deployed on Render
+if os.environ.get('RENDER'):
+    ALLOWED_HOSTS.append('.onrender.com')
+    render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if render_hostname:
+        ALLOWED_HOSTS.append(render_hostname)
 
 
 # Application definition
