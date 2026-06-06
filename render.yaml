@@ -1,0 +1,62 @@
+services:
+  - type: web
+    name: latexgenius
+    runtime: image
+    repo: https://github.com/omaralaye/latexgenius
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "latexgenius.onrender.com,www.latexgenius.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://latexgenius.onrender.com,https://www.latexgenius.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: latexgenius-db
+          property: connectionString
+      - key: KIMI_API_KEY
+        sync: false
+      - key: KIMI_BASE_URL
+        value: "https://integrate.api.nvidia.com/v1/chat/completions"
+      - key: KIMI_MODEL
+        value: "moonshotai/kimi-k2.6"
+      - key: LATEX_COMPILER_URL
+        value: "https://latexonline.cc/compile"
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_SECRET
+        sync: false
+      - key: GITHUB_OAUTH_CLIENT_ID
+        sync: false
+      - key: GITHUB_OAUTH_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.smtp.EmailBackend"
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: "noreply@latexgenius.com"
+
+databases:
+  - name: latexgenius-db
+    plan: free
+    databaseName: latexgenius
+    user: latexgenius
