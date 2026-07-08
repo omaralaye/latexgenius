@@ -1,0 +1,285 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Notifications - LaTeX Genius</title>
+<!-- BEGIN: External Resources -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- END: External Resources -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'serif'],
+          },
+          colors: {
+            'academic-surface': '#faf9f3',
+            'academic-surface-dim': '#dbdad4',
+            'academic-accent': '#064e3b', // Deep green from prompt
+            'academic-border': '#e5e4de',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      font-family: 'Source Serif 4', serif;
+      background-color: #faf9f3;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="h-full text-[#1a1a1a]">
+<div class="flex h-full overflow-hidden">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 flex flex-col border-r border-academic-border bg-academic-surface-dim/20">
+<div class="p-6">
+<div class="flex items-center gap-2 text-academic-accent font-bold text-xl">
+<div class="bg-academic-accent text-white p-1 rounded shadow-sm">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="">LaTeX Genius</span>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Dashboard
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Documents
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          AI Generate
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+          Templates
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Bibliography
+        </a>
+<div class="pt-4 mt-4 border-t border-academic-border">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-white/50 rounded-lg transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            Settings
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-academic-accent/10 text-academic-accent font-medium rounded-lg mt-1" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+            Notifications
+          </a>
+</div>
+</nav>
+<!-- Profile Section at bottom of sidebar -->
+<div class="p-4 border-t border-academic-border bg-academic-surface-dim/40">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-academic-accent text-white flex items-center justify-center font-bold">JD</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500 truncate">jane@mit.edu</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- BEGIN: Top Header -->
+<header class="h-16 border-b border-academic-border flex items-center justify-between px-8 bg-academic-surface/80 backdrop-blur-sm sticky top-0 z-10">
+<h1 class="text-xl font-bold">Notifications</h1>
+<div class="flex items-center gap-6">
+<button class="relative text-gray-500 hover:text-gray-800">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-orange-400 border border-white"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-semibold">Dr. Jane Doe</p>
+<p class="text-xs text-gray-400">jane@mit.edu</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-academic-surface-dim flex items-center justify-center font-bold text-gray-600">JD</div>
+</div>
+</div>
+</header>
+<!-- END: Top Header -->
+<div class="flex-1 overflow-y-auto p-8 scrollbar-hide">
+<div class="max-w-4xl mx-auto">
+<!-- BEGIN: Section Header -->
+<div class="flex items-end justify-between mb-8">
+<div data-purpose="page-title-block">
+<h2 class="text-3xl font-bold mb-1">Notifications</h2>
+<p class="text-gray-500">Stay on top of everything happening with your documents</p>
+</div>
+<button class="px-5 py-2.5 bg-academic-surface-dim/30 hover:bg-academic-surface-dim/50 border border-academic-border rounded-lg text-sm font-medium flex items-center gap-2 transition-all">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Mark all as read
+            </button>
+</div>
+<!-- END: Section Header -->
+<!-- BEGIN: Filter Tabs -->
+<div class="flex gap-2 mb-10">
+<button class="px-6 py-1.5 bg-white border border-academic-border shadow-sm rounded-full text-sm font-semibold text-academic-accent">All</button>
+<button class="px-6 py-1.5 hover:bg-white/50 rounded-full text-sm font-medium text-gray-500 flex items-center gap-2">
+              Unread
+              <span class="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">3</span>
+</button>
+</div>
+<!-- END: Filter Tabs -->
+<!-- BEGIN: Notifications Feed -->
+<div class="space-y-12">
+<!-- TODAY -->
+<section data-purpose="time-group">
+<h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Today</h3>
+<div class="space-y-3">
+<!-- Unread Pin -->
+<article class="flex items-start gap-4 p-5 bg-orange-50/60 border border-orange-100 rounded-xl relative group hover:bg-orange-50 transition-colors">
+<div class="p-2.5 bg-orange-100 text-orange-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.013 2.513a1.75 1.75 0 00-2.026 0L5.383 5.122a.75.75 0 01-1.063.15L3.437 4.58a.75.75 0 10-.94 1.168l.883.707a2.25 2.25 0 003.189-.451l3.604-2.609a.25.25 0 01.29 0l3.604 2.609a2.25 2.25 0 003.189.45l.883-.707a.75.75 0 10-.94-1.168l-.883.707a.75.75 0 01-1.063-.15l-3.604-2.609z"></path>
+<path clip-rule="evenodd" d="M10 2a1 1 0 011 1v6.757l3.95 3.95a.75.75 0 01-1.06 1.06l-2.89-2.89V18a1 1 0 11-2 0v-6.123l-2.89 2.89a.75.75 0 11-1.06-1.06l3.95-3.95V3a1 1 0 011-1z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-gray-900">You pinned a document</h4>
+<span class="h-2 w-2 rounded-full bg-orange-500"></span>
+</div>
+<p class="text-sm text-gray-600">Quantum Entanglement in Many-Body Systems</p>
+<p class="text-xs text-gray-400 mt-1">2 minutes ago</p>
+</div>
+</article>
+<!-- Unread Share -->
+<article class="flex items-start gap-4 p-5 bg-teal-50/40 border border-teal-100 rounded-xl relative group hover:bg-teal-50 transition-colors">
+<div class="p-2.5 bg-teal-100 text-teal-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+</svg>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-gray-900">Shared with Dr. Alan Turing</h4>
+<span class="h-2 w-2 rounded-full bg-orange-500"></span>
+</div>
+<p class="text-sm text-gray-600">Neural Network Ansatz for Many-Body Systems</p>
+<p class="text-xs text-gray-400 mt-1">1 hour ago</p>
+</div>
+</article>
+<!-- Unread Comment -->
+<article class="flex items-start gap-4 p-5 bg-yellow-50/40 border border-yellow-100 rounded-xl relative group hover:bg-yellow-50 transition-colors">
+<div class="p-2.5 bg-yellow-100 text-yellow-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-gray-900">Dr. Emmy Noether left a comment</h4>
+<span class="h-2 w-2 rounded-full bg-orange-500"></span>
+</div>
+<p class="text-sm text-gray-600">Convex Optimization — Lecture 14</p>
+<p class="text-xs text-gray-400 mt-1">3 hours ago</p>
+</div>
+</article>
+<!-- Read Export -->
+<article class="flex items-start gap-4 p-5 bg-white border border-academic-border rounded-xl group hover:border-academic-accent transition-colors">
+<div class="p-2.5 bg-green-50 text-green-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-gray-900">Export completed</h4>
+<p class="text-sm text-gray-600">Graph Theory — Chapter 3: Connectivity</p>
+<p class="text-xs text-gray-400 mt-1">5 hours ago</p>
+</div>
+</article>
+</div>
+</section>
+<!-- YESTERDAY -->
+<section data-purpose="time-group">
+<h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Yesterday</h3>
+<div class="space-y-3">
+<article class="flex items-start gap-4 p-5 bg-white border border-academic-border rounded-xl group hover:border-academic-accent transition-colors">
+<div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+</svg>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-gray-900">Dr. Richard Feynman joined as editor</h4>
+<p class="text-sm text-gray-600">Topological Data Analysis Intro</p>
+<p class="text-xs text-gray-400 mt-1">Yesterday at 4:32 PM</p>
+</div>
+</article>
+<article class="flex items-start gap-4 p-5 bg-white border border-academic-border rounded-xl group hover:border-academic-accent transition-colors">
+<div class="p-2.5 bg-slate-100 text-slate-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-gray-900">Auto-saved version 12 created</h4>
+<p class="text-sm text-gray-600">Neural ODEs Presentation — NeurIPS</p>
+<p class="text-xs text-gray-400 mt-1">Yesterday at 2:15 PM</p>
+</div>
+</article>
+</div>
+</section>
+<!-- THIS WEEK -->
+<section data-purpose="time-group">
+<h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">This Week</h3>
+<div class="space-y-3">
+<article class="flex items-start gap-4 p-5 bg-white border border-academic-border rounded-xl group hover:border-academic-accent transition-colors">
+<div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-gray-900">Shared link copied to clipboard</h4>
+<p class="text-sm text-gray-600">Quantum Entanglement in Many-Body Systems</p>
+<p class="text-xs text-gray-400 mt-1">2 days ago</p>
+</div>
+</article>
+<article class="flex items-start gap-4 p-5 bg-white border border-academic-border rounded-xl group hover:border-academic-accent transition-colors">
+<div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-gray-900">Dr. John von Neumann resolved a comment</h4>
+<p class="text-sm text-gray-600">Bayesian Inference — Lecture Notes</p>
+<p class="text-xs text-gray-400 mt-1">4 days ago</p>
+</div>
+</article>
+</div>
+</section>
+</div>
+<!-- END: Notifications Feed -->
+</div>
+</div>
+</main>
+<!-- END: Main Content Area -->
+</div>
+<!-- BEGIN: Readdy Badge (Fixed at bottom) -->
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+
+</div>
+<!-- END: Readdy Badge -->
+
+
+</body></html>

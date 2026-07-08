@@ -1,336 +1,109 @@
 {% extends "base.html" %}
-{% load static %}
 
-{% block title %}LaTeXGenius Dashboard{% endblock %}
+{% block title %}Dashboard — LaTeX Genius{% endblock %}
 
-{% block extra_head %}
-{% include "components/drawer_styles.html" %}
-{% endblock %}
-
-{% block layout %}
-{% include "components/drawer.html" %}
-
-<!-- Main Canvas -->
-<main class="min-h-screen flex flex-col bg-secondary-light dark:bg-surface-dark transition-colors duration-300">
-    <header class="fixed top-0 right-0 left-0 z-40 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-border dark:border-border-dark">
-        <div class="flex items-center gap-4">
-            <button onclick="openDrawer()" class="p-1.5 hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors text-secondary dark:text-secondary-dark">
-                <span class="material-symbols-outlined text-xl">menu</span>
-            </button>
-            <h1 class="text-xl font-extrabold text-primary">LaTeXGenius</h1>
+{% block content %}
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pt-28">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div>
+            <h1 class="font-headline-lg text-headline-lg text-primary">My Projects</h1>
+            <p class="text-on-surface-variant">Continue where you left off</p>
         </div>
-        <div class="flex items-center gap-2 sm:gap-4">
-            <a href="{% url 'editor' %}" class="btn btn-primary text-xs sm:text-sm">
-                <span class="material-symbols-outlined text-sm">add</span>
+        <div class="flex gap-3">
+            <a href="{% url 'editor' %}" class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-label-md text-label-md hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2 active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[20px]">add</span>
                 New Project
             </a>
-            <div class="flex items-center gap-1 sm:gap-2 border-l border-border dark:border-border-dark pl-2 sm:pl-4">
-                <div class="relative" id="notification-dropdown-container">
-                    <button onclick="toggleNotificationDropdown()" class="relative p-1 sm:p-2 text-secondary dark:text-secondary-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-full transition-colors" aria-label="Notifications">
-                        <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
-                        {% if unread_notification_count > 0 %}
-                        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center">{{ unread_notification_count }}</span>
-                        {% endif %}
-                    </button>
-                    <div id="notification-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white dark:bg-surface-dark rounded-xl shadow-xl border border-border dark:border-border-dark z-50 overflow-hidden">
-                        <div class="flex items-center justify-between px-4 py-3 border-b border-border dark:border-border-dark">
-                            <h3 class="font-semibold text-accent dark:text-accent-dark">Notifications</h3>
-                            {% if unread_notification_count > 0 %}
-                            <span class="text-xs text-primary font-medium">{{ unread_notification_count }} unread</span>
-                            {% endif %}
-                        </div>
-                        <div class="max-h-80 overflow-y-auto">
-                            {% if notifications %}
-                                {% for notification in notifications %}
-                                <div class="notification-item px-4 py-3 hover:bg-surface-variant dark:hover:bg-dark-border border-b border-outline-variant/50 dark:border-dark-border/50 cursor-pointer {% if not notification.is_read %}bg-primary/5 dark:bg-primary/10{% endif %}" data-id="{{ notification.id }}" onclick="markNotificationAsRead('{{ notification.id }}')">
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex-shrink-0 mt-0.5">
-                                            {% if notification.type == 'success' %}
-                                            <span class="material-symbols-outlined text-green-600 text-lg">check_circle</span>
-                                            {% elif notification.type == 'error' %}
-                                            <span class="material-symbols-outlined text-error text-lg">error</span>
-                                            {% elif notification.type == 'warning' %}
-                                            <span class="material-symbols-outlined text-amber-600 text-lg">warning</span>
-                                            {% else %}
-                                            <span class="material-symbols-outlined text-primary text-lg">info</span>
-                                            {% endif %}
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium dark:text-white {% if not notification.is_read %}font-semibold{% endif %}">{{ notification.title }}</p>
-                                            <p class="text-xs text-on-surface-variant dark:text-dark-text-muted mt-0.5 line-clamp-2">{{ notification.message }}</p>
-                                            <p class="text-xs text-slate-400 dark:text-dark-text-muted mt-1">{{ notification.created_at|timesince }} ago</p>
-                                        </div>
-                                        {% if not notification.is_read %}
-                                        <div class="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                            <div class="px-4 py-8 text-center">
-                                <span class="material-symbols-outlined text-slate-300 dark:text-dark-border-strong text-4xl mb-2 block">notifications_none</span>
-                                <p class="text-sm text-on-surface-variant dark:text-dark-text-muted">No notifications yet</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="px-4 py-3 border-t border-outline-variant dark:border-dark-border">
-                            <a href="{% url 'notifications' %}" class="text-sm text-primary font-medium hover:underline">View all notifications</a>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
 
-                <!-- Profile Dropdown -->
-                <div class="relative" id="profile-dropdown-container">
-                    <button onclick="toggleProfileDropdown()" class="flex items-center gap-2 sm:gap-3 hover:bg-slate-100 dark:hover:bg-dark-surface rounded-full transition-colors p-1" aria-label="Profile menu">
-                        <a href="{% url 'settings' %}" class="hidden sm:flex p-2 text-slate-500 dark:text-dark-text-muted hover:bg-slate-100 dark:hover:bg-dark-surface rounded-full transition-colors" onclick="event.stopPropagation()">
-                            <span class="material-symbols-outlined">settings</span>
-                        </a>
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                            {% if user.first_name %}
-                            {{ user.first_name|slice:"1" }}{% else %}{{ user.username|slice:"1"|upper }}{% endif %}
-                        </div>
-                    </button>
-                    <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-64 bg-white dark:bg-dark-surface rounded-xl shadow-xl border border-outline-variant dark:border-dark-border z-50 overflow-hidden">
-                        <div class="px-4 py-4 border-b border-outline-variant dark:border-dark-border">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold shadow-sm">
-                                    {% if user.first_name %}
-                                    {{ user.first_name|slice:"1" }}{% else %}{{ user.username|slice:"1"|upper }}{% endif %}
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="font-semibold dark:text-white text-sm truncate">
-                                        {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
-                                    </p>
-                                    <p class="text-xs text-on-surface-variant dark:text-dark-text-muted truncate">{{ user.email }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="py-2">
-                            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                                <span class="material-symbols-outlined text-primary text-lg">dashboard</span>
-                                Dashboard
-                            </a>
-                            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                                <span class="material-symbols-outlined text-primary text-lg">person</span>
-                                Profile
-                            </a>
-                            <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface dark:text-dark-text-dim hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                                <span class="material-symbols-outlined text-primary text-lg">settings</span>
-                                Settings
-                            </a>
-                        </div>
-                        <div class="border-t border-outline-variant dark:border-dark-border py-2">
-                            <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                                <span class="material-symbols-outlined text-lg">logout</span>
-                                Sign Out
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+        <div class="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-lg flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-forest-light flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">description</span>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-primary">{{ total_projects|default:"0" }}</p>
+                <p class="text-label-md text-on-surface-variant">Total Projects</p>
             </div>
         </div>
-    </header>
-
-    <!-- Content Area -->
-    <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-7xl mx-auto flex-1">
-        <!-- Dashboard Hero -->
-        <div class="flex flex-col lg:flex-row gap-6 mb-12">
-            <!-- Stat 1: Welcome -->
-            <div class="flex-1 p-8 rounded-xl bg-white dark:bg-dark-surface border border-outline-variant dark:border-dark-border shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[200px]">
-                <div class="relative z-10">
-                    <h2 class="text-3xl font-extrabold text-on-surface dark:text-white tracking-tight mb-2">Welcome back, {{ user.first_name|default:user.username }}.</h2>
-                    <p class="text-on-surface-variant dark:text-dark-text-muted max-w-md leading-relaxed text-justify">Your technical workspace is ready. You have managed <span class="text-primary font-bold">{{ total_projects }} projects</span> this season.</p>
-                </div>
-                <div class="flex gap-4 relative z-10">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-dark-text-muted">Project Capacity</span>
-                        <div class="h-1.5 w-32 bg-slate-100 dark:bg-dark-surface-alt rounded-full mt-2 overflow-hidden">
-                            <div class="h-full bg-primary" style="width: {% widthratio total_projects 100 100 %}%"></div>
-                        </div>
-                        <span class="text-xs font-medium text-on-surface-variant dark:text-dark-text-muted mt-1">{{ total_projects }} / 100 projects</span>
-                    </div>
-                </div>
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDef7yCARkyP4T7qmSYcJXYUcyxcIgOH_zT_KqcpMxNN9LHHpMx8wKe5K-5QxGqBnyLmYaAuRYPl-H3BvRPW6paUJn1z-amYGF4hzIx4Xf6HHkhkCGm_fb2E1PD4qPhNyw9lUHnGVkFQJ0TmS1O68IwRKj616t2IZt49yMdR5cRPbaqHIJb3QzP3lfaxJXETbNNZvTFjpYHJOnXeenPFMZSHXg9i-2wBHyCe2vU8u8_gLE7XqWy8Na189YBoETUwY7eTbKl45ZVjg" class="absolute right-0 top-0 h-full w-1/3 object-cover opacity-10 pointer-events-none">
+        <div class="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-lg flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-secondary-container/30 flex items-center justify-center text-secondary">
+                <span class="material-symbols-outlined">edit_note</span>
             </div>
-            <!-- Stat 2: Active Instance -->
-            <div class="p-8 rounded-xl bg-primary text-on-primary shadow-lg flex flex-col justify-between">
-                <div>
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="material-symbols-outlined text-3xl">memory</span>
-                        <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold uppercase">System: Online</span>
-                    </div>
-                    <p class="font-headline text-lg font-bold">Local Engine</p>
-                    <p class="text-primary-container text-xs">V1.0.0-beta active</p>
-                </div>
-                <div class="mt-4">
-                    <p class="text-xl font-mono font-bold tracking-tighter">{{ recent_activity }}</p>
-                    <p class="text-[10px] uppercase font-bold tracking-widest opacity-70">Last Activity</p>
-                </div>
+            <div>
+                <p class="text-3xl font-bold text-secondary">{{ recent_count|default:"0" }}</p>
+                <p class="text-label-md text-on-surface-variant">Recent</p>
             </div>
         </div>
-        <!-- Main Content: Recent Documents & Activity -->
-        <div class="flex flex-col lg:flex-row gap-8 items-start">
-            <!-- Recent Documents List -->
-            <div class="w-full lg:flex-[3] space-y-4">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-bold flex items-center gap-2 dark:text-white">
-                        Recent Documents
-                        <span class="bg-surface-variant dark:bg-dark-surface px-2 py-0.5 rounded-full text-xs font-mono dark:text-dark-text-muted">{{ total_projects }}</span>
-                    </h3>
-                </div>
-                <!-- List Header -->
-                <div class="grid grid-cols-12 px-6 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-dark-text-muted mb-2">
-                    <div class="col-span-5">Document Name</div>
-                    <div class="col-span-3 text-center">Status</div>
-                    <div class="col-span-3 text-right">Modified</div>
-                    <div class="col-span-1"></div>
-                </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-lg flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-tertiary-container/30 flex items-center justify-center text-tertiary">
+                <span class="material-symbols-outlined">cloud_sync</span>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-tertiary">{{ conversion_count|default:"0" }}</p>
+                <p class="text-label-md text-on-surface-variant">Conversions</p>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/20 p-6 rounded-lg flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-error-container/20 flex items-center justify-center text-error">
+                <span class="material-symbols-outlined">groups</span>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-secondary">{{ collaboration_count|default:"0" }}</p>
+                <p class="text-label-md text-on-surface-variant">Collaborations</p>
+            </div>
+        </div>
+    </div>
 
-                {% for project in projects %}
-                {% if project.id %}
-                <div id="project-row-{{ project.id }}" class="group grid grid-cols-12 items-center px-6 py-4 bg-white dark:bg-dark-surface rounded-xl hover:bg-surface dark:hover:bg-dark-border/50 transition-all cursor-pointer shadow-sm border border-outline-variant dark:border-dark-border">
-                    <a href="{% url 'editor_with_id' project.id %}" class="col-span-5 flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-surface dark:bg-dark-bg flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined">{% if project.status == 'compiled' %}description{% else %}edit_note{% endif %}</span>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <p class="font-semibold text-sm group-hover:text-primary transition-colors dark:text-white rename-display" id="rename-display-{{ project.id }}">{{ project.title }}</p>
-                                <button onclick="startRename('{{ project.id }}', '{{ project.title|escapejs }}')" class="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-200 dark:hover:bg-dark-border rounded transition-opacity" title="Rename">
-                                    <span class="material-symbols-outlined text-sm text-slate-400">edit</span>
-                                </button>
-                            </div>
-                            <p class="text-[10px] font-mono text-slate-400 uppercase">{{ project.filename }}</p>
-                        </div>
+    <div class="flex items-center gap-4 mb-6">
+        <div class="relative flex-1 max-w-sm">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+            <input class="w-full input-underline pl-10 pr-4 py-2.5 text-on-surface font-body-md bg-surface-container-lowest" type="text" placeholder="Search projects..."/>
+        </div>
+        <button class="border border-outline-variant/50 px-4 py-2.5 rounded-full text-label-md text-on-surface-variant hover:bg-parchment-muted transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">sort</span>
+            Sort
+        </button>
+    </div>
+
+    {% if projects %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        {% for project in projects %}
+        <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg overflow-hidden hover:border-primary/30 transition-all group">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-forest-light flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-lg">description</span>
+                    </div>
+                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="p-1.5 hover:bg-parchment-muted rounded-lg text-on-surface-variant">
+                            <span class="material-symbols-outlined text-lg">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <h3 class="font-headline-md text-primary mb-2">{{ project.title|default:"Untitled Project" }}</h3>
+                <p class="text-sm text-on-surface-variant line-clamp-2 mb-4">{{ project.description|default:"No description" }}</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-on-surface-variant">{{ project.updated_at|date:"M d, Y"|default:"Recently" }}</span>
+                    <a href="{% url 'editor_with_id' project.id %}" class="text-label-md font-label-md text-secondary hover:underline flex items-center gap-1">
+                        Open <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                     </a>
-                    <div class="col-span-3 flex justify-center">
-                        {% if project.status == 'compiled' %}
-                        <span class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            Compiled
-                        </span>
-                        {% else %}
-                        <span class="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-dark-bg text-slate-600 dark:text-dark-text-muted rounded-full text-[10px] font-bold">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                            Draft
-                        </span>
-                        {% endif %}
-                    </div>
-                    <div class="col-span-3 text-right">
-                        <p class="text-xs font-medium dark:text-dark-text-muted">{{ project.last_modified|timesince }} ago</p>
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <button onclick="deleteProject('{{ project.id }}', '{{ project.title|escapejs }}')" class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-error/10 rounded-lg transition-opacity" title="Delete project">
-                            <span class="material-symbols-outlined text-lg text-slate-400 hover:text-error">delete</span>
-                        </button>
-                    </div>
                 </div>
-                {% endif %}
-                {% empty %}
-                <div class="p-12 text-center bg-white dark:bg-dark-surface rounded-xl border-2 border-dashed border-outline-variant dark:border-dark-border">
-                     <p class="text-on-surface-variant dark:text-dark-text-muted">No projects found. Create your first project to get started!</p>
-                </div>
-                {% endfor %}
-            </div>
-
-            <!-- Right Sidebar: Quick Actions -->
-            <div class="w-full lg:flex-1 space-y-6">
-                <!-- Quick Actions -->
-                <div class="bg-surface dark:bg-dark-surface/50 p-6 rounded-xl border border-outline-variant dark:border-dark-border">
-                    <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-dark-text-muted mb-4">Quick Actions</h4>
-                    <div class="space-y-2">
-                        <form id="uploadForm" action="{% url 'upload_document' %}" method="POST" enctype="multipart/form-data" class="hidden">
-                            {% csrf_token %}
-                            <input type="file" id="documentInput" name="document" accept=".tex,.md,.markdown,.docx,.odt,.html,.txt" onchange="document.getElementById('uploadForm').submit()">
-                        </form>
-                        <button onclick="document.getElementById('documentInput').click()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-dark-bg hover:bg-surface dark:hover:bg-dark-surface border border-outline-variant dark:border-dark-border rounded-lg text-sm font-semibold text-on-surface-variant dark:text-dark-text-muted transition-all text-left">
-                            <span class="material-symbols-outlined text-primary">upload_file</span>
-                            Upload Document
-                        </button>
-                        <button onclick="openAIConvertModal()" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-dark-bg hover:bg-surface dark:hover:bg-dark-surface border border-outline-variant dark:border-dark-border rounded-lg text-sm font-semibold text-on-surface-variant dark:text-dark-text-muted transition-all text-left">
-                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
-                            Convert with Kimi AI
-                        </button>
-                        <a href="{% url 'templates' %}" class="w-full flex items-center gap-3 p-3 bg-white dark:bg-dark-bg hover:bg-surface dark:hover:bg-dark-surface border border-outline-variant dark:border-dark-border rounded-lg text-sm font-semibold text-on-surface-variant dark:text-dark-text-muted transition-all text-left">
-                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
-                            Template Library
-                        </a>
-                    </div>
-                </div>
-
             </div>
         </div>
+        {% endfor %}
     </div>
-</main>
-</div>
-
-<!-- AI Convert Modal -->
-<div id="ai-convert-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-xl font-serif font-bold dark:text-white">Convert with Kimi K2.6</h3>
-            <button onclick="closeAIConvertModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-slate-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <form id="ai-convert-form" action="{% url 'ai_convert' %}" method="POST" enctype="multipart/form-data" class="flex-1 overflow-y-auto p-6">
-            {% csrf_token %}
-            <div class="mb-6 p-4 bg-primary/5 dark:bg-primary/10 rounded-lg border border-primary/20 dark:border-primary/30">
-                <h4 class="font-medium text-primary dark:text-white mb-2 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
-                    How it works
-                </h4>
-                <p class="text-sm text-on-surface-variant dark:text-dark-text-muted leading-relaxed">
-                    Paste your document text or upload a file. Kimi K2.6 will analyze your content and convert it into clean, publication-ready LaTeX code. You'll see the conversion progress in real-time.
-                </p>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Select Template <span class="text-error">*</span></label>
-                <select name="template_id" id="ai-template-select" required
-                        class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
-                    <option value="">-- Select a template --</option>
-                    {% for template in templates %}
-                    <option value="{{ template.id }}">{{ template.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Or upload a document</label>
-                <input type="file" name="document" accept=".docx,.odt,.pdf,.md,.markdown,.txt,.html"
-                       class="w-full text-sm text-on-surface-variant dark:text-dark-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-variant cursor-pointer">
-            </div>
-
-            <div class="relative mb-4">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-outline-variant dark:border-dark-border"></div>
-                </div>
-                <div class="relative flex justify-center text-xs uppercase">
-                    <span class="bg-white dark:bg-dark-surface px-3 text-on-surface-variant dark:text-dark-text-muted">or paste text</span>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Document Content</label>
-                <textarea name="content" rows="8" placeholder="Paste your document text here... (or upload a file above)"
-                          class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white dark:placeholder-slate-600 resize-y"></textarea>
-            </div>
-
-            <div class="flex gap-3">
-                <button type="button" onclick="closeAIConvertModal()"
-                        class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                    Cancel
-                </button>
-                <button type="submit"
-                        class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-sm">auto_fix</span>
-                    Convert with Kimi K2.6
-                </button>
-            </div>
-        </form>
+    {% else %}
+    <div class="text-center py-20 bg-surface-container-lowest rounded-lg border border-outline-variant/20">
+        <span class="material-symbols-outlined text-6xl text-outline mb-4">description</span>
+        <h3 class="font-headline-md text-on-surface-variant mb-2">No projects yet</h3>
+        <p class="text-on-surface-variant mb-6">Create your first LaTeX document to get started.</p>
+        <a href="{% url 'editor' %}" class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-label-md hover:bg-primary hover:text-on-primary transition-all inline-flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            New Project
+        </a>
     </div>
+    {% endif %}
 </div>
-
-<script src="{% static 'myapp/js/static.js' %}"></script>
 {% endblock %}

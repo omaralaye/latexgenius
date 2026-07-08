@@ -1,15 +1,15 @@
 {% load static %}<!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" class="light scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LatexGenius — Document to LaTeX Conversion{% endblock %}</title>
-    <meta name="description" content="Convert documents to publication-ready LaTeX. AI-powered conversion for researchers, academics, and students.">
-    <meta name="theme-color" content="#8b6f47">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%238b6f47'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>L</text></svg>">
+    <title>{% block title %}LaTeX Genius — Academic Writing Reimagined{% endblock %}</title>
+    <meta name="description" content="AI-powered LaTeX generation for researchers, academics, and students. Convert documents to publication-ready LaTeX.">
+    <meta name="theme-color" content="#003527">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23003527'/><text x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>L</text></svg>">
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
       tailwind.config = {
@@ -17,41 +17,82 @@
         theme: {
           extend: {
             colors: {
-              primary: { DEFAULT: "#8b6f47", hover: "#735a38", light: "#ede4d8", dark: "#c4a87c" },
-              secondary: { DEFAULT: "#7a6b5d", light: "#f0eae0", dark: "#a69581" },
-              accent: { DEFAULT: "#2c241b", light: "#faf7f2", dark: "#e5ddd3" },
-              surface: { DEFAULT: "#ffffff", hover: "#faf7f2", dark: "#231e18", "dark-hover": "#2c241b" },
-              error: { DEFAULT: "#b44a3a", light: "#f5e6e2", dark: "#e8977a" },
-              border: { DEFAULT: "#e5ddd3", dark: "#3d3228" },
-              "on-surface": "#2c241b",
-              "on-surface-variant": "#7a6b5d",
-              "on-background": "#2c241b",
-              "dark-bg": "#1a1510",
-              "dark-surface": "#231e18",
-              "dark-surface-alt": "#2c241b",
-              "dark-text": "#e5ddd3",
-              "dark-text-muted": "#a69581",
-              "dark-text-dim": "#a69581",
-              "dark-border": "#3d3228",
-              "dark-border-strong": "#4a3d32",
-              "surface-variant": "#f0eae0",
-              "outline-variant": "#e5ddd3",
-              "background": "#faf7f2",
+              primary: "#003527",
+              "primary-container": "#064e3b",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#80bea6",
+              secondary: "#8d4f00",
+              "on-secondary": "#ffffff",
+              "secondary-container": "#fea54a",
+              tertiary: "#00352f",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#114d45",
+              "on-tertiary-container": "#85bdb2",
+              error: "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              background: "#faf9f3",
+              "on-background": "#1b1c19",
+              surface: "#faf9f3",
+              "on-surface": "#1b1c19",
+              "on-surface-variant": "#404944",
+              outline: "#707974",
+              "outline-variant": "#bfc9c3",
+              "surface-dim": "#dbdad4",
+              "surface-bright": "#faf9f3",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f5f4ee",
+              "surface-container": "#efeee8",
+              "surface-container-high": "#e9e8e2",
+              "surface-container-highest": "#e3e3dd",
+              "surface-variant": "#e3e3dd",
+              "inverse-surface": "#30312d",
+              "inverse-on-surface": "#f2f1eb",
+              "inverse-primary": "#95d3ba",
+              "primary-fixed": "#b0f0d6",
+              "primary-fixed-dim": "#95d3ba",
+              "on-primary-fixed": "#002117",
+              "on-primary-fixed-variant": "#0b513d",
+              "secondary-fixed": "#ffdcc0",
+              "secondary-fixed-dim": "#ffb875",
+              "on-secondary-fixed": "#2d1600",
+              "on-secondary-fixed-variant": "#6b3b00",
+              "tertiary-fixed": "#b5eee2",
+              "tertiary-fixed-dim": "#99d1c6",
+              "on-tertiary-fixed": "#00201c",
+              "on-tertiary-fixed-variant": "#144f47",
+              ink: "#111111",
+              "forest-light": "#D1FAE5",
+              "parchment-muted": "#F4F2E9",
             },
             fontFamily: {
-              body: ["Inter", "sans-serif"],
+              serif: ['"Source Serif 4"', "serif"],
+              sans: ["Inter", "sans-serif"],
               mono: ["JetBrains Mono", "monospace"],
             },
             fontSize: {
-              xs: ["0.75rem", { lineHeight: "1rem" }],
-              sm: ["0.875rem", { lineHeight: "1.25rem" }],
-              base: ["1rem", { lineHeight: "1.5rem" }],
-              lg: ["1.125rem", { lineHeight: "1.75rem" }],
-              xl: ["1.25rem", { lineHeight: "1.75rem" }],
-              "2xl": ["1.5rem", { lineHeight: "2rem" }],
-              "3xl": ["1.875rem", { lineHeight: "2.25rem" }],
-              "4xl": ["2.25rem", { lineHeight: "2.5rem" }],
-              "5xl": ["3rem", { lineHeight: "1.1" }],
+              "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+              "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+              "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "500" }],
+              "code-sm": ["13px", { lineHeight: "20px", fontWeight: "400" }],
+              "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "600" }],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "margin-mobile": "16px",
+              "margin-desktop": "48px",
+              gutter: "24px",
+              "container-max": "1280px",
+              "stack-unit": "8px",
             },
           },
         },
@@ -60,7 +101,7 @@
     <link rel="stylesheet" href="{% static 'myapp/css/static.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-surface text-accent antialiased transition-colors duration-300 dark:bg-surface-dark dark:text-accent-dark">
+<body class="bg-surface text-on-surface font-sans antialiased selection:bg-primary-fixed-dim selection:text-primary">
     {% block layout %}
     {% include "components/navbar.html" %}
 

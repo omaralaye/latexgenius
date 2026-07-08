@@ -1,108 +1,270 @@
 {% extends "base.html" %}
-
-{% block title %}LaTeXGenius — Turn documents into LaTeX{% endblock %}
-
 {% load static %}
+
+{% block title %}LaTeX Genius | Academic Writing Reimagined{% endblock %}
+
 {% block content %}
-
-<section class="relative pt-20 pb-32 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div class="z-10">
-            <h1 class="text-5xl sm:text-6xl font-extrabold text-accent dark:text-accent-dark leading-[1.1] mb-6">
-                Turn documents into <span class="text-primary">clean LaTeX</span>
-            </h1>
-            <p class="text-lg sm:text-xl text-secondary dark:text-secondary-dark leading-relaxed mb-10 max-w-lg">
-                {{ app_settings.hero_subtitle|default:"Upload your Word files, PDFs, or notes. Get publication-ready LaTeX output in seconds." }}
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="btn btn-primary text-base px-8 py-3">
-                    Start Free
-                </a>
-                <a href="{% url 'templates' %}" class="btn btn-secondary text-base px-8 py-3">
-                    View Samples
-                </a>
-            </div>
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-32">
+    <div class="space-y-8">
+        <h1 class="font-serif font-display-lg text-display-lg md:text-6xl text-primary leading-tight">
+            Write LaTeX <br/><span class="text-secondary italic">Like Magic</span>
+        </h1>
+        <p class="text-body-lg text-on-surface-variant max-w-lg">
+            AI-powered LaTeX generation for researchers, students, and professionals. Describe your document in plain English — we handle the formatting, equations, and bibliography.
+        </p>
+        <div class="flex flex-wrap gap-4">
+            <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="bg-primary-container text-on-primary-container px-8 py-3.5 rounded-full font-label-md flex items-center gap-2 hover:bg-primary hover:text-on-primary transition-all active:scale-[0.98]">
+                Start Writing Free <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+            <a href="#features" class="border border-outline px-8 py-3.5 rounded-full font-label-md hover:bg-parchment-muted transition-all">
+                See How It Works
+            </a>
         </div>
-        <div class="relative">
-            <div class="rounded-xl overflow-hidden shadow-2xl border border-border dark:border-border-dark">
-                <img alt="LaTeX Editor Preview" class="w-full h-auto object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcOHHQvcESVxTw-XeQssiJt_wo67ugjA6-fgC_6U0nPau7eoOmTWG-oGXJFWq3kioV3GrAKzY9TqPu9tvMofcMZ-Kpc6HdVA20MX0n3dCLuTOj58LXOrX7exjqHTzXSoPgTz6kVHZSF9L05K4eXgX5ItgFoN_yYi0Kyzfbn4Pa0FXmF3LUOiOYAneE9Bl9V_sNqG-cT6ovoS3Ecl0T0UigW_14rJDqb85PLskrTjx9T6Rw3eQpl82HbAZeMkBYth1Re-ePg7Np-EyH"/>
+        <div class="flex items-center gap-3 pt-4">
+            <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant"></div>
+                <div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant"></div>
+                <div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant"></div>
+            </div>
+            <p class="text-label-md text-on-surface-variant">Trusted by 2,000+ researchers</p>
+        </div>
+    </div>
+    <div class="relative group">
+        <div class="absolute -inset-4 bg-primary-fixed/30 blur-3xl rounded-full group-hover:bg-primary-fixed/50 transition-all duration-700"></div>
+        <div class="relative bg-ink rounded-xl shadow-2xl overflow-hidden border border-white/10 aspect-square md:aspect-video flex flex-col">
+            <div class="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
+                <div class="flex gap-1.5">
+                    <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                </div>
+                <div class="ml-4 px-3 py-1 rounded bg-white/10 text-code-sm text-white/60 font-mono">research_paper.tex</div>
+            </div>
+            <div class="flex-1 p-6 font-mono text-code-sm text-white/80 overflow-hidden">
+                <p class="text-primary-fixed">\documentclass{article}</p>
+                <p class="text-primary-fixed">\begin{document}</p>
+                <p class="pl-4 mt-2 text-secondary-fixed-dim">\title{On the Complexity of Neural Network Training Landscapes}</p>
+                <p class="pl-4 text-secondary-fixed-dim">\author{Jane Doe}</p>
+                <p class="pl-4 mt-4 text-on-tertiary-container italic">% AI: Auto-completing bibliography from 12 sources...</p>
+                <p class="pl-4 mt-2">We present a novel analysis of...</p>
+                <div class="mt-8 bg-white/5 p-4 rounded border border-white/10">
+                    <p class="text-white/40 mb-2">// AI Generated Citation</p>
+                    <p class="text-primary-fixed">@article{author2024,<br/>&nbsp;&nbsp;title={Quantum Efficiency},<br/>&nbsp;&nbsp;journal={Nature Communications}<br/>}</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-24 bg-secondary-light dark:bg-surface-dark-hover">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-extrabold mb-4 text-accent dark:text-accent-dark">How it works</h2>
-            <p class="text-secondary dark:text-secondary-dark max-w-2xl mx-auto">Three steps from source file to publishable LaTeX.</p>
+<!-- Trust Stats -->
+<section class="bg-parchment-muted py-20">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter">
+        <div class="md:col-span-1 space-y-4">
+            <h2 class="font-headline-lg text-headline-lg text-primary">Trusted by the Academic World</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div class="space-y-4">
-                <div class="w-12 h-12 rounded-full bg-primary-light dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">1</div>
-                <h3 class="text-2xl font-bold text-accent dark:text-accent-dark">Upload</h3>
-                <p class="text-secondary dark:text-secondary-dark leading-relaxed">Drag and drop your Word, PDF, or handwritten notes into our secure workspace.</p>
-            </div>
-            <div class="space-y-4">
-                <div class="w-12 h-12 rounded-full bg-primary-light dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">2</div>
-                <h3 class="text-2xl font-bold text-accent dark:text-accent-dark">Convert</h3>
-                <p class="text-secondary dark:text-secondary-dark leading-relaxed">Our engine detects symbols, structure, and citations, producing accurate LaTeX output.</p>
-            </div>
-            <div class="space-y-4">
-                <div class="w-12 h-12 rounded-full bg-primary-light dark:bg-primary/20 flex items-center justify-center text-primary font-bold text-lg">3</div>
-                <h3 class="text-2xl font-bold text-accent dark:text-accent-dark">Export</h3>
-                <p class="text-secondary dark:text-secondary-dark leading-relaxed">Preview the rendered PDF and download your complete LaTeX project folder.</p>
-            </div>
+        <div class="flex flex-col items-start gap-1 p-6">
+            <span class="text-4xl font-serif font-bold text-secondary">50000+</span>
+            <span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Documents Generated</span>
+        </div>
+        <div class="flex flex-col items-start gap-1 p-6 border-l border-outline-variant/30">
+            <span class="text-4xl font-serif font-bold text-secondary">1200+</span>
+            <span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Institutions Worldwide</span>
+        </div>
+        <div class="flex flex-col items-start gap-1 p-6 border-l border-outline-variant/30">
+            <span class="text-4xl font-serif font-bold text-secondary">98%</span>
+            <span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Accuracy Rate</span>
         </div>
     </div>
 </section>
 
-<section class="py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Templates Grid -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop" id="templates">
+    <div class="mb-16">
+        <span class="text-label-md text-secondary font-bold uppercase tracking-widest">Document Templates</span>
+        <h2 class="font-headline-lg text-headline-lg text-primary mt-2">Start with a <span class="italic">perfect</span> foundation</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% if templates %}
+            {% for tpl in templates %}
+            <div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+                <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+                    {% if tpl.image_url %}
+                    <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="{{ tpl.image_url }}" alt="{{ tpl.name }}"/>
+                    {% else %}
+                    <span class="material-symbols-outlined text-5xl text-outline">description</span>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div class="px-3 pb-4">
+                    <h3 class="font-headline-md text-lg text-primary mb-1">{{ tpl.name }}</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">{{ tpl.description|truncatewords:15 }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+                <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+                    <span class="material-symbols-outlined text-5xl text-outline">article</span>
+                </div>
+                <div class="px-3 pb-4">
+                    <h3 class="font-headline-md text-lg text-primary mb-1">Research Paper</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">ACM/IEEE formatted academic paper with automated bibliography.</p>
+                </div>
+            </div>
+            <div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+                <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+                    <span class="material-symbols-outlined text-5xl text-outline">menu_book</span>
+                </div>
+                <div class="px-3 pb-4">
+                    <h3 class="font-headline-md text-lg text-primary mb-1">PhD Thesis</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Complete PhD thesis structure with chapters and auto-index.</p>
+                </div>
+            </div>
+            <div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+                <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+                    <span class="material-symbols-outlined text-5xl text-outline">functions</span>
+                </div>
+                <div class="px-3 pb-4">
+                    <h3 class="font-headline-md text-lg text-primary mb-1">Math Equations</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Complex notation with automatic alignment and environments.</p>
+                </div>
+            </div>
+            <div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+                <div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+                    <span class="material-symbols-outlined text-5xl text-outline">slideshow</span>
+                </div>
+                <div class="px-3 pb-4">
+                    <h3 class="font-headline-md text-lg text-primary mb-1">Beamer Slides</h3>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Professional slide deck with clean themes and navigation.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Bento Grid -->
+<section class="py-24 bg-surface-container" id="features">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-end">
+            <div>
+                <h2 class="font-display-lg text-display-lg text-primary">Everything You Need for Academic Writing</h2>
+            </div>
+            <p class="text-body-lg text-on-surface-variant">From AI generation to real-time collaboration, LaTeX Genius brings modern tooling to the world of academic typesetting.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
             {% if features %}
                 {% for feature in features %}
-                <div class="{% if forloop.counter == 1 or forloop.counter == 2 %}md:col-span-2{% else %}md:col-span-1{% endif %} bg-white dark:bg-surface-dark p-10 rounded-xl border border-border dark:border-border-dark">
-                    <span class="material-symbols-outlined text-primary mb-6 block text-4xl">{{ feature.icon }}</span>
-                    <h3 class="text-2xl font-bold mb-3 text-accent dark:text-accent-dark">{{ feature.title }}</h3>
-                    <p class="text-secondary dark:text-secondary-dark leading-relaxed">{{ feature.description }}</p>
+                <div class="{% if forloop.counter == 1 %}md:col-span-7{% elif forloop.counter == 2 %}md:col-span-5{% elif forloop.counter == 3 %}md:col-span-5{% else %}md:col-span-7{% endif %} {% if forloop.counter == 2 %}bg-primary-container p-8 rounded-xl border border-white/10 flex flex-col bento-card text-on-primary{% elif forloop.counter == 3 %}bg-parchment-muted p-8 rounded-xl border border-outline-variant/20 bento-card{% elif forloop.counter >= 4 %}bg-white p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-center items-center text-center bento-card{% else %}bg-surface p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-between overflow-hidden relative bento-card{% endif %}">
+                    {% if forloop.counter <= 2 or forloop.counter == 3 %}
+                        <h3 class="font-headline-md {% if forloop.counter == 2 %}text-white{% else %}text-primary{% endif %} mb-4">{{ feature.title }}</h3>
+                        <p class="{% if forloop.counter == 2 %}text-on-primary-container{% else %}text-on-surface-variant{% endif %} {% if forloop.counter == 1 %}max-w-sm{% endif %}">{{ feature.description }}</p>
+                    {% else %}
+                        <div class="w-16 h-16 bg-forest-light rounded-full flex items-center justify-center text-primary mb-6">
+                            <span class="material-symbols-outlined text-4xl">{{ feature.icon }}</span>
+                        </div>
+                        <h3 class="font-headline-md text-primary mb-4">{{ feature.title }}</h3>
+                        <p class="text-on-surface-variant max-w-md">{{ feature.description }}</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
             {% else %}
-                <div class="md:col-span-2 bg-white dark:bg-surface-dark p-10 rounded-xl border border-border dark:border-border-dark">
-                    <span class="material-symbols-outlined text-primary mb-6 block text-4xl">auto_awesome</span>
-                    <h3 class="text-2xl font-bold mb-3 text-accent dark:text-accent-dark">Smart conversion</h3>
-                    <p class="text-secondary dark:text-secondary-dark leading-relaxed">Sections, subsections, and appendices are mapped to LaTeX structure without manual tagging.</p>
+            <div class="md:col-span-7 bg-surface p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-between overflow-hidden relative bento-card">
+                <div class="relative z-10">
+                    <h3 class="font-headline-md text-primary mb-4">AI-Powered Generation</h3>
+                    <p class="text-on-surface-variant max-w-sm">Describe your document in plain English and watch LaTeX Genius generate perfectly formatted academic documents, equations, and bibliographies in seconds.</p>
                 </div>
-                <div class="md:col-span-2 bg-white dark:bg-surface-dark p-10 rounded-xl border border-border dark:border-border-dark">
-                    <span class="material-symbols-outlined text-primary mb-6 block text-4xl">functions</span>
-                    <h3 class="text-2xl font-bold mb-3 text-accent dark:text-accent-dark">Equation detection</h3>
-                    <p class="text-secondary dark:text-secondary-dark leading-relaxed">Recognizes complex math including matrices, derivatives, and multi-line equations.</p>
+            </div>
+            <div class="md:col-span-5 bg-primary-container p-8 rounded-xl border border-white/10 flex flex-col bento-card text-on-primary">
+                <h3 class="font-headline-md text-white mb-4">Real-Time Preview</h3>
+                <p class="text-on-primary-container">See your document render instantly as you type. No more compiling and waiting — every change is reflected immediately in a beautiful side-by-side view.</p>
+            </div>
+            <div class="md:col-span-5 bg-parchment-muted p-8 rounded-xl border border-outline-variant/20 bento-card">
+                <h3 class="font-headline-md text-primary mb-4">Smart Bibliography</h3>
+                <p class="text-on-surface-variant mb-8">Auto-generate citations and references from DOI, ISBN, or URL. Supports APA, MLA, Chicago, and IEEE styles with one-click formatting.</p>
+            </div>
+            <div class="md:col-span-7 bg-white p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-center items-center text-center bento-card">
+                <div class="w-16 h-16 bg-forest-light rounded-full flex items-center justify-center text-primary mb-6">
+                    <span class="material-symbols-outlined text-4xl">groups</span>
                 </div>
-                <div class="md:col-span-1 bg-white dark:bg-surface-dark p-10 rounded-xl border border-border dark:border-border-dark">
-                    <span class="material-symbols-outlined text-primary mb-6 block text-4xl">visibility</span>
-                    <h4 class="text-lg font-bold mb-2 text-accent dark:text-accent-dark">Live preview</h4>
-                    <p class="text-sm text-secondary dark:text-secondary-dark">See changes as you refine the generated source.</p>
-                </div>
-                <div class="md:col-span-1 bg-white dark:bg-surface-dark p-10 rounded-xl border border-border dark:border-border-dark flex items-center gap-6">
-                    <div class="flex-1">
-                        <h4 class="text-lg font-bold mb-2 text-accent dark:text-accent-dark">Citation support</h4>
-                        <p class="text-sm text-secondary dark:text-secondary-dark">Automatic BibTeX generation from your references.</p>
-                    </div>
-                </div>
+                <h3 class="font-headline-md text-primary mb-4">Team Workspaces</h3>
+                <p class="text-on-surface-variant max-w-md">Share projects with co-authors, leave comments on specific lines, and track version history in real-time. Designed for global research laboratories.</p>
+            </div>
             {% endif %}
         </div>
     </div>
 </section>
 
-<section class="py-24 px-4 bg-secondary-light dark:bg-surface-dark-hover">
-    <div class="max-w-5xl mx-auto bg-accent dark:bg-surface-dark rounded-2xl p-12 sm:p-16 text-center text-white">
-        <h2 class="text-4xl sm:text-5xl font-extrabold mb-6">Ready to convert?</h2>
-        <p class="text-secondary-dark dark:text-secondary-dark text-lg mb-10 max-w-xl mx-auto opacity-80">Upload your first document and get LaTeX output in seconds.</p>
-        <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="btn btn-primary text-base px-10 py-3 inline-block">
-            Start Free
-        </a>
-        <p class="mt-4 text-sm opacity-60">No credit card required.</p>
+<!-- Pricing Section -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center" id="pricing">
+    <div class="mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-light text-primary text-label-md font-bold uppercase tracking-wider mb-4">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">payments</span> Simple Pricing
+        </div>
+        <h2 class="font-display-lg text-display-lg text-primary">Choose Your Plan</h2>
+        <p class="text-on-surface-variant mt-4">Start free and scale as you grow. No hidden fees, cancel anytime.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter text-left max-w-5xl mx-auto">
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 flex flex-col hover:border-primary/50 transition-all">
+            <h3 class="font-headline-md text-primary mb-2">Free</h3>
+            <p class="text-on-surface-variant text-sm mb-6">Perfect for students getting started.</p>
+            <div class="flex items-baseline gap-1 mb-8">
+                <span class="text-4xl font-display-lg text-primary">$0</span>
+                <span class="text-on-surface-variant">/month</span>
+            </div>
+            <ul class="space-y-4 mb-10 flex-1">
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>3 documents per month</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Basic templates</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Standard equation editor</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>PDF export</li>
+            </ul>
+            <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="w-full text-center py-3 rounded-full border border-primary text-primary font-label-md hover:bg-parchment-muted transition-all block">Get Started</a>
+        </div>
+        <div class="bg-primary text-on-primary rounded-2xl p-8 flex flex-col relative shadow-xl scale-105 z-10">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
+            <h3 class="font-headline-md text-white mb-2">Pro</h3>
+            <p class="text-on-primary-container text-sm mb-6">For serious researchers and academics.</p>
+            <div class="flex items-baseline gap-1 mb-8">
+                <span class="text-4xl font-display-lg text-white">$19</span>
+                <span class="text-on-primary-container">/month</span>
+            </div>
+            <ul class="space-y-4 mb-10 flex-1">
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>Unlimited documents</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>All premium templates</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>AI-powered generation</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>Smart bibliography</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>Real-time collaboration</li>
+            </ul>
+            <a href="{% if user.is_authenticated %}{% url 'upgrade' %}{% else %}{% url 'signup' %}{% endif %}" class="w-full text-center py-3 rounded-full bg-white text-primary font-label-md hover:bg-forest-light transition-all block">Start Free Trial</a>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 flex flex-col hover:border-primary/50 transition-all">
+            <h3 class="font-headline-md text-primary mb-2">Team</h3>
+            <p class="text-on-surface-variant text-sm mb-6">For research groups and departments.</p>
+            <div class="flex items-baseline gap-1 mb-8">
+                <span class="text-4xl font-display-lg text-primary">$49</span>
+                <span class="text-on-surface-variant">/month</span>
+            </div>
+            <ul class="space-y-4 mb-10 flex-1">
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Everything in Pro</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Team workspaces</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Shared template library</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Admin dashboard</li>
+                <li class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span>Dedicated support</li>
+            </ul>
+            <a href="{% url 'contact' %}" class="w-full text-center py-3 rounded-full border border-primary text-primary font-label-md hover:bg-parchment-muted transition-all block">Contact Sales</a>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+    <div class="bg-surface-container-high rounded-3xl py-20 px-8 border border-outline-variant/30">
+        <h2 class="font-display-lg text-display-lg text-primary mb-6">Ready to Write Smarter?</h2>
+        <p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mb-10">Join thousands of researchers who have transformed how they create academic documents. Start free today.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'signup' %}{% endif %}" class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md shadow-lg hover:shadow-xl active:scale-95 transition-all">Get Started for Free</a>
+        </div>
+        <p class="text-xs text-on-surface-variant mt-6">No credit card required. Free plan includes 3 documents/month.</p>
     </div>
 </section>
 {% endblock %}

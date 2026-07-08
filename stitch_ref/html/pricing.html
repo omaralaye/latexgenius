@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pricing | LaTeX Genius - Professional Academic Typesetting</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#bfc9c3",
+                    "secondary": "#8d4f00",
+                    "surface": "#faf9f3",
+                    "surface-container": "#efeee8",
+                    "surface-bright": "#faf9f3",
+                    "tertiary-container": "#114d45",
+                    "inverse-surface": "#30312d",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "primary-fixed": "#b0f0d6",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-container-highest": "#e3e3dd",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "on-background": "#1b1c19",
+                    "tertiary": "#00352f",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "outline": "#707974",
+                    "surface-tint": "#2b6954",
+                    "on-error": "#ffffff",
+                    "on-surface": "#1b1c19",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#95d3ba",
+                    "on-tertiary": "#ffffff",
+                    "forest-light": "#D1FAE5",
+                    "ink": "#111111",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-fixed": "#002117",
+                    "on-secondary-fixed": "#2d1600",
+                    "primary-container": "#064e3b",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "error": "#ba1a1a",
+                    "parchment-muted": "#F4F2E9",
+                    "surface-container-low": "#f5f4ee",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "secondary-container": "#fea54a",
+                    "on-tertiary-container": "#85bdb2",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f2f1eb",
+                    "tertiary-fixed": "#b5eee2",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-surface-variant": "#404944",
+                    "surface-variant": "#e3e3dd",
+                    "on-primary-container": "#80bea6",
+                    "background": "#faf9f3",
+                    "on-secondary-container": "#6e3d00",
+                    "surface-container-high": "#e9e8e2",
+                    "primary-fixed-dim": "#95d3ba",
+                    "primary": "#003527",
+                    "secondary-fixed-dim": "#ffb875"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "stack-unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "code-sm": ["JetBrains Mono"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .pricing-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px -12px rgba(6, 78, 59, 0.12);
+        }
+        .faq-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+<a class="text-headline-md font-headline-md font-bold text-primary" href="#">LaTeX Genius</a>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-body-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Templates</a>
+<a class="font-body-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Features</a>
+<a class="font-body-md text-label-md text-primary font-semibold border-b-2 border-primary" href="#">Pricing</a>
+<a class="font-body-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Testimonials</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-body-md text-label-md text-on-surface-variant px-4 py-2 hover:text-primary transition-colors">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-body-md text-label-md font-semibold hover:bg-primary-container transition-all active:scale-95">Get Started</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24">
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-16">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container/10 text-secondary rounded-full border border-secondary/20 mb-6">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="text-label-md font-semibold">Institutional Grade Security</span>
+</div>
+<h1 class="font-display-lg text-display-lg md:text-[64px] mb-6 leading-tight">Investment in <span class="text-primary italic">Excellence.</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Scalable solutions for individual researchers, doctoral students, and institutional labs. Academic precision, automated.
+            </p>
+<div class="mt-10 flex justify-center items-center gap-4">
+<span class="text-label-md font-semibold text-on-surface-variant">Monthly</span>
+<button aria-checked="false" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out bg-primary focus:outline-none" id="billing-toggle" role="switch">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-5"></span>
+</button>
+<span class="text-label-md font-semibold text-on-surface-variant">Annual <span class="text-secondary">(Save 20%)</span></span>
+</div>
+</section>
+<!-- Pricing Grid -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Free Plan -->
+<div class="bg-white border border-outline-variant/30 rounded-xl p-8 flex flex-col pricing-card-hover transition-all duration-300">
+<div class="mb-8">
+<h3 class="font-headline-md text-headline-md mb-2">Free</h3>
+<p class="text-on-surface-variant text-body-md mb-6">For scholars just beginning their journey.</p>
+<div class="flex items-baseline gap-1">
+<span class="text-[40px] font-bold font-headline-lg">$0</span>
+<span class="text-on-surface-variant text-label-md">/month</span>
+</div>
+</div>
+<div class="flex-grow space-y-4 mb-8">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">3 Active documents</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">Standard LaTeX templates</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">Basic BibTeX integration</span>
+</div>
+<div class="flex items-start gap-3 text-on-surface-variant/50">
+<span class="material-symbols-outlined">block</span>
+<span class="text-body-md">Advanced AI Assistant</span>
+</div>
+</div>
+<button class="w-full border border-primary text-primary py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors">Start Writing</button>
+</div>
+<!-- Pro Plan (Popular) -->
+<div class="relative bg-primary-container text-on-primary rounded-xl p-8 flex flex-col pricing-card-hover transition-all duration-300 transform scale-105 shadow-xl">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-white px-4 py-1 rounded-full text-label-md font-bold tracking-wider">MOST POPULAR</div>
+<div class="mb-8">
+<h3 class="font-headline-md text-headline-md mb-2 text-on-primary-container">Pro</h3>
+<p class="text-on-primary-container/80 text-body-md mb-6">For researchers and PhD candidates.</p>
+<div class="flex items-baseline gap-1">
+<span class="text-[40px] font-bold font-headline-lg">$19</span>
+<span class="text-on-primary-container/70 text-label-md">/month</span>
+</div>
+</div>
+<div class="flex-grow space-y-4 mb-8">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-primary-container">check_circle</span>
+<span class="text-body-md">Unlimited documents</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-primary-container">check_circle</span>
+<span class="text-body-md">Unlimited AI-powered generation</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-primary-container">check_circle</span>
+<span class="text-body-md">Smart Bibliography (DOI search)</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-primary-container">check_circle</span>
+<span class="text-body-md">Version history (Git-based)</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-primary-container">check_circle</span>
+<span class="text-body-md">Priority cloud compilation</span>
+</div>
+</div>
+<button class="w-full bg-on-primary-container text-primary-container py-3 rounded-lg font-semibold hover:bg-white transition-colors">Free 14-Day Trial</button>
+</div>
+<!-- Team Plan -->
+<div class="bg-white border border-outline-variant/30 rounded-xl p-8 flex flex-col pricing-card-hover transition-all duration-300">
+<div class="mb-8">
+<h3 class="font-headline-md text-headline-md mb-2">Team</h3>
+<p class="text-on-surface-variant text-body-md mb-6">For labs, departments, and agencies.</p>
+<div class="flex items-baseline gap-1">
+<span class="text-[40px] font-bold font-headline-lg">$49</span>
+<span class="text-on-surface-variant text-label-md">/month</span>
+</div>
+</div>
+<div class="flex-grow space-y-4 mb-8">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">All Pro features included</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">Shared team workspace</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">Collaborative live editing</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">Custom institutional templates</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-body-md">SSO &amp; Administrative dashboard</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:bg-primary-container transition-colors">Contact Sales</button>
+</div>
+</section>
+<!-- Feature Comparison (Condensed Bento) -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mt-32">
+<h2 class="font-headline-lg text-headline-lg text-center mb-12">Detailed Comparison</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-parchment-muted p-4 rounded-xl border border-outline-variant/20">
+<!-- Column Headers (Mobile Hidden) -->
+<div class="hidden md:block p-4 font-bold text-primary">Features</div>
+<div class="hidden md:block p-4 font-bold text-center">Free</div>
+<div class="hidden md:block p-4 font-bold text-center bg-white/50 rounded-lg">Pro</div>
+<div class="hidden md:block p-4 font-bold text-center">Team</div>
+<!-- Rows -->
+<div class="p-4 border-b border-outline-variant/10 font-medium">Monthly Documents</div>
+<div class="p-4 border-b border-outline-variant/10 text-center text-on-surface-variant">10 Limit</div>
+<div class="p-4 border-b border-outline-variant/10 text-center font-semibold bg-white/50">Unlimited</div>
+<div class="p-4 border-b border-outline-variant/10 text-center">Unlimited</div>
+<div class="p-4 border-b border-outline-variant/10 font-medium">AI Copilot Tokens</div>
+<div class="p-4 border-b border-outline-variant/10 text-center text-on-surface-variant">500 / mo</div>
+<div class="p-4 border-b border-outline-variant/10 text-center font-semibold bg-white/50">Unlimited</div>
+<div class="p-4 border-b border-outline-variant/10 text-center">Unlimited</div>
+<div class="p-4 border-b border-outline-variant/10 font-medium">Direct DOI Search</div>
+<div class="p-4 border-b border-outline-variant/10 text-center text-on-surface-variant">—</div>
+<div class="p-4 border-b border-outline-variant/10 text-center font-semibold bg-white/50"><span class="material-symbols-outlined text-primary">check</span></div>
+<div class="p-4 border-b border-outline-variant/10 text-center"><span class="material-symbols-outlined text-primary">check</span></div>
+<div class="p-4 border-b border-outline-variant/10 font-medium">Review Mode</div>
+<div class="p-4 border-b border-outline-variant/10 text-center text-on-surface-variant">—</div>
+<div class="p-4 border-b border-outline-variant/10 text-center font-semibold bg-white/50"><span class="material-symbols-outlined text-primary">check</span></div>
+<div class="p-4 border-b border-outline-variant/10 text-center"><span class="material-symbols-outlined text-primary">check</span></div>
+<div class="p-4 font-medium">API Access</div>
+<div class="p-4 text-center text-on-surface-variant">—</div>
+<div class="p-4 text-center font-semibold bg-white/50">—</div>
+<div class="p-4 text-center"><span class="material-symbols-outlined text-primary">check</span></div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop mt-32">
+<h2 class="font-headline-lg text-headline-lg text-center mb-12">Academic Licensing FAQ</h2>
+<div class="space-y-4">
+<div class="border border-outline-variant/30 rounded-lg p-6 bg-white group cursor-pointer">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-lg">Do you offer institutional student discounts?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 text-on-surface-variant text-body-md">
+                        Yes! We partner with over 200 universities globally. If you register with a verified .edu or .ac.uk email, you automatically receive 40% off any Pro annual plan.
+                    </div>
+</div>
+<div class="border border-outline-variant/30 rounded-lg p-6 bg-white group cursor-pointer">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-lg">Can I use Grant funds to pay for LaTeX Genius?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 text-on-surface-variant text-body-md">
+                        Absolutely. We provide itemized VAT/Tax invoices compliant with NIH, NSF, and ERC grant reporting requirements. We also support Purchase Orders for department-wide licensing.
+                    </div>
+</div>
+<div class="border border-outline-variant/30 rounded-lg p-6 bg-white group cursor-pointer">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-lg">How does the "Smart Bibliography" handle citations?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 text-on-surface-variant text-body-md">
+                        Our AI indexes millions of papers. Simply paste a DOI or a URL, and we'll fetch the metadata and format it instantly in APA, MLA, IEEE, or any custom .bst style your journal requires.
+                    </div>
+</div>
+<div class="border border-outline-variant/30 rounded-lg p-6 bg-white group cursor-pointer">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-lg">Is my unpublished research data secure?</h4>
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform">expand_more</span>
+</div>
+<div class="mt-4 text-on-surface-variant text-body-md">
+                        Security is our priority. All documents are encrypted at rest (AES-256) and in transit. We never use your private papers to train our AI models without explicit opt-in.
+                    </div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container py-16 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+<div class="flex flex-col gap-4">
+<a class="text-headline-md font-headline-md font-bold text-primary" href="#">LaTeX Genius</a>
+<p class="text-body-md text-on-surface-variant">The future of academic typesetting. Precision, speed, and intelligence for the modern scholar.</p>
+</div>
+<div>
+<h5 class="font-bold text-primary mb-4">Product</h5>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Templates</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">AI Assistant</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Bibliography</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-primary mb-4">Resources</h5>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Documentation</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">LaTeX Guide</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Support</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-primary mb-4">Company</h5>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">About Us</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-label-md">© 2024 LaTeX Genius. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="material-symbols-outlined text-on-surface-variant hover:text-primary" href="#">language</a>
+<a class="material-symbols-outlined text-on-surface-variant hover:text-primary" href="#">terminal</a>
+<a class="material-symbols-outlined text-on-surface-variant hover:text-primary" href="#">forum</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        const toggle = document.getElementById('billing-toggle');
+        let isAnnual = false;
+
+        toggle.addEventListener('click', () => {
+            isAnnual = !isAnnual;
+            const knob = toggle.querySelector('span');
+            
+            if (isAnnual) {
+                knob.classList.replace('translate-x-0', 'translate-x-5');
+                toggle.classList.add('bg-primary');
+                // Potential price update logic here
+            } else {
+                knob.classList.replace('translate-x-5', 'translate-x-0');
+                toggle.classList.remove('bg-primary');
+            }
+        });
+
+        // Simple smooth entrance animation for cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.pricing-card-hover');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LaTeX Genius | Academic Writing Reimagined</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config Injection -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#bfc9c3",
+                    "secondary": "#8d4f00",
+                    "surface": "#faf9f3",
+                    "surface-container": "#efeee8",
+                    "surface-bright": "#faf9f3",
+                    "tertiary-container": "#114d45",
+                    "inverse-surface": "#30312d",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "primary-fixed": "#b0f0d6",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-container-highest": "#e3e3dd",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "on-background": "#1b1c19",
+                    "tertiary": "#00352f",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "outline": "#707974",
+                    "surface-tint": "#2b6954",
+                    "on-error": "#ffffff",
+                    "on-surface": "#1b1c19",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#95d3ba",
+                    "on-tertiary": "#ffffff",
+                    "forest-light": "#D1FAE5",
+                    "ink": "#111111",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-fixed": "#002117",
+                    "on-secondary-fixed": "#2d1600",
+                    "primary-container": "#064e3b",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "error": "#ba1a1a",
+                    "parchment-muted": "#F4F2E9",
+                    "surface-container-low": "#f5f4ee",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "secondary-container": "#fea54a",
+                    "on-tertiary-container": "#85bdb2",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f2f1eb",
+                    "tertiary-fixed": "#b5eee2",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-surface-variant": "#404944",
+                    "surface-variant": "#e3e3dd",
+                    "on-primary-container": "#80bea6",
+                    "background": "#faf9f3",
+                    "on-secondary-container": "#6e3d00",
+                    "surface-container-high": "#e9e8e2",
+                    "primary-fixed-dim": "#95d3ba",
+                    "primary": "#003527",
+                    "secondary-fixed-dim": "#ffb875"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "stack-unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "code-sm": ["JetBrains Mono"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-link {
+            border-bottom: 2px solid #003527;
+        }
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+<div class="text-headline-md font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>LaTeX Genius</span>
+</div>
+<div class="hidden md:flex items-center gap-8 font-label-md text-label-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#templates">Templates</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#features">Features</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#pricing">Pricing</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#testimonials">Testimonials</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block text-on-surface-variant font-label-md px-4 py-2 hover:text-primary transition-all">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">Get Started</button>
+</div>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<h1 class="font-display-lg text-display-lg md:text-6xl text-primary leading-tight">
+                    Write LaTeX <br/><span class="text-secondary italic">Like Magic</span>
+</h1>
+<p class="text-body-lg text-on-surface-variant max-w-lg">
+                    AI-powered LaTeX generation for researchers, students, and professionals. Describe your document in plain English — we handle the formatting, equations, and bibliography.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-3.5 rounded-full font-label-md flex items-center gap-2 hover:opacity-90 transition-all">
+                        Start Writing Free <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<button class="border border-outline px-8 py-3.5 rounded-full font-label-md hover:bg-parchment-muted transition-all">
+                        See How It Works
+                    </button>
+</div>
+<div class="flex items-center gap-3 pt-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a professional academic researcher in a bright university library, soft cinematic lighting, professional scholarly aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF6WYO8kB6-Bf2a2RJU6x-UangUWCzBx3mgVjTB_hlMk-jeLpXd92v3QbdyFZE6hr1o1oI0djdjCe3QffcKtp-nIBSq4-hkfTXQLORpb1icMlm4f_NWd97svhUm2BicHbshztRm2OKwcmzvOEUENjA7v0znFyAK_iFxwlmnPKh92_zwVlBWCSvxI3z9IC2DtZJUmivhRKtyE6MwMrEyyPUh-wMjTxJ2pvHHdmPKXHCobmZSpu52V0giIIJSBMJemXnUiWsJT0cF2Yz"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a smiling female doctoral student in a modern research lab, high-key lighting, scholarly environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDghFa5Ivoy0hn1tvNWSuaqELlsC2XMYOCpzOUv_4pF6tOARLOPCshYa-Vj5W7ZN5TDMmOFu1HmTO5aj86GxO10BgQlCHAL8EzxD6bvyTu9PARlhTbhOhNCMFMsSc8Epre-inrAkYZd8f897iHIL-1iW-qzVOoCRyerHjZFO9F56_7glkXUzj56I4KoEGfSLfYnnv0lPePzB9e2LqNaHj9OUkfK2VLNvJFkbJ6SwBGTkGARJ65dRBmDV53Yjqg_pzU20quQ_VYIbTwn"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden bg-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of a distinguished senior professor in a classic wood-paneled study, warm ambient lighting, intellectual atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD32uNt1hCjEirqk3SHHATOI7vdY4mtFhWbIc6u0hF4HvyIw_2i5RNU4kHKQPDrGxmdlEOHA7tifSyWXrULglogE_p-n-iNBgDU-9dar2LJM0IvCoDcs2lRVAHJ8KLdE7c9ztc0bCceYm4_bw9JmIqA97gVW-za4E8wcNW2KnG5FbM8V1U-2MINgevvLCgaeBWc5RyC7x0986ztIfJWkZLfj4Z7GdoSjzuuAqjI56gjfsvP86L-muU7StatcVZ93ggfZlqLnGXYwV9i"/>
+</div>
+</div>
+<p class="text-label-md text-on-surface-variant">Trusted by 2,000+ researchers</p>
+</div>
+</div>
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary-fixed/30 blur-3xl rounded-full group-hover:bg-primary-fixed/50 transition-all duration-700"></div>
+<div class="relative bg-ink rounded-xl shadow-2xl overflow-hidden border border-white/10 aspect-square md:aspect-video flex flex-col">
+<!-- Editor UI Mockup -->
+<div class="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
+<div class="flex gap-1.5">
+<div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+<div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+</div>
+<div class="ml-4 px-3 py-1 rounded bg-white/10 text-code-sm text-white/60">research_paper.tex</div>
+</div>
+<div class="flex-1 p-6 font-code-sm text-code-sm text-white/80 overflow-hidden">
+<p class="text-primary-fixed">\documentclass{article}</p>
+<p class="text-primary-fixed">\begin{document}</p>
+<p class="pl-4 mt-2 text-secondary-fixed-dim">\title{On the Complexity of Neural Network Training Landscapes}</p>
+<p class="pl-4 text-secondary-fixed-dim">\author{Jane Doe}</p>
+<p class="pl-4 mt-4 text-on-tertiary-container italic">% AI: Auto-completing bibliography from 12 sources...</p>
+<p class="pl-4 mt-2">We present a novel analysis of...</p>
+<div class="mt-8 bg-white/5 p-4 rounded border border-white/10">
+<p class="text-white/40 mb-2">// AI Generated Citation</p>
+<p class="text-primary-fixed">@article{author2024,<br/>  title={Quantum Efficiency},<br/>  journal={Nature Communications}<br/>}</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Stats -->
+<section class="bg-parchment-muted py-20">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="md:col-span-1 space-y-4">
+<h2 class="font-headline-lg text-headline-lg text-primary">Trusted by the Academic World</h2>
+</div>
+<div class="flex flex-col items-start gap-1 p-6">
+<span class="text-4xl font-display-lg text-secondary">50000+</span>
+<span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Documents Generated</span>
+</div>
+<div class="flex flex-col items-start gap-1 p-6 border-l border-outline-variant/30">
+<span class="text-4xl font-display-lg text-secondary">1200+</span>
+<span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Institutions Worldwide</span>
+</div>
+<div class="flex flex-col items-start gap-1 p-6 border-l border-outline-variant/30">
+<span class="text-4xl font-display-lg text-secondary">98%</span>
+<span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Accuracy Rate</span>
+</div>
+</div>
+</section>
+<!-- Document Templates Grid -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop" id="templates">
+<div class="mb-16">
+<span class="text-label-md text-secondary font-bold uppercase tracking-widest">Document Templates</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mt-2">Start with a <span class="italic">perfect</span> foundation</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Template Card 1 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A clean, minimalist research paper template on a parchment-textured background, structured with columns and small mathematical notations, scholarly and elegant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPnsj1JCbIOuyOFwYMPpi0_bJMZm1XbMtcZ3YK4xI0ygHeHIPPnPycimRjeEhe12fA0MrPx7gkGRdUdKuBpI5f8sJeh7nyNzcMuBrqCyswW5gJtBfqL1isbHLhLTzOu27XpXOilR1Wrb6oqTQdV-b_nx2x6zdI9wluuUq0p7yv5beRghdsPQv3XjYGONADNU9f62VopTs9DavODfXF_MFOQQnlbQjpLn65SasetVCcmeu9TKsFwwoZyNtoCpV0K4QIBNQiybQmU4kh"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="px-3 pb-4">
+<h3 class="font-headline-md text-lg text-primary mb-1">Research Paper</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">ACM/IEEE formatted academic paper with automated bibliography.</p>
+</div>
+</div>
+<!-- Template Card 2 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A thick PhD thesis document template with a gold-leaf title font, traditional academic aesthetic on high-quality paper texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpTIS-a3x1gt2TV3H1jlwDsLAP1hhPmYBHaJgrXJfGNrCTnaz0a2tJnPAdPAY_m7R_HR3HRmf9BLxwEDnyV6Ay2Nm3aCnPxeiRGHJN6uSDbYzag6_afdNcFgBuLfbG6JMojDxcX4DOlRpLZsslumX_vFJrYEEp9Ec05vA3o2BZ5BOITUZonnrVseN_HFYxgNLUbZEuQJxsWWI7tkL5OUX7bUp8I2OjnOqe5UFkNnVKMwTu7YMW3tFCeKyFZ1IRyNBvEtEQk1znr7kj"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="px-3 pb-4">
+<h3 class="font-headline-md text-lg text-primary mb-1">PhD Thesis</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Complete PhD thesis structure with chapters and auto-index.</p>
+</div>
+</div>
+<!-- Template Card 3 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A document featuring complex multi-line mathematical equations and proofs, rendered in high-contrast LaTeX typography on a clean ivory background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChe4_QwErU-j_DiSDXncYdMrybXKQEOJXY7qM3wJRvVZWuwsEzTXoV3cczqvwqdDr9PrD5I0dowXZwxW5lNy8eGApj-ecV0L1QUaCfkZ0hk9o9oPfn2d5caAl2LOi5mtihG6CGz8Hwad962F4kbeHBBMPzsZSz0MhQ3m-XOlX95imdimpMmFla16G6zJ8SKrH0zaiVupL_WcEmYQUUrtmDQcS8Wf-O-JbC9T8dIBO8Xkh9-o9tgxhp-lLe_Tvxck5IlojFXqWIRU6l"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="px-3 pb-4">
+<h3 class="font-headline-md text-lg text-primary mb-1">Math Equations</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Complex notation with automatic alignment and environments.</p>
+</div>
+</div>
+<!-- Template Card 4 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 hover:shadow-xl transition-all duration-300">
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-4 bg-parchment-muted flex items-center justify-center relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A professional presentation slide deck template (Beamer) with clean layout, charts, and mathematical figures, scholarly editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ7eEK8LiABBeU6Ns5ANWeYPM_ERpPxeLHrD58U_weO_wXesfo__NEOO6hYT3tdJCu-obVdWgPVi5OsYfWlxXU84p8WRYlgsiH4WNgGtbs0UZzxlF5syYOEXJgr_nWttsxNAyBCvS0pT1QucEJu9JE4WOx78SilAUu6iJFnqRQzImB7zRxQ0ON8JW7KHXZQ7hkl3ADmKKTYdgMZHSitf2CnCZZbUkmtuPi4-PbvpDWNXz3rKHCK2YfHqcCe54Ozp_XxM2MOQxpaSQr"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="px-3 pb-4">
+<h3 class="font-headline-md text-lg text-primary mb-1">Beamer Slides</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Professional slide deck with clean themes and navigation.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Key Features Bento Grid -->
+<section class="py-24 bg-surface-container" id="features">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Everything You Need for Academic Writing</h2>
+</div>
+<p class="text-body-lg text-on-surface-variant">From AI generation to real-time collaboration, LaTeX Genius brings modern tooling to the world of academic typesetting.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Feature: AI Generation -->
+<div class="md:col-span-7 bg-surface p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-between overflow-hidden relative bento-card">
+<div class="relative z-10">
+<h3 class="font-headline-md text-primary mb-4">AI-Powered Generation</h3>
+<p class="text-on-surface-variant max-w-sm">Describe your document in plain English and watch LaTeX Genius generate perfectly formatted academic documents, equations, and bibliographies in seconds.</p>
+</div>
+<div class="mt-12 -mx-8 -mb-8">
+<img class="w-full h-64 object-cover" data-alt="A stunning digital representation of a neural network with glowing nodes and golden sparks, representing AI intelligence, set against a deep dark background, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIpRdGUCPEZrZuIlaIOqfTAjxsHHGg7IOqo7k3rvwo5-p5OiiY8E7jB4ZbV_LiA2z8WdKHc-1_Ky6b-TW_dtoZo2qVoa-zuN2Ktaq4opfoIPLN4eeCenXM6JQl72avh6rAiqcbjMQzDe7H_rnVJj1enpSKm3gxYDW_Iq_udPEETyt2QlSW-aqdxKuyp8NQcCfdi1l2DX3KqQj6WB5nYkdKlCdBvd6DlB3yUzHUmwPRKtvVpT1Seq0w0TLETnv6BzH9Y4Zyqrm5hfBp"/>
+</div>
+</div>
+<!-- Feature: Real-time Preview -->
+<div class="md:col-span-5 bg-primary-container p-8 rounded-xl border border-white/10 flex flex-col bento-card text-on-primary">
+<h3 class="font-headline-md text-white mb-4">Real-Time Preview</h3>
+<p class="text-on-primary-container">See your document render instantly as you type. No more compiling and waiting — every change is reflected immediately in a beautiful side-by-side view.</p>
+<div class="mt-auto pt-8">
+<img class="rounded-lg shadow-2xl" data-alt="A split-screen computer monitor showing a coding editor on the left and a beautifully rendered academic PDF on the right, high-end professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-zq1G0WGqHIcveQE3zbxlnSfutTiJXrH7hmDw-FABLyABxPLWqUzGfRnkCZMMTat9Qll5t_7VumMK1at2M9dKdFYfDhhO1eYK5yXbViZ8pYVy8AxP5EHEsf5Z0Ke5FN8SwZDpfFgx0_1Plz-k0BDeYLk9Nr2kyEECYcSTufFQe9dYVtcMQuA0j7_lHE0LKVBDyS5EXb4-Qps2DH53-euPejE7XJlD7jQvNjiHXhRzHnQyK0e5aoybKMlNsmaOFybnXSTRsn_XmabK"/>
+</div>
+</div>
+<!-- Feature: Smart Bibliography -->
+<div class="md:col-span-5 bg-parchment-muted p-8 rounded-xl border border-outline-variant/20 bento-card">
+<h3 class="font-headline-md text-primary mb-4">Smart Bibliography</h3>
+<p class="text-on-surface-variant mb-8">Auto-generate citations and references from DOI, ISBN, or URL. Supports APA, MLA, Chicago, and IEEE styles with one-click formatting.</p>
+<img class="w-full rounded-lg h-48 object-cover" data-alt="A stack of classic academic books with leather bindings and gold lettering on the spines, warm library lighting, scholarly tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI8KqtZFrKO7cJzp-bv0pY5OLRRhfyBhxTf1XXoNmm-NAkpN9oBuJMZ_g_Y3ZRgLJnSmlVszCL0PX1aQ234nWo4NjJRBZlw9Ku-7x6LbnW-vOlNBsF9_jfCNak7Fg_tiEB9VF4H27mPXJYJVpW6ajhHZyp4aTM8COr3KbxLn3p2B0BJLmfdYDBiLlhHO7Pa1Im4VYoARnS3ocJnt5nmovgf9U-M8exaeLd3srwHyDwmsxlfQcZ1YGOCTn2J1GJOPkdhoUYw0mBMmkw"/>
+</div>
+<!-- Feature: Collaboration -->
+<div class="md:col-span-7 bg-white p-8 rounded-xl border border-outline-variant/20 flex flex-col justify-center items-center text-center bento-card">
+<div class="w-16 h-16 bg-forest-light rounded-full flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-4xl">groups</span>
+</div>
+<h3 class="font-headline-md text-primary mb-4">Team Workspaces</h3>
+<p class="text-on-surface-variant max-w-md">Share projects with co-authors, leave comments on specific lines, and track version history in real-time. Designed for global research laboratories.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center" id="pricing">
+<div class="mb-16">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-light text-primary text-label-md font-bold uppercase tracking-wider mb-4">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">payments</span> Simple Pricing
+                </div>
+<h2 class="font-display-lg text-display-lg text-primary">Choose Your Plan</h2>
+<p class="text-on-surface-variant mt-4">Start free and scale as you grow. No hidden fees, cancel anytime.</p>
+<div class="flex items-center justify-center gap-4 mt-8">
+<span class="text-label-md">Monthly</span>
+<button class="w-12 h-6 bg-primary-container rounded-full relative transition-all">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</button>
+<span class="text-label-md">Annual <span class="text-secondary font-bold">Save 20%</span></span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter text-left">
+<!-- Free Plan -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 flex flex-col hover:border-primary/50 transition-all">
+<h3 class="font-headline-md text-primary mb-2">Free</h3>
+<p class="text-on-surface-variant text-sm mb-6">Perfect for students getting started.</p>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-display-lg text-primary">$0</span>
+<span class="text-on-surface-variant">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-1">
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            10 documents per month
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Basic templates
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Standard equation editor
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            PDF export
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-parchment-muted transition-all">Get Started</button>
+</div>
+<!-- Pro Plan -->
+<div class="bg-primary text-on-primary rounded-2xl p-8 flex flex-col relative shadow-xl transform scale-105 z-10">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">Most Popular</div>
+<h3 class="font-headline-md text-white mb-2">Pro</h3>
+<p class="text-on-primary-container text-sm mb-6">For serious researchers and academics.</p>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-display-lg text-white">$19</span>
+<span class="text-on-primary-container">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-1">
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Unlimited documents
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            All premium templates
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            AI-powered generation
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Smart bibliography
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Real-time collaboration
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-full bg-white text-primary font-label-md hover:bg-forest-light transition-all">Start Free Trial</button>
+</div>
+<!-- Team Plan -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 flex flex-col hover:border-primary/50 transition-all">
+<h3 class="font-headline-md text-primary mb-2">Team</h3>
+<p class="text-on-surface-variant text-sm mb-6">For research groups and departments.</p>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-display-lg text-primary">$49</span>
+<span class="text-on-surface-variant">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-1">
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Everything in Pro
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Team workspaces
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Shared template library
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Admin dashboard
+                        </li>
+<li class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                            Dedicated support
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-parchment-muted transition-all">Contact Sales</button>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 bg-parchment-muted" id="testimonials">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-16">
+<span class="text-label-md text-secondary font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">favorite</span> What Researchers Say
+                    </span>
+<h2 class="font-display-lg text-display-lg text-primary mt-2">Loved by Academics Worldwide</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Column 1 -->
+<div class="space-y-6">
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Close-up headshot of a female professor with glasses, intelligent and friendly expression, professional lighting, academic setting background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeFu6mEluP2JK4W4djYK4t1IFCwwWjLb1WbjQewfk54KQPl-1wNg3lpMcA2HPrZU3yLxKA6-YzFPKAOUpnvD6n5CDk98mCi3PHSeMjVHdFLqs5c7F2K9yNpS04S95__YtARigoGqm42MfuDLFa8wxFk8_SXfFTRLW-WYW7s66EavVUfezq0hMDbvwVkN-dZZN3HIWjlj9cBUQKFxOsAFkbSuYozFG4cEgSJkB7Fh_QhTcSB-geaSHGKzh_AT2ZnTHPH_wer6zSE2Rx"/>
+<div>
+<h4 class="font-bold text-primary text-sm">Dr. Sarah Chen</h4>
+<p class="text-xs text-on-surface-variant">Associate Professor, MIT</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface italic leading-relaxed">"LaTeX Genius cut my paper preparation time by 70%. The AI understands complex notation and produces publication-ready documents instantly."</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a young male PhD candidate, looking determined and thoughtful, clean modern academic background, high-end photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzMF86cpimYxUQwWSG-nHjGButBgjaplqzNcTtSUbvbQ9p73it0xaOKJrG5C_7sm-NgZz_nL6KaQvTvB-9aysaJhITfp102b2H_nNCJgMgG8oO9oKUX5WfmcjXjAPW-AN37p83YT_PXYIkQSkKocRNThjvTBRks-k1BZFEXYj92osJ4LezS2NT9JiA7AifBSbUEiPg-V3NjUGXZreIvb_e4SX-WbE8FGf-OHLW587AbAKKoNZ35sXR6dNjLsPPjKWNcc7L887VurpY"/>
+<div>
+<h4 class="font-bold text-primary text-sm">Prof. James Miller</h4>
+<p class="text-xs text-on-surface-variant">Research Lead, Stanford</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface italic leading-relaxed">"The bibliography automation alone saves me hours every week. It is the most intelligent LaTeX tool I have ever used."</p>
+</div>
+</div>
+<!-- Column 2 (Large Card) -->
+<div class="lg:col-span-1 bg-primary text-on-primary p-0 rounded-xl overflow-hidden flex flex-col relative group">
+<img class="w-full h-full object-cover absolute inset-0 opacity-50 group-hover:opacity-70 transition-opacity" data-alt="Full portrait of a professional academic woman in her 30s, smiling confidently, holding a digital tablet, background of a modern minimalist office with soft focus, high-quality professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJM3PdTAYkT9jha6p_tmhBak-Dq3hrbW1sNtc44E8hQoh80wKsW3RgU4hiHJF_st0l9kCTtHDDcjGut3aT2B9QehEye4xbnnf4fdcctiA1dtC9reDJvXAG-kiBZ7j7I-OiL9ro3zmXDLFYDWe4Xqp4FZpLWUFUgXL27xcSrQJ4RIoanktBLnHryjtfznSohgvjYqhE9SL7qB5r4ElRnvJNA8YaQErpsypMr9efRTnJMZyGh95rYpP09h6STCOhlX-xDccVZuSEWnTV"/>
+<div class="relative mt-auto p-8 bg-gradient-to-t from-primary via-primary/80 to-transparent">
+<p class="text-lg italic mb-6">"Finally, a tool that lets me focus on the science rather than the syntax. It's a game changer for collaborative research."</p>
+<h4 class="font-bold text-lg">Dr. Aisha Patel</h4>
+<p class="text-sm text-on-primary-container">Postdoc, Oxford</p>
+</div>
+</div>
+<!-- Column 3 -->
+<div class="space-y-6">
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Headshot of an older male professor with a gray beard and warm eyes, scholarly authority and kindness, indoor academic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDHgBCKsRBxiZxZ8M6y554Vd8l5UtMeZzE5jLA7LuBn0zv3sfnwOEAjgtWPwIJwzF6V_4qa0ezD5ff59MbuPr47veiunNlPex7WA6mTbbwFRWo6BvB09ykDjIaAbLEwNzIo9pIOLRD7R6Zx8Jz0uO-QrjogeaQDF_rykp-5IHKFUC8D_4WCdQkmBugkojM1u0j9QQYdxXS9-Z1fj3aSn8TZBPzgtMROHvO_NopUQPHASw0-iBCaGse8419bScMfgb8SYaY_F3YjDDY"/>
+<div>
+<h4 class="font-bold text-primary text-sm">Dr. Marcus Weber</h4>
+<p class="text-xs text-on-surface-variant">Principal Investigator, ETH Zurich</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface italic leading-relaxed">"My entire research group switched to LaTeX Genius. The collaborative features and template library are unmatched in the academic space."</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a young graduate student in a library, looking excited and inspired, bright light mode aesthetic, clean academic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-aogk-Aktm1v-BI1U5V57-6POc3vyA0uRIMDMOygTs9_JeQ7KrFcx2w1zW29Z01lTpFW4ftBM8Tm6l_czOeBJ2SPzlNOJC3NioNTZkiNoM741SIdrhUK6BWwChHFvdPDep2sz4r4pF1cD83PtHv5Zam4ZRPXL3X_rT7IVCQ6nNCRL27tTmanKw2SuCQJr1KlBERk3Jss1P0H-NbEy0rRpLzfZfDNHUGKJbll2B0iIKCO_FAmVp3YZa0ReR2ULjwwZ5Ip7lnqPhiOf"/>
+<div>
+<h4 class="font-bold text-primary text-sm">Emily Zhang</h4>
+<p class="text-xs text-on-surface-variant">PhD Candidate, Caltech</p>
+</div>
+</div>
+<p class="text-body-md text-on-surface italic leading-relaxed">"The equation recognition is remarkable. Handwritten formulas become perfect LaTeX code in seconds."</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+<div class="bg-surface-container-high rounded-3xl py-20 px-8 border border-outline-variant/30">
+<h2 class="font-display-lg text-display-lg text-primary mb-6">Ready to Write Smarter?</h2>
+<p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mb-10">Join thousands of researchers who have transformed how they create academic documents. Start free today.</p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md shadow-lg hover:shadow-xl active:scale-95 transition-all">Get Started for Free</button>
+<button class="bg-white text-primary border border-outline-variant px-8 py-4 rounded-full font-label-md flex items-center gap-2 hover:bg-parchment-muted transition-all">
+<span class="material-symbols-outlined">calendar_today</span> Book a Demo
+                    </button>
+</div>
+<p class="text-xs text-on-surface-variant mt-6">No credit card required. Free plan includes 10 documents/month.</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container py-16">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+<div class="space-y-6">
+<div class="text-headline-md font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>LaTeX Genius</span>
+</div>
+<p class="text-on-surface-variant text-sm">Stay ahead of the curve. Get the latest LaTeX tips, AI writing insights, and product updates delivered to your inbox.</p>
+<form class="space-y-2">
+<input class="w-full px-4 py-3 bg-white border-b border-primary/20 focus:border-primary focus:ring-0 text-sm transition-all outline-none" placeholder="you@university.edu" type="email"/>
+<button class="bg-primary text-on-primary w-full py-3 rounded-full font-label-md text-sm hover:opacity-90">Subscribe</button>
+</form>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-bold text-primary uppercase text-xs tracking-widest">Product</h5>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Templates</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Features</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Pricing</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Changelog</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-bold text-primary uppercase text-xs tracking-widest">Resources</h5>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Documentation</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">API Reference</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Blog</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-bold text-primary uppercase text-xs tracking-widest">Company</h5>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">About</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Careers</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Contact</a>
+<a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="#">Privacy</a>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-sm">© 2024 LaTeX Genius. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="material-symbols-outlined">language</span></a>
+<a class="text-on-surface-variant hover:text-primary" href="#"><span class="material-symbols-outlined">share</span></a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple button scaling micro-interaction
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

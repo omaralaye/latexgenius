@@ -73,6 +73,8 @@ class RowLevelSecurityMiddleware:
 
     def __call__(self, request):
         from django.db import connection
+        if connection.vendor != 'postgresql':
+            return self.get_response(request)
         user_id = request.user.id if request.user.is_authenticated else None
         with connection.cursor() as cursor:
             if user_id:

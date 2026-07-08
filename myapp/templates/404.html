@@ -1,21 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}404 — Page not found — LaTeXGenius{% endblock %}
+{% block title %}404 — Page not found — LaTeX Genius{% endblock %}
 
 {% block layout %}
-<div class="min-h-screen bg-secondary-light dark:bg-surface-dark flex flex-col items-center justify-center p-4">
+<div class="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
     <div class="text-center">
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-light text-primary mb-8 border border-primary/20">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-forest-light text-primary mb-8">
             <span class="material-symbols-outlined text-4xl">search_off</span>
         </div>
         <h1 class="text-6xl font-black text-primary mb-4 tracking-tighter">404</h1>
-        <h2 class="text-3xl font-bold text-accent dark:text-accent-dark mb-4">Page not found</h2>
-        <p class="text-secondary dark:text-secondary-dark max-w-md mx-auto mb-8 leading-relaxed">
-            The page you're looking for doesn't exist.
-        </p>
+        <h2 class="font-headline-lg text-headline-lg text-primary mb-4">Page not found</h2>
+        <p class="text-on-surface-variant max-w-md mx-auto mb-8">The page you're looking for doesn't exist.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{% url 'landing' %}" class="btn btn-primary">Back to Home</a>
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+            <a href="{% url 'landing' %}" class="bg-primary-container text-on-primary-container px-8 py-3 rounded-full font-label-md hover:bg-primary hover:text-on-primary transition-all">Back to Home</a>
+            <a href="{% url 'dashboard' %}" class="border border-outline-variant/50 px-8 py-3 rounded-full font-label-md text-on-surface-variant hover:bg-parchment-muted transition-colors">Dashboard</a>
         </div>
     </div>
 </div>

@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bibliography - LaTeX Genius</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Font: Source Serif 4 -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'surface': '#faf9f3',
+            'surface-dim': '#dbdad4',
+            'surface-bright': '#faf9f3',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f5f4ee',
+            'surface-container': '#f0efe9',
+            'primary': '#064e3b',
+            'secondary': '#5d6052',
+            'accent': '#92400e',
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'serif'],
+          },
+          borderRadius: {
+            'academic': '4px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      font-family: "Source Serif 4", serif;
+      background-color: #faf9f3;
+      color: #1a1c18;
+    }
+    .sidebar-active {
+      background-color: #e2e8f0; /* Fallback */
+      background-color: rgba(6, 78, 59, 0.1);
+      border-left: 4px solid #064e3b;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #dbdad4;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-64 border-r border-surface-dim bg-surface-container flex flex-col shrink-0" data-purpose="sidebar">
+<!-- Logo Section -->
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-academic">
+<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold text-primary tracking-tight">LaTeX Genius</h1>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Documents</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">AI Generate</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Templates</span>
+</a>
+<a class="sidebar-active flex items-center gap-3 px-4 py-3 text-primary font-semibold rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Bibliography</span>
+</a>
+</nav>
+<!-- Bottom Nav -->
+<div class="px-4 py-4 mt-auto border-t border-surface-dim space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-dim rounded-academic transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="">Notifications</span>
+</a>
+</div>
+<!-- User Profile -->
+<div class="p-4 border-t border-surface-dim flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-dim flex items-center justify-center text-primary font-bold">JD</div>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold text-primary truncate">Dr. Jane Doe</p>
+<p class="text-xs text-secondary truncate">jane@mit.edu</p>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- BEGIN: TopHeader -->
+<header class="h-16 border-b border-surface-dim flex items-center justify-between px-8 bg-surface-container-lowest" data-purpose="top-header">
+<h2 class="text-xl font-bold text-primary">Bibliography</h2>
+<div class="flex items-center gap-6">
+<button class="text-secondary hover:text-primary relative">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-accent border-2 border-surface-container-lowest"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-semibold text-primary leading-tight">Dr. Jane Doe</p>
+<p class="text-[10px] text-secondary leading-tight">jane@mit.edu</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-dim flex items-center justify-center text-primary font-bold text-sm">JD</div>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: BibliographyContent -->
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<!-- Page Title & CTA -->
+<div class="flex items-start justify-between mb-8">
+<div>
+<h1 class="text-3xl font-bold text-primary mb-1">Bibliography</h1>
+<p class="text-secondary">12 references</p>
+</div>
+<button class="bg-primary text-white px-5 py-2.5 rounded-academic flex items-center gap-2 font-medium hover:bg-opacity-90 transition-all shadow-sm">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          New Document
+        </button>
+</div>
+<!-- Search and Add Controls -->
+<div class="flex flex-wrap items-center gap-4 mb-8">
+<div class="flex-1 min-w-[300px] relative">
+<svg class="absolute left-3 top-3 w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input class="w-full pl-10 pr-4 py-2.5 border border-surface-dim rounded-academic bg-white focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm" placeholder="Search by title, author, key, or journal..." type="text">
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm text-secondary">Style:</span>
+<select class="border border-surface-dim rounded-academic py-2.5 px-4 bg-white text-sm text-primary focus:ring-1 focus:ring-primary">
+<option>APA 7th</option>
+<option>MLA 9th</option>
+<option>Chicago</option>
+<option>IEEE</option>
+</select>
+</div>
+<button class="flex items-center gap-2 border border-surface-dim px-4 py-2.5 rounded-academic bg-white text-secondary hover:text-primary hover:border-primary transition-colors text-sm font-medium">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Add
+        </button>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-3 mb-8 overflow-x-auto pb-2">
+<button class="bg-primary text-white px-4 py-1.5 rounded-full text-sm font-medium">All</button>
+<button class="bg-surface-container border border-surface-dim text-secondary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-surface-dim transition-colors whitespace-nowrap">Deep Learning</button>
+<button class="bg-surface-container border border-surface-dim text-secondary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-surface-dim transition-colors whitespace-nowrap">Machine Learning</button>
+<button class="bg-surface-container border border-surface-dim text-secondary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-surface-dim transition-colors whitespace-nowrap">Information Theory</button>
+<div class="ml-auto flex items-center gap-2">
+<select class="border border-surface-dim rounded-academic py-1.5 px-3 bg-white text-xs text-secondary focus:ring-0">
+<option>All Types</option>
+<option>Articles</option>
+<option>Books</option>
+</select>
+</div>
+</div>
+<!-- Bibliography List -->
+<div class="space-y-4" data-purpose="reference-list">
+<!-- Entry 1 -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">Attention Is All You Need</h3>
+<p class="text-sm text-secondary truncate">Vaswani, A. et al. · 2017 · Advances in Neural Information Processing Systems</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">vaswani2017attention</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">Language Models are Few-Shot Learners</h3>
+<p class="text-sm text-secondary truncate">Brown, T.B. et al. · 2020 · Advances in Neural Information Processing Systems</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">brown2020language</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Entry 3 (Journal style icon) -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-blue-50 text-blue-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">A Mathematical Theory of Communication</h3>
+<p class="text-sm text-secondary truncate">Shannon, C.E. · 1948 · Bell System Technical Journal</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">shannon1948mathematical</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Entry 4 -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">Generative Adversarial Nets</h3>
+<p class="text-sm text-secondary truncate">Goodfellow, I. et al. · 2014 · Advances in Neural Information Processing Systems</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">goodfellow2014generative</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Entry 5 (Book icon) -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">Pattern Recognition and Machine Learning</h3>
+<p class="text-sm text-secondary truncate">Bishop, C.M. · 2006 · Springer</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">bishop2006pattern</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Entry 6 -->
+<div class="group flex items-center bg-white border border-surface-dim rounded-academic p-4 hover:shadow-sm transition-shadow">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 flex items-center justify-center rounded-academic mr-4 shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="text-base font-bold text-primary truncate">Adam: A Method for Stochastic Optimization</h3>
+<p class="text-sm text-secondary truncate">Kingma, D.P. et al. · 2014 · International Conference on Learning Representations (ICLR)</p>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<span class="text-xs font-mono bg-surface-container px-2 py-1 rounded text-secondary border border-surface-dim">kingma2014adam</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors" title="Copy BibTeX">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- END: BibliographyContent -->
+</main>
+<!-- Readdy Footer/Branding (Mirroring Image 14 overlay) -->
+
+
+
+</body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AI Generate - LaTeX Genius</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Source Serif 4 for Academic Precision theme -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'serif'],
+          },
+          colors: {
+            academic: {
+              surface: '#faf9f3',
+              'surface-dim': '#dbdad4',
+              'surface-bright': '#faf9f3',
+              'surface-container-low': '#f5f4ee',
+              'surface-container-lowest': '#ffffff',
+              primary: '#064e3b', // Deep green from custom_color
+              accent: '#d1fae5', // Light green accent
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Source Serif 4', serif;
+      background-color: #faf9f3;
+    }
+  </style>
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #dbdad4;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c7c6bf;
+    }
+  </style>
+</head>
+<body class="h-full overflow-hidden flex">
+<!-- BEGIN: Sidebar Navigation -->
+<aside class="w-64 border-r border-academic-surface-dim flex flex-col h-full bg-academic-surface" data-purpose="sidebar">
+<div class="p-6">
+<div class="flex items-center gap-2 text-academic-primary font-bold text-xl mb-10">
+<div class="bg-academic-primary text-white p-1 rounded">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M9 3v18"></path><path d="M3 9h18"></path><path d="M3 15h18"></path><path d="M15 3v18"></path></svg>
+</div>
+<span class="">LaTeX Genius</span>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          Dashboard
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Documents
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-academic-accent text-academic-primary font-medium rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+          AI Generate
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M4 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"></path><path d="M4 13a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2Z"></path><path d="M4 21a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2Z"></path></svg>
+          Templates
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m2 4 3 12h14l3-12H2Z"></path><line x1="9" x2="9" y1="8" y2="8"></line><line x1="15" x2="15" y1="8" y2="8"></line></svg>
+          Bibliography
+        </a>
+</nav>
+<div class="mt-auto pt-10 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-academic-accent/30 rounded-md transition-colors" href="#">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+          Notifications
+        </a>
+</div>
+</div>
+<!-- User Profile in Sidebar -->
+<div class="mt-auto p-4 border-t border-academic-surface-dim bg-academic-surface-container-low" data-purpose="sidebar-profile">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-academic-accent flex items-center justify-center text-academic-primary font-bold text-sm">
+          JD
+        </div>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate text-gray-900">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500 truncate">jane@mit.edu</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar Navigation -->
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-white overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-academic-surface-dim flex items-center justify-between px-8 bg-white" data-purpose="top-header">
+<h1 class="text-xl font-bold text-gray-900">AI Generate</h1>
+<div class="flex items-center gap-4">
+<button class="text-gray-400 hover:text-gray-600 relative">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+<span class="absolute top-0 right-0 h-2 w-2 bg-yellow-500 rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3 border-l pl-4 border-gray-200">
+<div class="text-right">
+<p class="text-xs font-bold text-gray-900">Dr. Jane Doe</p>
+<p class="text-[10px] text-gray-500">jane@mit.edu</p>
+</div>
+<div class="h-8 w-8 rounded-full bg-academic-accent flex items-center justify-center text-academic-primary font-bold text-xs">
+            JD
+          </div>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<div class="flex-1 flex overflow-hidden bg-academic-surface-bright">
+<!-- Input Column -->
+<section class="w-1/2 p-8 overflow-y-auto" data-purpose="generation-controls">
+<div class="mb-8">
+<p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">AI Assistant</p>
+<h2 class="text-3xl font-bold text-gray-900">Generate Document</h2>
+</div>
+<!-- Description Input -->
+<div class="mb-6">
+<label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Describe your document</label>
+<div class="relative">
+<textarea class="w-full h-48 p-4 bg-academic-surface-container-low border-0 rounded-lg focus:ring-2 focus:ring-academic-primary/20 text-gray-700 resize-none placeholder-gray-400 italic" placeholder="Write a research paper about quantum entanglement in multi-particle systems. Include the theoretical framework, recent experimental advances, and potential applications in quantum computing."></textarea>
+<div class="absolute bottom-3 right-4 text-xs text-gray-400">0/2000</div>
+</div>
+</div>
+<!-- Document Type Selector -->
+<div class="mb-6">
+<label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Document Type</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-academic-primary text-white text-sm font-medium">Research Paper</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Thesis</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Dissertation</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Course Notes</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Presentation</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Literature Review</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Technical Report</button>
+<button class="px-4 py-1.5 rounded-full bg-academic-surface-dim/30 text-gray-600 text-sm font-medium hover:bg-academic-surface-dim/50">Grant Proposal</button>
+</div>
+</div>
+<!-- Selectors Row -->
+<div class="grid grid-cols-2 gap-6 mb-6">
+<div>
+<label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Citation Style</label>
+<select class="w-full bg-academic-surface-container-low border-0 rounded-lg text-sm text-gray-700 py-2.5 focus:ring-2 focus:ring-academic-primary/20">
+<option>APA</option>
+<option>MLA</option>
+<option>Chicago</option>
+<option>IEEE</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Length</label>
+<select class="w-full bg-academic-surface-container-low border-0 rounded-lg text-sm text-gray-700 py-2.5 focus:ring-2 focus:ring-academic-primary/20">
+<option>Medium (15-25 pages)</option>
+<option>Short (5-10 pages)</option>
+<option>Long (50+ pages)</option>
+</select>
+</div>
+</div>
+<!-- Options Checkboxes -->
+<div class="space-y-3 mb-8">
+<label class="block text-xs font-bold text-gray-500 uppercase mb-1 tracking-wide">Options</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-academic-primary focus:ring-academic-primary" type="checkbox">
+<span class="text-sm text-gray-700 font-medium">Include abstract</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-academic-primary focus:ring-academic-primary" type="checkbox">
+<span class="text-sm text-gray-700 font-medium">Include placeholder figures</span>
+</label>
+</div>
+<button class="w-full py-4 bg-academic-primary text-white rounded-lg font-bold text-lg hover:bg-opacity-90 shadow-lg shadow-academic-primary/10 transition-all flex items-center justify-center gap-2">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+          Generate with AI
+        </button>
+</section>
+<!-- Preview Column -->
+<section class="w-1/2 p-8" data-purpose="preview-area">
+<div class="h-full w-full bg-white border border-academic-surface-dim rounded-2xl flex flex-col items-center justify-center p-12 text-center shadow-sm relative overflow-hidden">
+<!-- Decorative Background Elements -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-academic-accent/10 rounded-full -mr-16 -mt-16"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-academic-accent/5 rounded-full -ml-24 -mb-24"></div>
+<div class="relative">
+<div class="bg-[#fdf3d7] h-16 w-16 rounded-2xl flex items-center justify-center mb-6 mx-auto transform rotate-6">
+<svg fill="none" height="32" stroke="#d97706" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+</div>
+</div>
+<h3 class="text-xl font-bold text-gray-900 mb-2">Ready to generate</h3>
+<p class="text-gray-500 max-w-sm">Describe your document and configure options, then hit Generate to see AI magic.</p>
+<div class="mt-8 flex gap-2">
+<div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+<div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+<div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- END: Main Content Area -->
+<!-- Floating Readdy Promotion (Based on visual reference) -->
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto" data-purpose="promo-banner">
+
+</div>
+
+
+</body></html>

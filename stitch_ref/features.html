@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Features | LaTeX Genius - AI-Powered Academic Writing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#bfc9c3",
+                    "secondary": "#8d4f00",
+                    "surface": "#faf9f3",
+                    "surface-container": "#efeee8",
+                    "surface-bright": "#faf9f3",
+                    "tertiary-container": "#114d45",
+                    "inverse-surface": "#30312d",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "primary-fixed": "#b0f0d6",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-container-highest": "#e3e3dd",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "on-background": "#1b1c19",
+                    "tertiary": "#00352f",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "outline": "#707974",
+                    "surface-tint": "#2b6954",
+                    "on-error": "#ffffff",
+                    "on-surface": "#1b1c19",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#95d3ba",
+                    "on-tertiary": "#ffffff",
+                    "forest-light": "#D1FAE5",
+                    "ink": "#111111",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-fixed": "#002117",
+                    "on-secondary-fixed": "#2d1600",
+                    "primary-container": "#064e3b",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "error": "#ba1a1a",
+                    "parchment-muted": "#F4F2E9",
+                    "surface-container-low": "#f5f4ee",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "secondary-container": "#fea54a",
+                    "on-tertiary-container": "#85bdb2",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f2f1eb",
+                    "tertiary-fixed": "#b5eee2",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-surface-variant": "#404944",
+                    "surface-variant": "#e3e3dd",
+                    "on-primary-container": "#80bea6",
+                    "background": "#faf9f3",
+                    "on-secondary-container": "#6e3d00",
+                    "surface-container-high": "#e9e8e2",
+                    "primary-fixed-dim": "#95d3ba",
+                    "primary": "#003527",
+                    "secondary-fixed-dim": "#ffb875"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "stack-unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "code-sm": ["JetBrains Mono"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-glow {
+            text-shadow: 0 0 8px rgba(128, 190, 166, 0.4);
+        }
+        .paper-border {
+            border: 1px solid rgba(6, 78, 59, 0.1);
+        }
+        .asymmetric-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">LaTeX Genius</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-body-md text-label-md" href="#">Templates</a>
+<a class="text-primary font-semibold border-b-2 border-primary font-body-md text-label-md" href="#">Features</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-body-md text-label-md" href="#">Pricing</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-body-md text-label-md" href="#">Testimonials</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface font-label-md text-label-md hover:text-primary transition-colors">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 shadow-sm">Get Started</button>
+</div>
+</div>
+</nav>
+<main class="pt-32">
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-24">
+<div class="max-w-3xl">
+<span class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-label-md font-label-md rounded-full mb-6">Deep Dive</span>
+<h1 class="font-display-lg text-display-lg md:text-display-lg mb-6 text-primary leading-tight">Precision Tools for Modern Scholarship</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Beyond simple automation, LaTeX Genius provides a professional suite of tools designed specifically for the rigors of academic publishing and technical documentation.
+                </p>
+</div>
+</section>
+<!-- Feature 01: AI-Powered Generation -->
+<section class="bg-surface-container-low py-24 mb-24">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<span class="p-2 bg-primary-container text-on-primary-container rounded-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</span>
+<span class="text-primary font-bold uppercase tracking-widest text-label-md">Core Capability 01</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-6 text-ink">AI-Powered Semantic Generation</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
+                            Our proprietary LLM understands the nuances of academic discourse. Simply describe your findings or upload raw notes, and witness the instant creation of structured LaTeX source code. It handles complex environments—mathematical proofs, tabular data, and chemical notations—with institutional-grade precision.
+                        </p>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+<span class="text-on-surface font-body-md italic">Auto-balancing of complex math environments and delimiters.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+<span class="text-on-surface font-body-md italic">Context-aware document structuring based on journal templates.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+<span class="text-on-surface font-body-md italic">Instant transformation of conversational text into formal academic prose.</span>
+</li>
+</ul>
+</div>
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-all duration-700"></div>
+<div class="relative bg-ink rounded-xl shadow-2xl overflow-hidden border border-white/10 aspect-video flex flex-col">
+<div class="h-8 bg-zinc-900 flex items-center px-4 gap-2 border-b border-white/5">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+<span class="text-[10px] text-zinc-500 ml-2 font-code-sm uppercase tracking-widest">ai-generator.tex</span>
+</div>
+<div class="p-6 font-code-sm text-code-sm leading-relaxed overflow-hidden">
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">1</span>
+<span class="text-blue-400">\documentclass</span><span class="text-zinc-300">{article}</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">2</span>
+<span class="text-blue-400">\usepackage</span><span class="text-zinc-300">{amsmath, amssymb}</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">3</span>
+<span class="text-zinc-400">% AI is currently drafting your abstract...</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">4</span>
+<span class="text-blue-400">\begin</span><span class="text-zinc-300">{document}</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">5</span>
+<span class="text-blue-400">\section</span><span class="text-zinc-300">{Methodology}</span>
+</div>
+<div class="flex gap-4 animate-pulse">
+<span class="text-zinc-600 select-none">6</span>
+<span class="text-on-primary-container code-glow">The neural architecture utilizes a series of residual blocks...</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">7</span>
+<span class="text-blue-400">\begin</span><span class="text-zinc-300">{equation}</span>
+</div>
+<div class="flex gap-4">
+<span class="text-zinc-600 select-none">8</span>
+<span class="text-on-primary-container code-glow">\mathcal{L}(\theta) = \sum_{i=1}^n \ell(f(x_i; \theta), y_i) + \lambda R(\theta)</span>
+</div>
+</div>
+<div class="mt-auto bg-primary-container/20 p-3 border-t border-white/5 flex items-center justify-between">
+<span class="text-on-primary-container text-[11px] font-label-md flex items-center gap-2">
+<span class="animate-ping w-1.5 h-1.5 rounded-full bg-on-primary-container"></span>
+                                    AI is generating your Proof...
+                                </span>
+<div class="flex gap-2">
+<div class="w-16 h-1 rounded-full bg-zinc-800 overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature 02: Real-Time Preview (Bento Grid Style) -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-24">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-ink mb-4">The Live Editorial Workbench</h2>
+<p class="text-on-surface-variant font-body-md max-w-2xl mx-auto">See your document come to life as you type. Our blazing-fast engine eliminates the "compile and wait" frustration of legacy LaTeX editors.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 grid-rows-2 gap-6 min-h-[600px]">
+<!-- Main Editor Preview -->
+<div class="md:col-span-8 md:row-span-2 bg-white paper-border rounded-xl p-8 flex flex-col gap-6 group hover:shadow-xl transition-shadow duration-500">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-primary">Side-by-Side Clarity</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-outline-variant">splitscreen</span>
+<span class="material-symbols-outlined text-outline-variant">zoom_in</span>
+</div>
+</div>
+<div class="flex-grow flex gap-4 overflow-hidden rounded-lg border border-outline-variant/20">
+<div class="w-1/2 bg-ink p-4 font-code-sm text-zinc-400 overflow-hidden hidden sm:block">
+<p class="text-blue-300">1 \title{Quantum Entanglement}</p>
+<p>2 \author{Dr. Elena Vance}</p>
+<p>3 \date{\today}</p>
+<p>4 </p>
+<p>5 \begin{abstract}</p>
+<p>6 This paper explores the...</p>
+</div>
+<div class="flex-grow bg-parchment-muted p-6 shadow-inner overflow-hidden">
+<div class="max-w-xs mx-auto text-center border-b border-black/10 pb-4 mb-4">
+<div class="h-4 w-32 bg-black/10 mx-auto rounded mb-2"></div>
+<div class="h-3 w-20 bg-black/5 mx-auto rounded"></div>
+</div>
+<div class="space-y-3">
+<div class="h-3 w-full bg-black/5 rounded"></div>
+<div class="h-3 w-full bg-black/5 rounded"></div>
+<div class="h-3 w-2/3 bg-black/5 rounded"></div>
+</div>
+<img class="mt-8 rounded-md border border-black/5 opacity-80" data-alt="A clean, minimalist layout of a scientific paper preview on high-quality cream-colored digital paper. The typography is elegant serif, resembling a prestigious physics journal with detailed mathematical formulas and a small abstract section. The lighting is soft and flat, emphasizing the paper texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6F8FlatDZloBCqXjbz2KotLFRKJ8cDk-8ZA3ZfBEOy5PGhPxjBEy0eEHsWsxJFNSE5seSrb5dtz95v3w3aBw9b08JflIbpfRykvOZRkN1Qk2heVU0T29jlcKdSovLfxJZm8ugI8zzAhPMzk4-557nErX60zkhbmfHyFdgYQUXsrH_vfoRa5_Y2ReFsy1cPMfkk3NgB-7gnoxoyqt0noDBP3tC28icFycRjYUn6B9I2bZy0__HebBNW19DofZ4JtshbrP55VV754S"/>
+</div>
+</div>
+<p class="text-on-surface-variant text-body-md">Engineered with a high-performance WASM-based TeX engine that updates your PDF locally in milliseconds.</p>
+</div>
+<!-- Feature Mini-Card: Error Highlighting -->
+<div class="md:col-span-4 bg-primary text-on-primary rounded-xl p-8 flex flex-col justify-between group overflow-hidden relative">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">error</span>
+<h3 class="font-headline-md text-headline-md mb-2">Instant Debugging</h3>
+<p class="text-on-primary/70 text-body-md">No more cryptic log files. Our AI pinpoints errors and suggests fixes in human-readable English.</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 transform rotate-12 transition-transform group-hover:rotate-6 duration-500">
+<span class="material-symbols-outlined text-[160px]">bug_report</span>
+</div>
+</div>
+<!-- Feature Mini-Card: Cloud Sync -->
+<div class="md:col-span-4 bg-surface-container-highest border border-outline-variant/30 rounded-xl p-8 flex flex-col justify-between group">
+<div>
+<span class="material-symbols-outlined text-primary text-4xl mb-4">cloud_sync</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Omnipresent Access</h3>
+<p class="text-on-surface-variant text-body-md">Your library is encrypted and synced across all devices. Write in the lab, refine on the train.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature 03: Smart Bibliography -->
+<section class="bg-primary-container text-on-primary-container py-24 mb-24 overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative">
+<!-- Bibliography Stack Illustration -->
+<div class="relative w-full max-w-md mx-auto h-[400px]">
+<div class="absolute top-0 left-0 w-full h-full transform translate-x-4 translate-y-4 bg-on-primary-container/10 rounded-lg"></div>
+<div class="absolute top-0 left-0 w-full h-full bg-white rounded-lg shadow-2xl p-6 flex flex-col gap-4">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-4">
+<span class="font-headline-md text-ink text-lg">References (42)</span>
+<button class="bg-primary-container text-on-primary-container px-3 py-1 rounded-md text-[12px] font-label-md">Import .bib</button>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface rounded border border-outline-variant/30 group cursor-pointer hover:bg-forest-light transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-ink font-bold text-[14px]">Smith, J. et al. (2023)</span>
+<span class="text-primary text-[10px] font-bold">APA 7</span>
+</div>
+<p class="text-on-surface-variant text-[12px] leading-tight">Neural Architectures for Large-Scale Knowledge Retrieval...</p>
+</div>
+<div class="p-3 bg-surface rounded border border-outline-variant/30 opacity-60">
+<div class="flex justify-between items-start mb-1">
+<span class="text-ink font-bold text-[14px]">Kovacs, A. (2022)</span>
+<span class="text-primary text-[10px] font-bold">IEEE</span>
+</div>
+<p class="text-on-surface-variant text-[12px] leading-tight">Decentralized Protocols in Scholarly Publishing...</p>
+</div>
+<!-- Animated Loader -->
+<div class="p-3 bg-primary/5 rounded border-2 border-dashed border-primary/20 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-primary animate-spin text-xl">sync</span>
+<span class="text-primary font-code-sm text-[12px]">Auto-resolving DOI...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="flex items-center gap-3 mb-4">
+<span class="p-2 bg-secondary text-on-secondary rounded-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book</span>
+</span>
+<span class="text-on-primary-container font-bold uppercase tracking-widest text-label-md">Core Capability 03</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-6">Zero-Effort Bibliography</h2>
+<p class="font-body-md text-body-md text-on-primary-container/80 mb-8 leading-relaxed">
+                            Stop wrestling with BibTeX files. LaTeX Genius automatically scrapes metadata from DOIs, ISBNs, or URLs. Just paste a link, and we'll generate perfectly formatted citations in APA, MLA, Chicago, IEEE, or any of the 2,500+ supported CSL styles.
+                        </p>
+<div class="grid grid-cols-2 gap-6">
+<div class="p-4 bg-white/5 rounded-lg border border-white/10">
+<h4 class="font-bold text-white mb-1">DOI Resolution</h4>
+<p class="text-[13px] opacity-70">Instant metadata retrieval from CrossRef and PubMed databases.</p>
+</div>
+<div class="p-4 bg-white/5 rounded-lg border border-white/10">
+<h4 class="font-bold text-white mb-1">Format Switching</h4>
+<p class="text-[13px] opacity-70">Switch citation styles for the entire document in one click.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Specs / Details Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-32">
+<div class="bg-surface-container rounded-3xl p-12 overflow-hidden relative">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+
+</div>
+<div class="relative z-10 max-w-2xl">
+<h3 class="font-headline-lg text-headline-lg text-ink mb-8">Institutional Requirements? Covered.</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<div>
+<h5 class="font-bold text-ink">GDPR &amp; FERPA</h5>
+<p class="text-label-md text-on-surface-variant">Institutional data security standards for universities.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">groups</span>
+<div>
+<h5 class="font-bold text-ink">Team Collaboration</h5>
+<p class="text-label-md text-on-surface-variant">Real-time multiplayer editing with Git-like versioning.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">terminal</span>
+<div>
+<h5 class="font-bold text-ink">API Access</h5>
+<p class="text-label-md text-on-surface-variant">Integrate LaTeX Genius into your laboratory workflows.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">print</span>
+<div>
+<h5 class="font-bold text-ink">Print-Ready Export</h5>
+<p class="text-label-md text-on-surface-variant">CMYK support and bleed control for physical journals.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center pb-32">
+<h2 class="font-display-lg text-headline-lg md:text-display-lg mb-8 text-primary">Ready to publish your best work?</h2>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="bg-primary text-on-primary px-10 py-4 rounded-lg font-headline-md text-headline-md hover:bg-primary-container transition-all shadow-lg active:scale-95">Get Started for Free</button>
+<button class="border border-outline text-on-surface px-10 py-4 rounded-lg font-headline-md text-headline-md hover:bg-surface-container transition-all">Schedule Demo</button>
+</div>
+<p class="mt-6 text-on-surface-variant text-label-md italic">No credit card required for researchers and students.</p>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container dark:bg-surface-container-highest w-full py-12 px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto border-b border-outline-variant/30 pb-12 mb-8">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">LaTeX Genius</span>
+</div>
+<p class="text-on-surface-variant text-body-md pr-4 leading-relaxed">The professional standard for AI-assisted academic writing and technical typesetting.</p>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-6 uppercase tracking-widest text-label-md">Product</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Features</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Templates</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Pricing</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">API Reference</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-6 uppercase tracking-widest text-label-md">Resources</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Documentation</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Community</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Blog</a></li>
+<li><a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Help Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-6 uppercase tracking-widest text-label-md">Stay Informed</h4>
+<p class="text-on-surface-variant text-label-md mb-4">Join 20,000+ researchers getting our monthly digest.</p>
+<div class="flex gap-2">
+<input class="bg-surface border-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-3 py-2 w-full text-body-md" placeholder="Your email" type="email"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-md hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-container-max mx-auto text-on-surface-variant text-label-md">
+<p>© 2024 LaTeX Genius. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Accessibility</a>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple intersection observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

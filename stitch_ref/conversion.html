@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LaTeX Genius | Academic Workspace</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#fea54a",
+                    "surface-container-lowest": "#ffffff",
+                    "ink": "#111111",
+                    "on-secondary-container": "#6e3d00",
+                    "inverse-primary": "#95d3ba",
+                    "on-tertiary-fixed": "#00201c",
+                    "background": "#faf9f3",
+                    "primary-fixed": "#b0f0d6",
+                    "on-primary-container": "#80bea6",
+                    "surface": "#faf9f3",
+                    "on-secondary-fixed": "#2d1600",
+                    "surface-container": "#efeee8",
+                    "inverse-surface": "#30312d",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "primary": "#003527",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "forest-light": "#D1FAE5",
+                    "on-surface": "#1b1c19",
+                    "primary-container": "#064e3b",
+                    "inverse-on-surface": "#f2f1eb",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e9e8e2",
+                    "outline-variant": "#bfc9c3",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#00352f",
+                    "secondary-fixed-dim": "#ffb875",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#e3e3dd",
+                    "primary-fixed-dim": "#95d3ba",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f5f4ee",
+                    "surface-container-highest": "#e3e3dd",
+                    "on-primary-fixed": "#002117",
+                    "parchment-muted": "#F4F2E9",
+                    "on-surface-variant": "#404944",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#2b6954",
+                    "surface-bright": "#faf9f3",
+                    "outline": "#707974",
+                    "on-background": "#1b1c19",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#b5eee2",
+                    "tertiary-container": "#114d45",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "secondary": "#8d4f00",
+                    "on-tertiary-container": "#85bdb2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-unit": "8px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-md": ["\"Source Serif 4\""],
+                    "code-sm": ["JetBrains Mono"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""],
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Inter"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #faf9f3;
+            color: #1b1c19;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bfc9c3;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="overflow-hidden h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full w-64 bg-parchment-muted dark:bg-surface-container-low border-r border-primary/10 transition-all duration-300">
+<div class="flex flex-col h-full py-6">
+<!-- Header Identity -->
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 bg-primary rounded-DEFAULT flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">LaTeX Genius</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant/70 uppercase tracking-widest">Library</p>
+<p class="text-[12px] text-on-surface-variant/50">Academic Workspace</p>
+</div>
+<!-- CTA -->
+<div class="px-4 mb-6">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 px-4 rounded-DEFAULT hover:bg-primary-container transition-all font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined">upload_file</span>
+                Convert PDF/Image
+            </button>
+</div>
+<!-- Main Nav Items -->
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-primary dark:text-primary-fixed-dim font-bold bg-primary/5 hover:bg-primary/10 transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant hover:bg-primary/10 dark:hover:bg-surface-container-high transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Shared</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant hover:bg-primary/10 dark:hover:bg-surface-container-high transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">Conversions</span>
+</a>
+</nav>
+<!-- Usage Widget -->
+<div class="mx-4 mt-auto mb-6 p-4 rounded-lg bg-white border border-primary/5 shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-[12px] font-semibold text-on-surface-variant">Storage</span>
+<span class="text-[12px] font-bold text-primary">3/10</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[30%]"></div>
+</div>
+<p class="mt-2 text-[11px] text-on-surface-variant/60 leading-relaxed italic">Upgrade for unlimited projects and advanced TeX compilation.</p>
+</div>
+<!-- Footer Nav -->
+<div class="px-2 border-t border-primary/5 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant hover:bg-primary/10 transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant dark:text-outline-variant hover:bg-primary/10 transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Viewport -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-gutter h-16 bg-surface dark:bg-surface-dim border-b border-primary/10 dark:border-outline-variant z-20">
+<div class="flex items-center gap-6">
+<div class="relative w-96 hidden lg:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[18px]">search</span>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/20 rounded-DEFAULT pl-10 pr-4 py-2 text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant/50 transition-all" placeholder="Search conversion history..." type="text"/>
+</div>
+<span class="md:hidden font-headline-md text-headline-md font-bold text-primary">LaTeX Genius</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-primary/10 mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right hidden sm:block">
+<p class="text-label-md font-bold text-primary leading-none">Dr. Aris Thorne</p>
+<p class="text-[11px] text-on-surface-variant leading-none mt-1">Research Fellow</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/20 overflow-hidden bg-surface-container-high transition-transform group-active:scale-95">
+<img class="w-full h-full object-cover" data-alt="A professional headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJbOpuOae7BGxUN1dVF4QltgpiX8i4gjw4ZO1HA4US3XaPjbTgnTHKqHPXdW3vilfHBGTtPVz763ioSR8ltJ_A-LVwa4R-Jd74cAcpFfNG00pnU8FCLSTROcRGjjCYxJzMI3czWOKj6ZND7sZe3dk_0DDjI0i-tSBaqNDD5AShIhekU6Rd8I-mhmpyshM16RMXE013aasK8d6gxyDT2rQUrQk0DDQhk1pHs4OlHZOM5VEWDuZSir3LT7vwt5vbFnN8Nuenk1nMcbj"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-background">
+<div class="max-w-container-max mx-auto px-gutter py-10 space-y-12">
+<!-- Upload & Convert Dropzone -->
+<section>
+<div class="mb-6">
+<h2 class="font-headline-lg text-headline-lg text-primary">Upload &amp; Convert</h2>
+<p class="text-on-surface-variant/70 text-body-md mt-1">Drop a PDF, image, or hand-written notes to generate LaTeX source code instantly.</p>
+</div>
+<div class="relative group">
+<div class="w-full h-48 border-2 border-dashed border-primary/20 rounded-xl bg-white flex flex-col items-center justify-center transition-all hover:border-primary/40 hover:bg-forest-light/30 cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+</div>
+<p class="font-label-md text-label-md text-primary">Click or drag files here to start conversion</p>
+<p class="text-[12px] text-on-surface-variant/60 mt-2">Supports PDF, PNG, JPG (Max 25MB)</p>
+</div>
+</div>
+</section>
+<!-- Current Project / Active Conversion -->
+<section>
+<div class="flex items-baseline justify-between mb-6">
+<h2 class="font-headline-lg text-headline-lg text-primary">Active Conversion</h2>
+<span class="flex items-center gap-2 text-label-md text-secondary font-bold">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+                        Processing Document...
+                    </span>
+</div>
+<div class="bg-white border border-primary/10 rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row h-[500px]">
+<!-- Left Column: Source / LaTeX Code -->
+<div class="w-full md:w-1/2 border-r border-primary/5 flex flex-col">
+<div class="px-4 py-3 bg-surface-container-low flex justify-between items-center border-b border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">terminal</span>
+<span class="font-label-md text-label-md text-primary">main.tex</span>
+</div>
+<button class="p-1 hover:bg-surface-container rounded transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+<div class="flex-1 p-6 font-code-sm text-code-sm bg-[#282c34] text-[#abb2bf] overflow-auto custom-scrollbar">
+<pre class="whitespace-pre-wrap">\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\title{Quantum Entanglement Dynamics}
+\author{A. Thorne}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The phenomenon of quantum entanglement suggests that 
+particles can remain connected such that the 
+physical properties of one are...
+
+\begin{equation}
+    |\psi\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\end{equation}
+
+\end{document}
+</pre>
+</div>
+</div>
+<!-- Right Column: Live PDF Preview -->
+<div class="w-full md:w-1/2 bg-parchment-muted flex flex-col">
+<div class="px-4 py-3 bg-surface-container-low flex justify-between items-center border-b border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">picture_as_pdf</span>
+<span class="font-label-md text-label-md text-primary">Live Preview</span>
+</div>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined text-[18px]">zoom_in</span></button>
+<button class="p-1 hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined text-[18px]">download</span></button>
+</div>
+</div>
+<div class="flex-1 p-10 flex justify-center overflow-auto custom-scrollbar">
+<!-- Simulated PDF Page -->
+<div class="bg-white shadow-lg w-full max-w-md h-fit p-12 aspect-[1/1.41]">
+<div class="text-center mb-8">
+<div class="h-4 w-48 bg-surface-container mx-auto mb-2"></div>
+<div class="h-3 w-32 bg-surface-container-high mx-auto"></div>
+</div>
+<div class="space-y-4">
+<div class="h-3 w-full bg-surface-container-low"></div>
+<div class="h-3 w-full bg-surface-container-low"></div>
+<div class="h-3 w-[80%] bg-surface-container-low"></div>
+<div class="h-12 w-full bg-surface-container-high my-8 flex items-center justify-center">
+<div class="h-2 w-32 bg-primary/10"></div>
+</div>
+<div class="h-3 w-full bg-surface-container-low"></div>
+<div class="h-3 w-full bg-surface-container-low"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Conversion History / Library -->
+<section>
+<div class="flex items-baseline justify-between mb-6">
+<h2 class="font-headline-lg text-headline-lg text-primary">Conversion History</h2>
+<div class="flex items-center gap-2">
+<button class="p-1.5 rounded bg-surface-container-high text-primary"><span class="material-symbols-outlined text-[20px]">grid_view</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:bg-surface-container"><span class="material-symbols-outlined text-[20px]">list</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- History Card 1 -->
+<div class="group bg-white border border-primary/10 rounded-lg overflow-hidden flex flex-col hover:border-primary/30 transition-all hover:shadow-lg">
+<div class="h-40 bg-parchment-muted overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-top opacity-80 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAp1l0LQwWEEjZskvVKjMgejcREMx4C0Q3awmDmrzNX4IPG_Rb8H2gSF6na9C0722csw7Z-Tw0pBKpawnsuJP3ig5yYsGfahY_tGoA31jnMGI4hZrGBBsyMZUU5OMI1E-71FdlFCkczsBlTkQkacwRZmIIgU0F_zUGCvZ8giIxEKIFvfKXU2zrCLdg1KZJiJQYJfLZNSmLMVI0wc44BKrr0_peGG5D4Kw5Ne2kHfjOsPiodtLcK2OrkrM4oM86nkQI9_3iHnOFwTxex')"></div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[18px] text-primary leading-tight">Quantum_Final_v1.tex</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mt-auto pt-4 flex items-center justify-between border-t border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant/40">schedule</span>
+<span class="text-[12px] text-on-surface-variant/60">2 hours ago</span>
+</div>
+<span class="px-2 py-0.5 bg-forest-light text-primary-container text-[11px] font-semibold rounded-full uppercase tracking-tighter">Draft</span>
+</div>
+</div>
+</div>
+<!-- History Card 2 -->
+<div class="group bg-white border border-primary/10 rounded-lg overflow-hidden flex flex-col hover:border-primary/30 transition-all hover:shadow-lg">
+<div class="h-40 bg-parchment-muted overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-top opacity-80 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5S44eR9365qt4SO_D4o8YSdPoF9VpoVrz1w6jxLtFmm5O78WOuAs6eycb8ZqukHUR62DOml0Q5AXx-SPenqfJmowIwc_WSw_mFg8gV9r3424yieyxgrw6-Gq2pXn2DajgDd8tQDivDNN8w-2OQYD7O9eCwrXHgKbLx2eydUoYqj9CRV34a42KVr-Pq2auQPlck0hopzyoa-_vdDUINoitF7nLz6irgWVYMSLUjA4B7xnBK3tY0pK4L5Jm3fV_1AtDpPywBVaknewM')"></div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[18px] text-primary leading-tight">Macro_Stats_Export.tex</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mt-auto pt-4 flex items-center justify-between border-t border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant/40">schedule</span>
+<span class="text-[12px] text-on-surface-variant/60">Oct 24, 2023</span>
+</div>
+<span class="px-2 py-0.5 bg-secondary-fixed text-on-secondary-fixed text-[11px] font-semibold rounded-full uppercase tracking-tighter">Verified</span>
+</div>
+</div>
+</div>
+<!-- History Card 3 -->
+<div class="group bg-white border border-primary/10 rounded-lg overflow-hidden flex flex-col hover:border-primary/30 transition-all hover:shadow-lg">
+<div class="h-40 bg-parchment-muted overflow-hidden relative">
+<div class="w-full h-full bg-cover bg-top opacity-80 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDH7LZEnfDmj_PvBH5Z3TrHcNsQjIeTAxIcmRrz4JIAs1UOPQZIGX4od2d5YCvCo3kI-_9UiVcVevRv0SvDaI2hGc_ihCjsknlbMBapZlSTj4yvpUQuUejXBr9sBiuYYstW8pAi9g15aqVh3RXEULVNlswcfcqfRMnioomcf2cWeeHa2FOPdonHN1InuoY-TAMNt2ko4-f_BOlgZHojA9cqXNcg8f3vhIeeQ7j_B4rCnoAZ2u5WCAzxFMcVYrchpC6HnvkK2wzAQfC2')"></div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[18px] text-primary leading-tight">Colloquium_Slides.tex</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="mt-auto pt-4 flex items-center justify-between border-t border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant/40">schedule</span>
+<span class="text-[12px] text-on-surface-variant/60">Yesterday</span>
+</div>
+<span class="px-2 py-0.5 bg-tertiary-fixed-dim text-on-tertiary-fixed-variant text-[11px] font-semibold rounded-full uppercase tracking-tighter">Beamer</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- System Info -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 p-6 bg-primary-container text-white rounded-lg relative overflow-hidden flex items-center justify-between group">
+<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary-fixed-dim opacity-10 rounded-full group-hover:scale-110 transition-transform duration-700"></div>
+<div class="relative z-10 space-y-2">
+<h4 class="font-headline-md text-[20px]">Introducing AI Cite™</h4>
+<p class="text-body-md text-primary-fixed-dim/80 max-w-md">Automatically format your bibliography using our new machine-learning citation engine. Works with BibTeX and Mendeley.</p>
+</div>
+<button class="relative z-10 px-6 py-2 bg-white text-primary font-bold rounded-DEFAULT hover:bg-forest-light transition-colors whitespace-nowrap">Learn More</button>
+</div>
+<div class="p-6 bg-parchment-muted border border-primary/5 rounded-lg flex flex-col justify-center">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-primary/10">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<span class="text-label-md font-bold text-primary">Compiler Status</span>
+</div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-[12px] text-on-surface-variant">XeLaTeX Engine</span>
+<span class="text-[12px] font-bold text-green-700 flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-green-700 rounded-full"></span> Online
+                        </span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden mt-1">
+<div class="bg-green-700 h-full w-full"></div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Mobile FAB -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all md:hidden z-30" id="fab">
+<span class="material-symbols-outlined">upload_file</span>
+</button>
+<script>
+    // Search bar focus effect
+    const searchInput = document.querySelector('input[type="text"]');
+    if(searchInput) {
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('w-[32rem]');
+            searchInput.parentElement.classList.remove('w-96');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('w-[32rem]');
+            searchInput.parentElement.classList.add('w-96');
+        });
+    }
+</script>
+</body></html>

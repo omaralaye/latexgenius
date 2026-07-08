@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - LaTeX Genius</title>
+<!-- Google Fonts: Inter for Body, Source Serif 4 for Headings, JetBrains Mono for Code -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#85bdb2",
+                    "surface": "#faf9f3",
+                    "ink": "#111111",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e3dd",
+                    "primary": "#003527",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "inverse-primary": "#95d3ba",
+                    "forest-light": "#D1FAE5",
+                    "secondary-container": "#fea54a",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#404944",
+                    "outline": "#707974",
+                    "inverse-on-surface": "#f2f1eb",
+                    "on-background": "#1b1c19",
+                    "surface-container": "#efeee8",
+                    "on-secondary-fixed": "#2d1600",
+                    "tertiary-fixed": "#b5eee2",
+                    "on-secondary-container": "#6e3d00",
+                    "on-primary-fixed": "#002117",
+                    "parchment-muted": "#F4F2E9",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "surface-tint": "#2b6954",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-container": "#80bea6",
+                    "surface-bright": "#faf9f3",
+                    "secondary": "#8d4f00",
+                    "primary-container": "#064e3b",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "primary-fixed-dim": "#95d3ba",
+                    "on-surface": "#1b1c19",
+                    "tertiary": "#00352f",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e9e8e2",
+                    "tertiary-container": "#114d45",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "surface-container-low": "#f5f4ee",
+                    "background": "#faf9f3",
+                    "outline-variant": "#bfc9c3",
+                    "primary-fixed": "#b0f0d6",
+                    "inverse-surface": "#30312d",
+                    "secondary-fixed-dim": "#ffb875",
+                    "surface-container-highest": "#e3e3dd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-unit": "8px",
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "code-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""],
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "display-lg": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bg-cream-paper {
+            background-color: #FDFCF6;
+        }
+        .academic-border {
+            border-color: rgba(6, 78, 59, 0.1);
+        }
+        .input-underline {
+            border: none;
+            border-bottom: 1px solid #707974;
+            background-color: #F4F2E9;
+            border-radius: 0;
+            transition: border-color 0.2s ease;
+        }
+        .input-underline:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #003527;
+            border-bottom-width: 2px;
+        }
+        .card-elevation {
+            box-shadow: 0 4px 20px rgba(6, 78, 59, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-cream-paper font-body-md text-on-surface min-h-screen flex flex-col selection:bg-primary-fixed-dim selection:text-primary">
+<!-- TopNavBar (Transactional Suppression: No Main Nav, only Logo link) -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+<a class="flex items-center gap-2" href="/">
+<span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">LaTeX Genius</span>
+</a>
+<div class="hidden md:flex items-center">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-margin-mobile">
+<div class="w-full max-w-[440px]">
+<!-- Login Card -->
+<div class="bg-surface-container-lowest academic-border border card-elevation p-8 md:p-10 rounded-lg">
+<div class="text-center mb-10">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Welcome Back</h1>
+<p class="font-body-md text-on-surface-variant">Access your academic documents</p>
+</div>
+<form action="#" class="space-y-8" method="POST">
+<!-- Email Field -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="email">Academic Email</label>
+<input class="w-full input-underline py-3 px-4 text-on-surface font-body-md placeholder-outline-variant" id="email" name="email" placeholder="e.g. researcher@university.edu" required="" type="email"/>
+</div>
+<!-- Password Field -->
+<div class="space-y-1">
+<div class="flex justify-between items-end">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="password">Password</label>
+<a class="text-label-md font-label-md text-secondary hover:underline transition-all" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<input class="w-full input-underline py-3 px-4 pr-12 text-on-surface font-body-md" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container text-on-primary py-4 rounded-full font-label-md text-label-md hover:bg-primary transition-all duration-200 transform active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
+                        Sign In
+                        <span class="material-symbols-outlined text-[20px]">login</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-10">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-label-md">
+<span class="px-4 bg-surface-container-lowest text-on-surface-variant italic">or continue with institutional identity</span>
+</div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 border border-outline-variant/50 rounded-lg hover:bg-parchment-muted transition-colors group">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor" style="color: #4285F4"></path>
+</svg></button></div></div></div></main></body></html>

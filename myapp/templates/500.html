@@ -1,21 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}500 — Server error — LaTeXGenius{% endblock %}
+{% block title %}500 — Server error — LaTeX Genius{% endblock %}
 
 {% block layout %}
-<div class="min-h-screen bg-secondary-light dark:bg-surface-dark flex flex-col items-center justify-center p-4">
+<div class="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
     <div class="text-center">
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-error-light dark:bg-error/10 text-error mb-8 border border-error/20">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-error-container/30 text-error mb-8">
             <span class="material-symbols-outlined text-4xl">warning</span>
         </div>
         <h1 class="text-6xl font-black text-error mb-4 tracking-tighter">500</h1>
-        <h2 class="text-3xl font-bold text-accent dark:text-accent-dark mb-4">Server error</h2>
-        <p class="text-secondary dark:text-secondary-dark max-w-md mx-auto mb-8 leading-relaxed">
-            Something went wrong. Our team has been notified.
-        </p>
+        <h2 class="font-headline-lg text-headline-lg text-primary mb-4">Server error</h2>
+        <p class="text-on-surface-variant max-w-md mx-auto mb-8">Something went wrong. Our team has been notified.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
-            <a href="{% url 'landing' %}" class="btn btn-secondary">Go Home</a>
+            <button onclick="window.location.reload()" class="bg-primary-container text-on-primary-container px-8 py-3 rounded-full font-label-md hover:bg-primary hover:text-on-primary transition-all">Retry</button>
+            <a href="{% url 'landing' %}" class="border border-outline-variant/50 px-8 py-3 rounded-full font-label-md text-on-surface-variant hover:bg-parchment-muted transition-colors">Go Home</a>
         </div>
     </div>
 </div>

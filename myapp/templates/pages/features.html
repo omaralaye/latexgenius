@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Features | LaTeX Genius{% endblock %}
+
+{% block content %}
+<div class="bg-background text-on-surface font-body-md overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
+<header class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+    <div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+        <a class="flex items-center gap-2" href="{% url 'landing' %}">
+            <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            <span class="font-headline-md text-headline-md font-bold text-primary">LaTeX Genius</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+            <a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="{% url 'templates' %}">Templates</a>
+            <a class="text-primary font-semibold border-b-2 border-primary font-label-md text-label-md" href="{% url 'features' %}">Features</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="{% url 'pricing' %}">Pricing</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="text-on-surface font-label-md text-label-md hover:text-primary transition-colors" href="{% url 'login' %}">Sign In</a>
+            <a class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 shadow-sm" href="{% url 'signup' %}">Get Started</a>
+        </div>
+    </div>
+</header>
+
+<main class="pt-32">
+    <!-- Hero -->
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-24">
+        <div class="max-w-3xl">
+            <span class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-label-md font-label-md rounded-full mb-6">Deep Dive</span>
+            <h1 class="font-display-lg text-display-lg mb-6 text-primary leading-tight">Precision Tools for Modern Scholarship</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Beyond simple automation, LaTeX Genius provides a professional suite of tools designed specifically for the rigors of academic publishing and technical documentation.
+            </p>
+        </div>
+    </section>
+
+    <!-- Feature 01: AI Generation -->
+    <section class="bg-surface-container-low py-24 mb-24">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="p-2 bg-primary-container text-on-primary-container rounded-lg">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                        </span>
+                        <span class="text-primary font-bold uppercase tracking-widest text-label-md">Core Capability 01</span>
+                    </div>
+                    <h2 class="font-headline-lg text-headline-lg mb-6 text-on-surface">AI-Powered Semantic Generation</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
+                        Our proprietary LLM understands the nuances of academic discourse. Simply describe your findings or upload raw notes, and witness the instant creation of structured LaTeX source code. It handles complex environments—mathematical proofs, tabular data, and chemical notations—with institutional-grade precision.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <span class="text-on-surface font-body-md italic">Auto-balancing of complex math environments and delimiters.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <span class="text-on-surface font-body-md italic">Context-aware document structuring based on journal templates.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                            <span class="text-on-surface font-body-md italic">Instant transformation of conversational text into formal academic prose.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-all duration-700"></div>
+                    <div class="relative bg-[#111] rounded-xl shadow-2xl overflow-hidden border border-white/10 aspect-video flex flex-col">
+                        <div class="h-8 bg-zinc-900 flex items-center px-4 gap-2 border-b border-white/5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+                            <span class="text-[10px] text-zinc-500 ml-2 font-code-sm uppercase tracking-widest">ai-generator.tex</span>
+                        </div>
+                        <div class="p-6 font-code-sm text-code-sm leading-relaxed overflow-hidden">
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">1</span><span class="text-blue-400">\documentclass</span><span class="text-zinc-300">{article}</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">2</span><span class="text-blue-400">\usepackage</span><span class="text-zinc-300">{amsmath, amssymb}</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">3</span><span class="text-zinc-400">% AI is currently drafting your abstract...</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">4</span><span class="text-blue-400">\begin</span><span class="text-zinc-300">{document}</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">5</span><span class="text-blue-400">\section</span><span class="text-zinc-300">{Methodology}</span></div>
+                            <div class="flex gap-4 animate-pulse"><span class="text-zinc-600 select-none">6</span><span class="text-primary-fixed code-glow">The neural architecture utilizes a series of residual blocks...</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">7</span><span class="text-blue-400">\begin</span><span class="text-zinc-300">{equation}</span></div>
+                            <div class="flex gap-4"><span class="text-zinc-600 select-none">8</span><span class="text-primary-fixed code-glow">\mathcal{L}(\theta) = \sum_{i=1}^n \ell(f(x_i; \theta), y_i) + \lambda R(\theta)</span></div>
+                        </div>
+                        <div class="mt-auto bg-primary-container/20 p-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-on-primary-container text-[11px] font-label-md flex items-center gap-2">
+                                <span class="animate-ping w-1.5 h-1.5 rounded-full bg-on-primary-container"></span>
+                                AI is generating your Proof...
+                            </span>
+                            <div class="flex gap-2"><div class="w-16 h-1 rounded-full bg-zinc-800 overflow-hidden"><div class="h-full bg-primary w-2/3"></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 02: Bento Grid -->
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-24">
+        <div class="text-center mb-16">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">The Live Editorial Workbench</h2>
+            <p class="text-on-surface-variant font-body-md max-w-2xl mx-auto">See your document come to life as you type. Our blazing-fast engine eliminates the "compile and wait" frustration of legacy LaTeX editors.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 grid-rows-2 gap-6 min-h-[600px]">
+            <div class="md:col-span-8 md:row-span-2 bg-white academic-border rounded-xl p-8 flex flex-col gap-6 group hover:shadow-xl transition-shadow duration-500">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-headline-md text-headline-md text-primary">Side-by-Side Clarity</h3>
+                    <div class="flex gap-2">
+                        <span class="material-symbols-outlined text-outline-variant">splitscreen</span>
+                        <span class="material-symbols-outlined text-outline-variant">zoom_in</span>
+                    </div>
+                </div>
+                <div class="flex-grow flex gap-4 overflow-hidden rounded-lg border border-outline-variant/20">
+                    <div class="w-1/2 bg-[#111] p-4 font-code-sm text-zinc-400 overflow-hidden hidden sm:block">
+                        <p class="text-blue-300">1 \title{Quantum Entanglement}</p>
+                        <p>2 \author{Dr. Elena Vance}</p>
+                        <p>3 \date{\today}</p>
+                        <p>4 </p>
+                        <p>5 \begin{abstract}</p>
+                        <p>6 This paper explores the...</p>
+                    </div>
+                    <div class="flex-grow bg-parchment-muted p-6 shadow-inner overflow-hidden">
+                        <div class="max-w-xs mx-auto text-center border-b border-black/10 pb-4 mb-4">
+                            <div class="h-4 w-32 bg-black/10 mx-auto rounded mb-2"></div>
+                            <div class="h-3 w-20 bg-black/5 mx-auto rounded"></div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="h-3 w-full bg-black/5 rounded"></div>
+                            <div class="h-3 w-full bg-black/5 rounded"></div>
+                            <div class="h-3 w-2/3 bg-black/5 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-on-surface-variant text-body-md">Engineered with a high-performance WASM-based TeX engine that updates your PDF locally in milliseconds.</p>
+            </div>
+            <div class="md:col-span-4 bg-primary text-on-primary rounded-xl p-8 flex flex-col justify-between group overflow-hidden relative">
+                <div class="relative z-10">
+                    <span class="material-symbols-outlined text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">error</span>
+                    <h3 class="font-headline-md text-headline-md mb-2">Instant Debugging</h3>
+                    <p class="text-on-primary/70 text-body-md">No more cryptic log files. Our AI pinpoints errors and suggests fixes in human-readable English.</p>
+                </div>
+                <div class="absolute -right-4 -bottom-4 opacity-10 transform rotate-12 transition-transform group-hover:rotate-6 duration-500">
+                    <span class="material-symbols-outlined text-[160px]">bug_report</span>
+                </div>
+            </div>
+            <div class="md:col-span-4 bg-surface-container-highest border border-outline-variant/30 rounded-xl p-8 flex flex-col justify-between group">
+                <div>
+                    <span class="material-symbols-outlined text-primary text-4xl mb-4">cloud_sync</span>
+                    <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Omnipresent Access</h3>
+                    <p class="text-on-surface-variant text-body-md">Your library is encrypted and synced across all devices. Write in the lab, refine on the train.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Grid from DB -->
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-24">
+        <div class="text-center mb-16">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Everything you need, nothing you don't</h2>
+            <p class="text-on-surface-variant font-body-md max-w-2xl mx-auto">Each feature is designed around real academic workflows.</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for feature in features %}
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 card-elevation hover:shadow-lg transition-all duration-300">
+                <div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-2xl">{{ feature.icon|default:"auto_awesome" }}</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-surface mb-3">{{ feature.title }}</h3>
+                <p class="text-body-md text-on-surface-variant leading-relaxed">{{ feature.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Smart Bibliography -->
+    <section class="bg-primary text-on-primary py-24 mb-24 overflow-hidden">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 relative">
+                    <div class="relative w-full max-w-md mx-auto h-[400px]">
+                        <div class="absolute top-0 left-0 w-full h-full transform translate-x-4 translate-y-4 bg-white/10 rounded-lg"></div>
+                        <div class="absolute top-0 left-0 w-full h-full bg-white rounded-lg shadow-2xl p-6 flex flex-col gap-4">
+                            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-4">
+                                <span class="font-headline-md text-on-surface text-lg">References (42)</span>
+                                <button class="bg-primary-container text-on-primary-container px-3 py-1 rounded-md text-[12px] font-label-md">Import .bib</button>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="p-3 bg-surface rounded border border-outline-variant/30 group cursor-pointer hover:bg-forest-light transition-colors">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span class="text-on-surface font-bold text-[14px]">Smith, J. et al. (2023)</span>
+                                        <span class="text-primary text-[10px] font-bold">APA 7</span>
+                                    </div>
+                                    <p class="text-on-surface-variant text-[12px] leading-tight">Neural Architectures for Large-Scale Knowledge Retrieval...</p>
+                                </div>
+                                <div class="p-3 bg-surface rounded border border-outline-variant/30 opacity-60">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span class="text-on-surface font-bold text-[14px]">Kovacs, A. (2022)</span>
+                                        <span class="text-primary text-[10px] font-bold">IEEE</span>
+                                    </div>
+                                    <p class="text-on-surface-variant text-[12px] leading-tight">Decentralized Protocols in Scholarly Publishing...</p>
+                                </div>
+                                <div class="p-3 bg-primary/5 rounded border-2 border-dashed border-primary/20 flex items-center justify-center gap-3">
+                                    <span class="material-symbols-outlined text-primary animate-spin text-xl">sync</span>
+                                    <span class="text-primary font-code-sm text-[12px]">Auto-resolving DOI...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="p-2 bg-secondary text-on-secondary rounded-lg">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book</span>
+                        </span>
+                        <span class="text-on-primary font-bold uppercase tracking-widest text-label-md">Core Capability 03</span>
+                    </div>
+                    <h2 class="font-headline-lg text-headline-lg mb-6 text-on-primary">Zero-Effort Bibliography</h2>
+                    <p class="font-body-md text-body-md text-on-primary/80 mb-8 leading-relaxed">
+                        Stop wrestling with BibTeX files. LaTeX Genius automatically scrapes metadata from DOIs, ISBNs, or URLs. Just paste a link, and we'll generate perfectly formatted citations in APA, MLA, Chicago, IEEE, or any of the 2,500+ supported CSL styles.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <h4 class="font-bold text-on-primary mb-1">DOI Resolution</h4>
+                            <p class="text-[13px] opacity-70">Instant metadata retrieval from CrossRef and PubMed databases.</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <h4 class="font-bold text-on-primary mb-1">Format Switching</h4>
+                            <p class="text-[13px] opacity-70">Switch citation styles for the entire document in one click.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Institutional Requirements -->
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-32">
+        <div class="bg-surface-container rounded-3xl p-12 overflow-hidden relative">
+            <div class="relative z-10 max-w-2xl">
+                <h3 class="font-headline-lg text-headline-lg text-on-surface mb-8">Institutional Requirements? Covered.</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+                    <div class="flex gap-4">
+                        <span class="material-symbols-outlined text-primary">verified_user</span>
+                        <div>
+                            <h5 class="font-bold text-on-surface">GDPR & FERPA</h5>
+                            <p class="text-label-md text-on-surface-variant">Institutional data security standards for universities.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="material-symbols-outlined text-primary">groups</span>
+                        <div>
+                            <h5 class="font-bold text-on-surface">Team Collaboration</h5>
+                            <p class="text-label-md text-on-surface-variant">Real-time multiplayer editing with Git-like versioning.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="material-symbols-outlined text-primary">terminal</span>
+                        <div>
+                            <h5 class="font-bold text-on-surface">API Access</h5>
+                            <p class="text-label-md text-on-surface-variant">Integrate LaTeX Genius into your laboratory workflows.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="material-symbols-outlined text-primary">print</span>
+                        <div>
+                            <h5 class="font-bold text-on-surface">Print-Ready Export</h5>
+                            <p class="text-label-md text-on-surface-variant">CMYK support and bleed control for physical journals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center pb-32">
+        <h2 class="font-display-lg text-display-lg mb-8 text-primary">Ready to publish your best work?</h2>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a class="bg-primary text-on-primary px-10 py-4 rounded-full font-headline-md text-headline-md hover:bg-primary-container hover:text-on-primary-container transition-all shadow-lg active:scale-95" href="{% url 'signup' %}">Get Started for Free</a>
+            <a class="border border-outline text-on-surface px-10 py-4 rounded-full font-headline-md text-headline-md hover:bg-surface-container transition-all" href="{% url 'documentation' %}">Schedule Demo</a>
+        </div>
+        <p class="mt-6 text-on-surface-variant text-label-md italic">No credit card required for researchers and students.</p>
+    </section>
+</main>
+
+<footer class="bg-surface-container w-full py-12 px-margin-mobile md:px-margin-desktop">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-container-max mx-auto text-on-surface-variant text-label-md">
+        <p>&copy; 2026 LaTeX Genius. All rights reserved.</p>
+        <div class="flex gap-8">
+            <a class="hover:text-primary transition-colors" href="{% url 'privacy' %}">Privacy Policy</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'terms' %}">Terms of Service</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'documentation' %}">Help Center</a>
+        </div>
+    </div>
+</footer>
+</div>
+{% endblock content %}

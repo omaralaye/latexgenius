@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings - LaTeX Genius</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Source Serif 4 -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- BEGIN: Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            academic: {
+              surface: '#faf9f3',
+              'surface-dim': '#dbdad4',
+              'surface-bright': '#faf9f3',
+              'surface-low': '#f5f4ee',
+              primary: '#064e3b', // Custom color from design system
+              'primary-container': '#d1fae5',
+            }
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Source Serif 4', serif;
+      background-color: #faf9f3;
+      color: #1a1c18;
+    }
+    input, textarea {
+      background-color: #ffffff !important;
+      border: 1px solid #dbdad4 !important;
+    }
+    input:focus, textarea:focus {
+      border-color: #064e3b !important;
+      ring-color: #064e3b !important;
+    }
+  </style>
+<style data-purpose="layout-adjustment">
+    .sidebar-item-active {
+      background-color: #d1fae5;
+      color: #064e3b;
+    }
+    .settings-tab-active {
+      background-color: #064e3b;
+      color: #ffffff;
+    }
+    .card-border {
+      border: 1px solid #dbdad4;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="min-h-screen flex">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-64 border-r border-academic-surface-dim bg-academic-surface flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-academic-primary text-white p-1.5 rounded">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-xl font-bold text-academic-primary tracking-tight">LaTeX Genius</span>
+</div>
+<nav class="mt-4 flex-grow px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+        Dashboard
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+        Documents
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        AI Generate
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+        Templates
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        Bibliography
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 sidebar-item-active font-medium rounded transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        Settings
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 rounded hover:bg-academic-surface-low transition-colors" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        Notifications
+      </a>
+</nav>
+<div class="mt-auto p-4 border-t border-academic-surface-dim">
+<div class="flex items-center gap-3 p-2 rounded bg-academic-surface-low">
+<div class="w-10 h-10 rounded-full bg-academic-primary flex items-center justify-center text-white font-bold">JD</div>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500 truncate">jane@mit.edu</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="ml-64 flex-1 min-h-screen">
+<!-- BEGIN: TopBar -->
+<header class="h-16 border-b border-academic-surface-dim bg-white flex items-center justify-between px-8">
+<h1 class="text-lg font-semibold">Settings</h1>
+<div class="flex items-center gap-6">
+<button class="relative text-gray-600">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+<span class="absolute top-0 right-0 w-2 h-2 bg-yellow-500 rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-semibold leading-none">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500 leading-none mt-1">jane@mit.edu</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#90b1a8] flex items-center justify-center text-white font-bold">JD</div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: SettingsContainer -->
+<div class="p-8 max-w-5xl mx-auto">
+<!-- BEGIN: SectionHeader -->
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-gray-900">Settings</h2>
+<p class="text-gray-500 mt-1">Manage your account, preferences, and billing</p>
+</div>
+<!-- END: SectionHeader -->
+<!-- BEGIN: Tabs -->
+<div class="flex gap-4 mb-10">
+<button class="settings-tab-active flex items-center gap-2 px-5 py-2.5 rounded shadow-sm text-sm font-medium transition-all">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" fill-rule="evenodd"></path></svg>
+          Profile
+        </button>
+<button class="bg-academic-surface-low border border-academic-surface-dim text-gray-700 flex items-center gap-2 px-5 py-2.5 rounded shadow-sm text-sm font-medium hover:bg-academic-surface-dim transition-all">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" fill-rule="evenodd"></path></svg>
+          Preferences
+        </button>
+<button class="bg-academic-surface-low border border-academic-surface-dim text-gray-700 flex items-center gap-2 px-5 py-2.5 rounded shadow-sm text-sm font-medium hover:bg-academic-surface-dim transition-all">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path clip-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" fill-rule="evenodd"></path></svg>
+          Billing
+        </button>
+</div>
+<!-- END: Tabs -->
+<!-- BEGIN: ProfileForm -->
+<div class="space-y-8">
+<!-- Avatar Section -->
+<section class="card-border rounded-lg p-6 bg-academic-surface-low" data-purpose="avatar-management">
+<h3 class="text-sm font-semibold text-gray-900 mb-4">Avatar &amp; Name</h3>
+<div class="flex items-center gap-6">
+<div class="w-20 h-20 rounded-full bg-[#90b1a8] flex items-center justify-center text-white text-2xl font-bold">JD</div>
+<div class="flex-1 space-y-3">
+<input class="w-full px-4 py-2.5 rounded border focus:ring-academic-primary text-gray-800" data-purpose="name-input" type="text" value="Dr. Jane Doe">
+<button class="text-sm text-academic-primary font-medium hover:underline">Change avatar</button>
+</div>
+</div>
+</section>
+<!-- Account Info Section -->
+<section class="card-border rounded-lg p-6 bg-academic-surface-low" data-purpose="account-information">
+<h3 class="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wider">Account Information</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Email</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="email" value="jane.doe@mit.edu">
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Institution</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="text" value="Massachusetts Institute of Technology">
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Department</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="text" value="Department of Electrical Engineering &amp; Computer Science">
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Role</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="text" value="Associate Professor">
+</div>
+<div class="col-span-full space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Bio</label>
+<textarea class="w-full px-4 py-2.5 rounded border text-gray-800 resize-none" rows="4">Computational physicist and machine learning researcher. Focus on deep learning applications in quantum many-body systems and statistical mechanics.</textarea>
+</div>
+</div>
+</section>
+<!-- Change Password Section -->
+<section class="card-border rounded-lg p-6 bg-academic-surface-low" data-purpose="password-security">
+<h3 class="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wider">Change Password</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Current password</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="password">
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">New password</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="password">
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-gray-500 uppercase">Confirm new password</label>
+<input class="w-full px-4 py-2.5 rounded border text-gray-800" type="password">
+</div>
+</div>
+<button class="px-6 py-2 bg-academic-surface-dim hover:bg-gray-300 transition-colors rounded text-sm font-semibold text-gray-800">
+            Update password
+          </button>
+</section>
+<!-- Sticky Footer for Actions -->
+<div class="pt-6 border-t border-academic-surface-dim flex justify-end items-center gap-4">
+<button class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Cancel</button>
+<button class="px-8 py-2.5 bg-academic-primary text-white rounded font-bold hover:opacity-90 shadow-lg transition-all">Save changes</button>
+</div>
+</div>
+<!-- END: ProfileForm -->
+</div>
+<!-- END: SettingsContainer -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: ReaddyBadge -->
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+
+</div>
+<!-- END: ReaddyBadge -->
+
+
+</body></html>

@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Subscription Successful | LatexGenius{% endblock %}
+{% block title %}Subscription Successful — LaTeX Genius{% endblock %}
 
 {% block content %}
-<section class="relative pt-32 pb-20 bg-background dark:bg-dark-bg min-h-screen flex items-center justify-center">
-    <div class="max-w-md mx-auto px-8 text-center">
-        <div class="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-8">
-            <span class="material-symbols-outlined text-5xl text-green-600">check_circle</span>
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pt-28 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md text-center">
+        <div class="w-20 h-20 rounded-full bg-forest-light flex items-center justify-center mx-auto mb-8">
+            <span class="material-symbols-outlined text-5xl text-primary">check_circle</span>
         </div>
-        <h1 class="text-4xl font-serif font-bold dark:text-white mb-4">Welcome to Pro!</h1>
-        <p class="text-lg text-on-surface-variant dark:text-dark-text-muted mb-8">
-            Your subscription is active. You now have unlimited AI conversions, 50GB storage, and all premium features.
-        </p>
-        <a href="{% url 'dashboard' %}" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-label font-bold text-lg transition-all hover:bg-primary-variant">
+        <h1 class="font-headline-lg text-headline-lg text-primary mb-4">Welcome to Pro!</h1>
+        <p class="text-on-surface-variant mb-8">Your subscription is active. You now have unlimited AI conversions, 50GB storage, and all premium features.</p>
+        <a href="{% url 'dashboard' %}" class="bg-primary-container text-on-primary-container px-8 py-4 rounded-full font-label-md hover:bg-primary hover:text-on-primary transition-all inline-flex items-center gap-2">
             <span class="material-symbols-outlined">dashboard</span>
             Go to Dashboard
         </a>

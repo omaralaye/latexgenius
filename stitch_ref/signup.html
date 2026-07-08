@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up | LaTeX Genius</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#85bdb2",
+                    "surface": "#faf9f3",
+                    "ink": "#111111",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e3e3dd",
+                    "primary": "#003527",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#6b3b00",
+                    "inverse-primary": "#95d3ba",
+                    "forest-light": "#D1FAE5",
+                    "secondary-container": "#fea54a",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#404944",
+                    "outline": "#707974",
+                    "inverse-on-surface": "#f2f1eb",
+                    "on-background": "#1b1c19",
+                    "surface-container": "#efeee8",
+                    "on-secondary-fixed": "#2d1600",
+                    "tertiary-fixed": "#b5eee2",
+                    "on-secondary-container": "#6e3d00",
+                    "on-primary-fixed": "#002117",
+                    "parchment-muted": "#F4F2E9",
+                    "on-primary-fixed-variant": "#0b513d",
+                    "surface-tint": "#2b6954",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-dim": "#dbdad4",
+                    "on-primary-container": "#80bea6",
+                    "surface-bright": "#faf9f3",
+                    "secondary": "#8d4f00",
+                    "primary-container": "#064e3b",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#99d1c6",
+                    "primary-fixed-dim": "#95d3ba",
+                    "on-surface": "#1b1c19",
+                    "tertiary": "#00352f",
+                    "secondary-fixed": "#ffdcc0",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e9e8e2",
+                    "tertiary-container": "#114d45",
+                    "on-tertiary-fixed-variant": "#144f47",
+                    "surface-container-low": "#f5f4ee",
+                    "background": "#faf9f3",
+                    "outline-variant": "#bfc9c3",
+                    "primary-fixed": "#b0f0d6",
+                    "inverse-surface": "#30312d",
+                    "secondary-fixed-dim": "#ffb875",
+                    "surface-container-highest": "#e3e3dd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-unit": "8px",
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "code-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["\"Source Serif 4\""],
+                    "headline-lg": ["\"Source Serif 4\""],
+                    "display-lg": ["\"Source Serif 4\""]
+            },
+            "fontSize": {
+                    "code-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-academic {
+            background-color: #F4F2E9;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 1px solid #707974;
+            transition: border-bottom 0.2s ease-in-out;
+        }
+        .form-input-academic:focus {
+            outline: none;
+            border-bottom: 2px solid #003527;
+            box-shadow: none;
+            --tw-ring-color: transparent;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#064e3b 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Header (Suppressed standard nav per Task logic, but providing a branding anchor) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop h-20 flex items-center justify-between">
+<a class="text-primary font-headline-md text-headline-md tracking-tight flex items-center gap-2" href="/">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+            LaTeX Genius
+        </a>
+<div class="hidden md:block">
+<p class="text-label-md font-label-md text-on-surface-variant">Already have an account? <a class="text-primary font-semibold hover:underline" href="#">Sign In</a></p>
+</div>
+</header>
+<main class="min-h-screen flex flex-col md:flex-row pt-20">
+<!-- Left Side: Registration Form -->
+<section class="flex-1 flex items-center justify-center px-margin-mobile md:px-24 py-12">
+<div class="w-full max-w-md">
+<div class="mb-10">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Create your academic workspace</h1>
+<p class="text-body-md text-on-surface-variant">Join 20,000+ researchers simplifying their LaTeX workflow.</p>
+</div>
+<!-- Social Auth -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+<button class="flex items-center justify-center gap-3 border border-outline-variant px-6 py-3 rounded-lg hover:bg-surface-container transition-colors font-label-md text-label-md">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                        Google
+                    </button>
+<button class="flex items-center justify-center gap-3 border border-outline-variant px-6 py-3 rounded-lg hover:bg-surface-container transition-colors font-label-md text-label-md">
+<img alt="ORCID Logo" class="w-5 h-5 grayscale opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDaTvWxXitNBK5-Pn9aNTJ82GetiBY7GoluTQJtxLDUUP9hT-Mt6Rro9Vmlz_7--A-GZBwkJtKolyCugyN3Y02MQi0-OSx9c42EoG8WjSkFr9i8K_6py8zz9bs2dHBeamTjPJjQtVPhW6vrZejn0mstGjO9dYXjJBxy3t3l8DK4qREs5O4fYZZAXS7b_8YtaruBfHm1FRe3X8kzpMZcUG-j0MQj7bl6y4NGBtOPjyq9V9h3t8IV9S2pKfANwr4ytsnpoPodGhLYPdj"/>
+                        ORCID
+                    </button>
+</div>
+<div class="relative flex items-center mb-8">
+<div class="flex-grow border-t border-outline-variant/50"></div>
+<span class="flex-shrink mx-4 text-label-md font-label-md text-outline">or with email</span>
+<div class="flex-grow border-t border-outline-variant/50"></div>
+</div>
+<!-- Standard Form -->
+<form class="space-y-8" onsubmit="event.preventDefault()">
+<div class="relative">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-1" for="name">Full Name</label>
+<input class="w-full py-2 form-input-academic text-body-md" id="name" name="name" placeholder="Dr. Julian Thorne" type="text"/>
+</div>
+<div class="relative">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-1" for="email">Institutional Email</label>
+<input class="w-full py-2 form-input-academic text-body-md" id="email" name="email" placeholder="j.thorne@cambridge.ac.uk" type="email"/>
+</div>
+<div class="relative">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-1" for="password">Password</label>
+<input class="w-full py-2 form-input-academic text-body-md" id="password" name="password" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="flex items-start gap-3 pt-2">
+<input class="mt-1 w-4 h-4 rounded-sm border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<label class="text-label-md text-on-surface-variant leading-tight" for="terms">
+                            I agree to the <a class="underline hover:text-primary" href="#">Terms of Service</a> and <a class="underline hover:text-primary" href="#">Privacy Policy</a>.
+                        </label>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-body-md py-4 rounded-lg hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+                        Create Account
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<p class="mt-8 text-center text-label-md text-on-surface-variant md:hidden">
+                    Already have an account? <a class="text-primary font-semibold" href="#">Sign In</a>
+</p>
+</div>
+</section>
+<!-- Right Side: Brand Atmosphere / Testimonial -->
+<section class="hidden md:flex flex-1 relative bg-surface-container overflow-hidden border-l border-outline-variant/30">
+<div class="absolute inset-0 bg-pattern"></div>
+<!-- Atmospheric Image -->
+<div class="absolute inset-0 z-0 overflow-hidden">
+<div class="w-full h-full opacity-40 mix-blend-multiply bg-cover bg-center" data-alt="A moody, high-contrast overhead shot of a clean academic workspace. A vintage fountain pen rests on a thick stack of ivory manuscript paper with complex mathematical formulas. Soft morning light enters through a tall library window, casting long, elegant shadows. The atmosphere is quiet, studious, and deeply intellectual, perfectly capturing the scholarly editorial aesthetic with forest green and parchment tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANmsWcNgvxE3DRzJBBhQz7RIWX0shsfIrHd55Mh-75So9wziKVSar5E_J9lshd3kYcB23cD_eXaeKdwm1B4SCCgoFFHdTrkryCeU-asqiDfD5Tq7HL4mxYwJShHrU8g6lJ6-3fxrwkuaMVY0Ac_TuvBPEirB3aQh9-Rl04EE76rQ8CowOG4MnPU-TNhJv07u4kR-yXr1hiSZRc1ISqR76AYIaAW4OFpgADK1qNrABZ4e_WlY-4iuI_EbO1nkUEcwhBgFU3_RDPwsqh')">
+</div>
+</div>
+<div class="relative z-10 w-full flex flex-col justify-end p-24 text-primary">
+<div class="max-w-md">
+<!-- Testimonial Card -->
+<div class="bg-surface/90 backdrop-blur-md p-8 border border-primary/10 rounded-xl mb-12 shadow-sm">
+<div class="flex gap-1 mb-4 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="font-headline-md text-headline-md italic mb-6 leading-relaxed">
+                            "The citation management and real-time collaboration features have transformed how our lab publishes. It's the precision of LaTeX with the ease of modern AI."
+                        </blockquote>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary/20 overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a distinguished female professor in her 50s with a warm, confident smile. She has graying hair styled neatly and is wearing dark-framed glasses and a tailored navy blazer. The background is a soft-focus academic library with leather-bound books. High-end portrait photography style, soft directional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpZ5mLpqGt3nKUUz9E_Kdv1qGaQN1f_IkvGnifFNwmZQ8nSnAgooi8scesiVknNFW1lLX1MOe8Dm5-XkPnA1f0TtUNGCuKFzreDEZeVVdbuINYUragz6L0i44ngngkF_TgbsotwTtFSQnlhEoNirF6GXsDRGKlik5FEc_F-FP_Z4bLlwCq9WS5Up1vKinLZytdYJfeTKSkaKO1fPk36KO4kUN6nHxtFys_5RT0jM6HQUY--SNPpDpNG_NGbq3WBgQWNeQiJvBlZkjx"/>
+</div>
+<div>
+<p class="font-bold text-label-md">Dr. Elena Volkov</p>
+<p class="text-label-md text-on-surface-variant">Director of Research, ETH Zürich</p>
+</div>
+</div>
+</div>
+<!-- Benefits List -->
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-6">Why researchers choose Genius</h3>
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+</div>
+<p class="text-body-md font-medium">Automatic BibTeX formatting for 5,000+ journals</p>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[20px]">psychology</span>
+</div>
+<p class="text-body-md font-medium">AI-powered equation synthesis and error detection</p>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+</div>
+<p class="text-body-md font-medium">Real-time collaboration with track-changes</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Minimal for Focused Journey) -->
+<footer class="w-full py-8 px-margin-mobile md:px-margin-desktop bg-background border-t border-outline-variant/30">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-label-md text-on-surface-variant">© 2024 LaTeX Genius. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-label-md text-on-surface-variant hover:text-primary" href="#">Privacy</a>
+<a class="text-label-md text-on-surface-variant hover:text-primary" href="#">Terms</a>
+<a class="text-label-md text-on-surface-variant hover:text-primary" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Input focus effects
+        const inputs = document.querySelectorAll('.form-input-academic');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.replace('text-on-surface-variant', 'text-primary');
+            });
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.parentElement.querySelector('label').classList.replace('text-primary', 'text-on-surface-variant');
+                }
+            });
+        });
+
+        // Simple form validation feedback
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Processing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
+        });
+    </script>
+</body></html>

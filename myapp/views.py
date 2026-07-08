@@ -863,6 +863,16 @@ def templates_page(request):
         return JsonResponse(context, safe=False)
     return render(request, 'pages/templatespage.html', context)
 
+def features_page(request):
+    features = services.get_features()
+    context = {
+        'features': features,
+        'app_settings': services.get_all_settings(),
+    }
+    if request.GET.get('format') == 'json':
+        return JsonResponse(context, safe=False)
+    return render(request, 'pages/features.html', context)
+
 def pricing_page(request):
     plans = services.get_subscription_plans()
     user_sub = None

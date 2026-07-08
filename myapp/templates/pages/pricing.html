@@ -1,196 +1,148 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Pricing — LaTeXGenius{% endblock %}
+{% block title %}Pricing — LaTeX Genius{% endblock %}
 
 {% block content %}
-<section class="pt-20 pb-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-6xl font-extrabold text-accent dark:text-accent-dark mb-6">
-                Simple pricing
-            </h1>
-            <p class="text-xl text-secondary dark:text-secondary-dark max-w-2xl mx-auto mb-10">
-                Choose the plan that fits your workflow. No hidden fees, cancel anytime.
-            </p>
-            <div class="inline-flex items-center bg-secondary-light dark:bg-surface-dark-hover p-1 rounded-xl border border-border dark:border-border-dark">
-                <button id="monthly-btn" class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white transition-all">Monthly</button>
-                <button id="yearly-btn" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-secondary dark:text-secondary-dark transition-all">Yearly <span class="text-green-600 text-xs">-17%</span></button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {% for plan in plans %}
-            <div class="bg-white dark:bg-surface-dark rounded-xl border {% if plan.name == 'Pro' %}border-2 border-primary md:-mt-4 md:mb-4{% else %}border-border dark:border-border-dark{% endif %} p-8 flex flex-col transition-all hover:shadow-xl relative">
-                {% if plan.name == 'Pro' %}
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase">Most Popular</div>
-                {% endif %}
-                <div class="mb-8 {% if plan.name == 'Pro' %}mt-4{% endif %}">
-                    <span class="material-symbols-outlined text-secondary dark:text-secondary-dark mb-4 block text-3xl">
-                        {% if plan.name == 'Free' %}person{% elif plan.name == 'Pro' %}rocket_launch{% else %}domain{% endif %}
-                    </span>
-                    <h3 class="text-xl font-bold text-accent dark:text-accent-dark mb-2">{{ plan.name }}</h3>
-                    <p class="text-secondary dark:text-secondary-dark text-sm">{{ plan.description }}</p>
-                </div>
-                <div class="mb-8">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-5xl font-extrabold text-accent dark:text-accent-dark price-number" data-monthly="{{ plan.monthly_price_dollars }}" data-yearly="{{ plan.yearly_price_dollars }}" data-plan="{{ plan.name }}">
-                            {% if plan.monthly_price_cents == 0 %}Free{% else %}${{ plan.monthly_price_dollars }}{% endif %}
-                        </span>
-                        <span class="text-secondary dark:text-secondary-dark text-sm">{% if plan.monthly_price_cents > 0 %}/month{% endif %}</span>
-                    </div>
-                </div>
-                <ul class="space-y-4 mb-8 flex-grow">
-                    {% for feature in plan.features %}
-                    <li class="flex items-center gap-3 text-sm {% if feature.highlighted %}text-accent dark:text-accent-dark{% else %}text-secondary dark:text-secondary-dark{% endif %}">
-                        <span class="material-symbols-outlined text-sm {% if feature.highlighted %}text-green-600{% else %}text-secondary dark:text-secondary-dark{% endif %}">
-                            {% if feature.highlighted %}check_circle{% else %}close{% endif %}
-                        </span>
-                        {{ feature.label }}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% if plan.monthly_price_cents == 0 %}
-                <a href="{% url 'signup' %}" class="btn btn-primary justify-center">Get Started Free</a>
-                {% elif user.is_authenticated and user_subscription and user_subscription.plan_name == plan.name and user_subscription.is_active %}
-                <div class="w-full py-3 bg-primary-light text-primary text-center rounded-lg font-semibold">Current Plan</div>
-                {% elif user.is_authenticated %}
-                <button onclick="checkout('{{ plan.stripe_price_id_monthly }}', '{{ plan.stripe_price_id_yearly }}')" class="btn btn-primary justify-center" data-plan="{{ plan.name }}">Upgrade</button>
-                {% else %}
-                <a href="{% url 'signup' %}" class="btn btn-primary justify-center">Start Free</a>
-                {% endif %}
-            </div>
-            {% endfor %}
+<div class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop h-20 flex items-center justify-between border-b border-outline-variant/30">
+    <a class="text-primary font-headline-md text-headline-md tracking-tight flex items-center gap-2" href="{% url 'landing' %}">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+        LaTeX Genius
+    </a>
+    <nav class="hidden md:flex items-center gap-8">
+        <a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="{% url 'templates' %}">Templates</a>
+        <a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="{% url 'features' %}">Features</a>
+        <a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="{% url 'pricing' %}">Pricing</a>
+        <a class="text-primary font-label-md font-semibold bg-primary-container px-5 py-2.5 rounded-full hover:bg-primary hover:text-on-primary transition-all" href="{% url 'signup' %}">Start Free</a>
+    </nav>
+    <!-- Mobile menu trigger -->
+    <button class="md:hidden text-on-surface-variant" onclick="document.getElementById('mobile-nav').classList.toggle('translate-x-full')">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+</header>
+<!-- Mobile Nav -->
+<nav id="mobile-nav" class="fixed top-0 right-0 z-[100] h-full w-72 bg-surface shadow-2xl translate-x-full transition-transform duration-300 p-8 border-l border-outline-variant/30">
+    <div class="flex justify-end mb-8">
+        <button onclick="document.getElementById('mobile-nav').classList.add('translate-x-full')">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <div class="flex flex-col gap-6">
+        <a class="text-label-md font-label-md text-on-surface-variant" href="{% url 'landing' %}">Home</a>
+        <a class="text-label-md font-label-md text-on-surface-variant" href="{% url 'templates' %}">Templates</a>
+        <a class="text-label-md font-label-md text-on-surface-variant" href="{% url 'features' %}">Features</a>
+        <a class="text-label-md font-label-md text-primary font-semibold" href="{% url 'pricing' %}">Pricing</a>
+        <a class="text-label-md font-label-md text-on-surface-variant" href="{% url 'login' %}">Sign In</a>
+        <a class="bg-primary text-on-primary text-center font-label-md font-semibold px-5 py-3 rounded-full mt-4" href="{% url 'signup' %}">Start Free</a>
+    </div>
+</nav>
+<!-- Hero -->
+<section class="pt-32 pb-16 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+        <h1 class="font-headline-lg text-headline-lg text-primary mb-4">Find the plan that's right for you</h1>
+        <p class="text-body-lg text-on-surface-variant">Start free, upgrade when you need more. All plans include core LaTeX tooling and AI assistance.</p>
+        <!-- Toggle -->
+        <div class="flex items-center justify-center gap-4 mt-10">
+            <span class="font-label-md text-label-md {% if not annual %}text-primary font-semibold{% else %}text-on-surface-variant{% endif %}">Monthly</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input id="billing-toggle" type="checkbox" class="sr-only peer" {% if annual %}checked{% endif %} onchange="toggleBilling()"/>
+                <div class="w-12 h-7 bg-outline-variant rounded-full peer peer-checked:bg-primary after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-surface after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:after:translate-x-5"></div>
+            </label>
+            <span class="font-label-md text-label-md {% if annual %}text-primary font-semibold{% else %}text-on-surface-variant{% endif %}">Annual <span class="text-secondary text-label-sm">Save 25%</span></span>
         </div>
     </div>
-</section>
-
-<section class="py-24 bg-secondary-light dark:bg-surface-dark-hover">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-extrabold text-accent dark:text-accent-dark mb-4">Feature comparison</h2>
+    <!-- Cards -->
+    <div class="grid md:grid-cols-3 gap-8">
+        {% for plan in plans %}
+        <div class="rounded-2xl border {% if forloop.counter == 2 %}border-secondary bg-surface-container-lowest shadow-lg scale-[1.02] relative{% else %}border-outline-variant/50 bg-surface{% endif %} p-8 flex flex-col card-elevation">
+            {% if forloop.counter == 2 %}
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary text-on-secondary px-4 py-1 rounded-full text-label-md font-label-md">MOST POPULAR</div>
+            {% endif %}
+            <div class="mb-4">
+                <h2 class="font-headline-md text-headline-md text-on-surface">{{ plan.name }}</h2>
+                <p class="text-body-md text-on-surface-variant mt-1">{{ plan.description }}</p>
+            </div>
+            <div class="mb-8">
+                <span class="font-headline-lg text-headline-lg text-on-surface font-bold monthly-price" data-monthly="{{ plan.monthly_price_dollars }}" data-annual="{{ plan.yearly_price_dollars }}" data-name="{{ plan.name }}">
+                    {% if plan.monthly_price_cents == 0 and plan.yearly_price_cents == 0 %}{% if plan.name == 'Free' %}Free{% else %}Custom{% endif %}{% else %}${{ plan.monthly_price_dollars }}{% endif %}
+                </span>
+                {% if plan.monthly_price_cents > 0 %}<span class="text-body-md text-on-surface-variant">/month</span>{% endif %}
+                {% if plan.yearly_price_cents > 0 and plan.monthly_price_cents == 0 %}<span class="text-body-md text-on-surface-variant">/year</span>{% endif %}
+            </div>
+            <a href="{% url 'signup' %}" class="block text-center font-label-md font-semibold py-3.5 rounded-full transition-all mb-8 {% if forloop.counter == 2 %}bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container{% else %}border border-outline-variant/50 text-on-surface hover:bg-parchment-muted{% endif %}">
+                {% if plan.monthly_price_cents == 0 and plan.yearly_price_cents == 0 %}{% if plan.name == 'Free' %}Get Started Free{% else %}Contact Us{% endif %}{% else %}Get Started{% endif %}
+            </a>
+            <ul class="space-y-3 flex-grow">
+                {% for feature in plan.features %}
+                <li class="flex items-start gap-3 text-body-md">
+                    <span class="material-symbols-outlined text-{% if feature.highlighted %}secondary{% else %}outline-variant{% endif %} text-[20px] flex-shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">{% if feature.highlighted %}check_circle{% else %}remove{% endif %}</span>
+                    {{ feature.label }}
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b border-border dark:border-border-dark">
-                        <th class="py-4 px-4 text-left font-semibold text-accent dark:text-accent-dark">Feature</th>
-                        <th class="py-4 px-4 text-center text-secondary dark:text-secondary-dark">Free</th>
-                        <th class="py-4 px-4 text-center text-primary font-semibold">Pro</th>
-                        <th class="py-4 px-4 text-center text-accent dark:text-accent-dark">Enterprise</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-border dark:divide-border-dark">
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">AI Conversions</td><td class="py-4 px-4 text-center text-secondary dark:text-secondary-dark">5/month</td><td class="py-4 px-4 text-center text-primary font-medium">Unlimited</td><td class="py-4 px-4 text-center font-medium">Unlimited</td></tr>
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">Cloud Storage</td><td class="py-4 px-4 text-center text-secondary dark:text-secondary-dark">1GB</td><td class="py-4 px-4 text-center text-primary font-medium">50GB</td><td class="py-4 px-4 text-center font-medium">Unlimited</td></tr>
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">Templates</td><td class="py-4 px-4 text-center text-secondary dark:text-secondary-dark">Basic</td><td class="py-4 px-4 text-center text-primary font-medium">All</td><td class="py-4 px-4 text-center font-medium">All + Custom</td></tr>
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">API Access</td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-secondary dark:text-secondary-dark text-sm">close</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-secondary dark:text-secondary-dark text-sm">close</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-green-600 text-sm">check_circle</span></td></tr>
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">Priority Support</td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-secondary dark:text-secondary-dark text-sm">close</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary text-sm">check_circle</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-green-600 text-sm">check_circle</span></td></tr>
-                    <tr><td class="py-4 px-4 text-accent dark:text-accent-dark">SSO & Team Seats</td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-secondary dark:text-secondary-dark text-sm">close</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-secondary dark:text-secondary-dark text-sm">close</span></td><td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-green-600 text-sm">check_circle</span></td></tr>
-                </tbody>
-            </table>
-        </div>
+        {% endfor %}
     </div>
 </section>
-
-<section class="py-24">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-extrabold text-accent dark:text-accent-dark mb-4">FAQ</h2>
-        </div>
-        <div class="space-y-4">
-            <div class="bg-white dark:bg-surface-dark rounded-xl border border-border dark:border-border-dark overflow-hidden">
-                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-accent dark:text-accent-dark">Can I cancel anytime?</span>
-                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                </button>
-                <div class="faq-content hidden px-6 pb-6">
-                    <p class="text-secondary dark:text-secondary-dark">Yes. Cancel from your settings at any time. No long-term contracts or fees. Your access continues through the end of the billing period.</p>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-surface-dark rounded-xl border border-border dark:border-border-dark overflow-hidden">
-                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-accent dark:text-accent-dark">What happens when my subscription ends?</span>
-                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                </button>
-                <div class="faq-content hidden px-6 pb-6">
-                    <p class="text-secondary dark:text-secondary-dark">You'll be downgraded to the Free plan. Your documents remain accessible.</p>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-surface-dark rounded-xl border border-border dark:border-border-dark overflow-hidden">
-                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-accent dark:text-accent-dark">Do you offer educational discounts?</span>
-                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                </button>
-                <div class="faq-content hidden px-6 pb-6">
-                    <p class="text-secondary dark:text-secondary-dark">Yes. Contact us with your institutional email for student and faculty pricing.</p>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-surface-dark rounded-xl border border-border dark:border-border-dark overflow-hidden">
-                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-accent dark:text-accent-dark">What payment methods do you accept?</span>
-                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                </button>
-                <div class="faq-content hidden px-6 pb-6">
-                    <p class="text-secondary dark:text-secondary-dark">All major credit cards and bank transfers for Enterprise. Payments processed via Stripe.</p>
-                </div>
-            </div>
-        </div>
+<!-- FAQ -->
+<section class="py-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <h2 class="font-headline-md text-headline-md text-primary text-center mb-12">Frequently asked questions</h2>
+    <div class="max-w-3xl mx-auto space-y-4">
+        <details class="group border border-outline-variant/30 rounded-2xl bg-surface overflow-hidden">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-label-md text-label-md text-on-surface list-none hover:bg-surface-container transition-colors">
+                Can I cancel anytime?
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="px-6 pb-6 text-body-md text-on-surface-variant">Yes. Cancel from your settings at any time. No long-term contracts or fees. Your access continues through the end of the billing period.</div>
+        </details>
+        <details class="group border border-outline-variant/30 rounded-2xl bg-surface overflow-hidden">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-label-md text-label-md text-on-surface list-none hover:bg-surface-container transition-colors">
+                What happens when my subscription ends?
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="px-6 pb-6 text-body-md text-on-surface-variant">You'll be downgraded to the Free plan. Your documents remain accessible.</div>
+        </details>
+        <details class="group border border-outline-variant/30 rounded-2xl bg-surface overflow-hidden">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-label-md text-label-md text-on-surface list-none hover:bg-surface-container transition-colors">
+                Do you offer educational discounts?
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="px-6 pb-6 text-body-md text-on-surface-variant">Yes. Contact us with your institutional email for student and faculty pricing.</div>
+        </details>
+        <details class="group border border-outline-variant/30 rounded-2xl bg-surface overflow-hidden">
+            <summary class="flex items-center justify-between p-6 cursor-pointer font-label-md text-label-md text-on-surface list-none hover:bg-surface-container transition-colors">
+                What payment methods do you accept?
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="px-6 pb-6 text-body-md text-on-surface-variant">All major credit cards and bank transfers for Enterprise. Payments processed via Stripe.</div>
+        </details>
     </div>
 </section>
-
-<section class="py-24 px-4 bg-secondary-light dark:bg-surface-dark-hover">
-    <div class="max-w-5xl mx-auto bg-accent dark:bg-surface-dark rounded-2xl p-12 sm:p-16 text-center text-white">
-        <h2 class="text-4xl sm:text-5xl font-extrabold mb-6">Ready to convert?</h2>
-        <p class="opacity-80 text-lg mb-10 max-w-xl mx-auto">No credit card required. Cancel anytime.</p>
-        <a href="{% url 'signup' %}" class="btn btn-primary text-base px-10 py-3 inline-block">Start Free</a>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-mobile md:px-margin-desktop bg-background border-t border-outline-variant/30">
+    <div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-label-md text-on-surface-variant">&copy; 2026 LaTeX Genius. All rights reserved.</p>
+        <div class="flex gap-6">
+            <a class="text-label-md text-on-surface-variant hover:text-primary" href="{% url 'privacy' %}">Privacy</a>
+            <a class="text-label-md text-on-surface-variant hover:text-primary" href="{% url 'terms' %}">Terms</a>
+            <a class="text-label-md text-on-surface-variant hover:text-primary" href="{% url 'documentation' %}">Help Center</a>
+        </div>
     </div>
-</section>
-{% endblock %}
+</footer>
+</div>
 
-{% block extra_scripts %}
 <script>
-let billingInterval = 'monthly';
-document.addEventListener('DOMContentLoaded', () => {
-    const monthlyBtn = document.getElementById('monthly-btn');
-    const yearlyBtn = document.getElementById('yearly-btn');
-    monthlyBtn.addEventListener('click', () => {
-        billingInterval = 'monthly';
-        monthlyBtn.className = 'px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white transition-all';
-        yearlyBtn.className = 'px-6 py-2.5 rounded-lg text-sm font-semibold text-secondary dark:text-secondary-dark transition-all';
-        document.querySelectorAll('.price-number').forEach(el => {
-            el.textContent = el.dataset.plan === 'Free' ? 'Free' : '$' + el.dataset.monthly;
-        });
+function toggleBilling() {
+    const isAnnual = document.getElementById('billing-toggle').checked;
+    const prices = document.querySelectorAll('.monthly-price');
+    prices.forEach(el => {
+        const monthly = parseFloat(el.dataset.monthly);
+        const annual = parseFloat(el.dataset.annual);
+        const name = el.dataset.name;
+        if (monthly === 0 && annual === 0) { el.textContent = name === 'Free' ? 'Free' : 'Custom'; return; }
+        el.textContent = isAnnual ? `$${annual}` : `$${monthly}`;
     });
-    yearlyBtn.addEventListener('click', () => {
-        billingInterval = 'yearly';
-        yearlyBtn.className = 'px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white transition-all';
-        monthlyBtn.className = 'px-6 py-2.5 rounded-lg text-sm font-semibold text-secondary dark:text-secondary-dark transition-all';
-        document.querySelectorAll('.price-number').forEach(el => {
-            el.textContent = el.dataset.plan === 'Free' ? 'Free' : '$' + el.dataset.yearly;
-        });
-    });
-});
-function checkout(monthlyPriceId, yearlyPriceId) {
-    {% if user.is_authenticated %}
-    const priceId = billingInterval === 'yearly' ? yearlyPriceId : monthlyPriceId;
-    if (!priceId) { toast('Not available yet', 'info'); return; }
-    fetch('{% url "create_checkout_session" %}', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
-        body: JSON.stringify({ price_id: priceId }),
-    }).then(r => r.json()).then(data => {
-        if (data.url) { window.location.href = data.url; }
-        else { toast(data.message || 'Checkout failed', 'error'); }
-    }).catch(() => toast('Network error', 'error'));
-    {% else %}
-    window.location.href = '{% url "signup" %}';
-    {% endif %}
-}
-function toggleFaq(button) {
-    const content = button.nextElementSibling;
-    const icon = button.querySelector('.material-symbols-outlined');
-    if (content.classList.contains('hidden')) { content.classList.remove('hidden'); icon.style.transform = 'rotate(180deg)'; }
-    else { content.classList.add('hidden'); icon.style.transform = 'rotate(0deg)'; }
 }
 </script>
-{% endblock %}
+{% endblock content %}

@@ -1,14 +1,32 @@
-<footer class="bg-white dark:bg-surface-dark border-t border-border dark:border-border-dark text-sm transition-colors">
-    <div class="flex flex-col md:flex-row justify-between items-center w-full px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto gap-6">
-        <div class="flex flex-col items-center md:items-start gap-1">
-            <a href="{% url 'landing' %}" class="text-lg font-extrabold text-primary">LaTeXGenius</a>
-            <p class="text-secondary dark:text-secondary-dark">&copy; 2026 LaTeXGenius. All rights reserved.</p>
+<footer class="bg-surface-container py-16">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+            <div class="space-y-6">
+                <div class="text-headline-md font-bold text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    LaTeX Genius
+                </div>
+                <p class="text-on-surface-variant text-sm">AI-powered LaTeX generation for researchers, students, and professionals.</p>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h5 class="font-bold text-primary uppercase text-xs tracking-widest">Product</h5>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'templates' %}">Templates</a>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'features' %}">Features</a>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'pricing' %}">Pricing</a>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h5 class="font-bold text-primary uppercase text-xs tracking-widest">Resources</h5>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'documentation' %}">Documentation</a>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'contact' %}">Contact</a>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h5 class="font-bold text-primary uppercase text-xs tracking-widest">Company</h5>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'privacy' %}">Privacy</a>
+                <a class="text-on-surface-variant hover:text-secondary text-sm transition-colors" href="{% url 'terms' %}">Terms</a>
+            </div>
         </div>
-        <div class="flex flex-wrap justify-center gap-6 text-secondary dark:text-secondary-dark">
-            <a class="hover:text-primary transition-colors" href="{% url 'privacy' %}">Privacy</a>
-            <a class="hover:text-primary transition-colors" href="{% url 'terms' %}">Terms</a>
-            <a class="hover:text-primary transition-colors" href="{% url 'contact' %}">Contact</a>
-            <a class="hover:text-primary transition-colors" href="{% url 'documentation' %}">Docs</a>
+        <div class="pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-on-surface-variant text-sm">&copy; 2026 LaTeX Genius. All rights reserved.</p>
         </div>
     </div>
 </footer>

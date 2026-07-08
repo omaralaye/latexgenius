@@ -1628,3 +1628,37 @@ document.addEventListener('click', (e) => {
     pollTimer = setInterval(pollStatus, pollInterval);
     pollStatus();
 })();
+
+/* ====================================================================================
+   Section 15: Stitch Design Micro-interactions
+   Source: Stitch generated pages (landing, signup, etc.)
+   ==================================================================================== */
+(function() {
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Button scale micro-interaction
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+        btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+        btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+    });
+
+    // Academic form input focus effects
+    document.querySelectorAll('.form-input-academic').forEach(input => {
+        input.addEventListener('focus', () => {
+            const lbl = input.parentElement.querySelector('label');
+            if (lbl) lbl.classList.replace('text-on-surface-variant', 'text-primary');
+        });
+        input.addEventListener('blur', () => {
+            const lbl = input.parentElement.querySelector('label');
+            if (lbl && !input.value) lbl.classList.replace('text-primary', 'text-on-surface-variant');
+        });
+    });
+})();

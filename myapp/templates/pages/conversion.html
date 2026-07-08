@@ -1,17 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Converting document — LaTeXGenius{% endblock %}
+{% block title %}Converting document — LaTeX Genius{% endblock %}
 
 {% block layout %}
-<div class="min-h-screen bg-secondary-light dark:bg-surface-dark flex flex-col items-center justify-center px-4">
+<div class="min-h-screen bg-surface flex flex-col items-center justify-center px-margin-mobile">
   <div class="w-full max-w-lg mx-auto text-center">
-    <div class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20 mb-8">
-      <span class="material-symbols-outlined text-white text-2xl">auto_awesome</span>
+    <div class="w-14 h-14 bg-primary-container rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-8">
+      <span class="material-symbols-outlined text-on-primary-container text-2xl">auto_awesome</span>
     </div>
 
-    <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-border dark:border-border-dark p-8 mb-6">
+    <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-8 mb-6">
       <div id="conversion-animation" class="mb-6">
-        <div id="spinner-icon" class="w-20 h-20 mx-auto relative">
+        <div class="w-20 h-20 mx-auto relative">
           <div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
           <div id="spinner-arc" class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"></div>
           <div class="absolute inset-0 flex items-center justify-center">
@@ -21,128 +22,68 @@
       </div>
 
       <div id="success-animation" class="mb-6 hidden">
-        <div class="w-20 h-20 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-          <span class="material-symbols-outlined text-4xl text-emerald-500">check_circle</span>
+        <div class="w-20 h-20 mx-auto rounded-full bg-forest-light flex items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-primary">check_circle</span>
         </div>
       </div>
 
       <div id="error-animation" class="mb-6 hidden">
-        <div class="w-20 h-20 mx-auto rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+        <div class="w-20 h-20 mx-auto rounded-full bg-error-container/30 flex items-center justify-center">
           <span class="material-symbols-outlined text-4xl text-error">error</span>
         </div>
       </div>
 
-      <h1 id="status-title" class="text-xl font-bold text-accent dark:text-accent-dark mb-2">Converting document</h1>
+      <h1 id="status-title" class="font-headline-md text-primary mb-2">Converting document</h1>
+      <p id="status-message" class="text-sm text-on-surface-variant mb-6 min-h-[1.25rem]">{{ job.progress_message }}</p>
 
-      <p id="status-message" class="text-sm text-secondary dark:text-secondary-dark mb-6 min-h-[1.25rem] transition-all duration-300">{{ job.progress_message }}</p>
-
-      <div class="w-full bg-secondary-light dark:bg-surface-dark-hover rounded-full h-2 mb-2 overflow-hidden">
+      <div class="w-full bg-surface-container-high rounded-full h-2 mb-2 overflow-hidden">
         <div id="progress-bar" class="h-full bg-primary rounded-full transition-all duration-700 ease-out" style="width: {{ job.progress_percent }}%"></div>
       </div>
-
-      <p id="progress-text" class="text-xs font-mono text-secondary dark:text-secondary-dark">{{ job.progress_percent }}%</p>
+      <p id="progress-text" class="text-xs font-mono text-on-surface-variant">{{ job.progress_percent }}%</p>
 
       <div class="mt-8 space-y-3 text-left">
-        <div id="step-extract" class="flex items-center gap-3 text-sm text-secondary dark:text-secondary-dark">
-          <span class="step-dot w-5 h-5 rounded-full border-2 border-secondary dark:border-secondary-dark flex items-center justify-center flex-shrink-0">
+        <div id="step-extract" class="flex items-center gap-3 text-sm text-on-surface-variant">
+          <span class="step-dot w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-xs hidden">check</span>
           </span>
           <span>Extracting text from document</span>
         </div>
-        <div id="step-analyze" class="flex items-center gap-3 text-sm text-secondary dark:text-secondary-dark">
-          <span class="step-dot w-5 h-5 rounded-full border-2 border-secondary dark:border-secondary-dark flex items-center justify-center flex-shrink-0">
+        <div id="step-analyze" class="flex items-center gap-3 text-sm text-on-surface-variant">
+          <span class="step-dot w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-xs hidden">check</span>
           </span>
-          <span>Analyzing content</span>
+          <span>Analyzing structure with AI</span>
         </div>
-        <div id="step-latex" class="flex items-center gap-3 text-sm text-secondary dark:text-secondary-dark">
-          <span class="step-dot w-5 h-5 rounded-full border-2 border-secondary dark:border-secondary-dark flex items-center justify-center flex-shrink-0">
+        <div id="step-generate" class="flex items-center gap-3 text-sm text-on-surface-variant">
+          <span class="step-dot w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-xs hidden">check</span>
           </span>
-          <span>Generating LaTeX code</span>
+          <span>Generating LaTeX</span>
         </div>
-        <div id="step-finalize" class="flex items-center gap-3 text-sm text-secondary dark:text-secondary-dark">
-          <span class="step-dot w-5 h-5 rounded-full border-2 border-secondary dark:border-secondary-dark flex items-center justify-center flex-shrink-0">
+        <div id="step-compile" class="flex items-center gap-3 text-sm text-on-surface-variant">
+          <span class="step-dot w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0">
             <span class="material-symbols-outlined text-xs hidden">check</span>
           </span>
-          <span>Finalizing project</span>
+          <span>Compiling to PDF</span>
+        </div>
+        <div id="step-finalize" class="flex items-center gap-3 text-sm text-on-surface-variant">
+          <span class="step-dot w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-xs hidden">check</span>
+          </span>
+          <span>Finalizing document</span>
         </div>
       </div>
     </div>
 
-    <div id="error-actions" class="hidden mt-4">
-      <a href="{% url 'dashboard' %}" class="btn btn-primary"><span class="material-symbols-outlined text-sm">arrow_back</span>Back to Dashboard</a>
-    </div>
+    <a href="{% url 'dashboard' %}" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Cancel and return to dashboard</a>
   </div>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
+<script src="{% static 'myapp/js/conversion.js' %}"></script>
 <script>
-  const projectId = "{{ project_id }}";
-  const pollInterval = 2000;
-  let pollTimer = null;
-
-  function updateSteps(percent) {
-    const steps = [
-      { el: document.getElementById('step-extract'), threshold: 10 },
-      { el: document.getElementById('step-analyze'), threshold: 30 },
-      { el: document.getElementById('step-latex'), threshold: 50 },
-      { el: document.getElementById('step-finalize'), threshold: 80 },
-    ];
-    steps.forEach(s => { if (percent >= s.threshold) markStepDone(s.el); });
-  }
-
-  function markStepDone(stepEl) {
-    const dot = stepEl.querySelector('.step-dot');
-    const icon = dot.querySelector('.material-symbols-outlined');
-    dot.classList.remove('border-secondary', 'dark:border-secondary-dark');
-    dot.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/20');
-    icon.classList.remove('hidden');
-    icon.textContent = 'check';
-    icon.classList.add('text-emerald-500', 'text-xs');
-    stepEl.classList.remove('text-secondary', 'dark:text-secondary-dark');
-    stepEl.classList.add('text-emerald-600', 'dark:text-emerald-400');
-  }
-
-  function pollStatus() {
-    fetch(`/convert/${projectId}/status/`)
-      .then(r => r.json())
-      .then(data => {
-        const bar = document.getElementById('progress-bar');
-        const pctText = document.getElementById('progress-text');
-        const msgEl = document.getElementById('status-message');
-        const titleEl = document.getElementById('status-title');
-
-        bar.style.width = data.progress_percent + '%';
-        pctText.textContent = data.progress_percent + '%';
-        msgEl.textContent = data.progress_message;
-        updateSteps(data.progress_percent);
-
-        if (data.status === 'completed') {
-          document.getElementById('spinner-icon').classList.add('hidden');
-          document.getElementById('success-animation').classList.remove('hidden');
-          titleEl.textContent = 'Conversion complete!';
-          msgEl.textContent = 'Redirecting to editor...';
-          document.getElementById('status-icon').classList.add('hidden');
-          clearInterval(pollTimer);
-          setTimeout(() => { window.location.href = `/editor/${projectId}/?autocompile=true`; }, 2000);
-        } else if (data.status === 'failed') {
-          document.getElementById('spinner-icon').classList.add('hidden');
-          document.getElementById('error-animation').classList.remove('hidden');
-          titleEl.textContent = 'Conversion failed';
-          msgEl.textContent = data.error_message || data.progress_message;
-          document.getElementById('status-icon').classList.add('hidden');
-          document.getElementById('error-actions').classList.remove('hidden');
-          bar.classList.remove('bg-primary');
-          bar.classList.add('bg-error');
-          clearInterval(pollTimer);
-        }
-      })
-      .catch(() => {});
-  }
-
-  pollTimer = setInterval(pollStatus, pollInterval);
-  pollStatus();
+const jobId = "{{ job.id }}";
+const redirectUrl = "{% if project %}{% url 'editor' project.id %}{% else %}{% url 'dashboard' %}{% endif %}";
 </script>
 {% endblock %}

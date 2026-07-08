@@ -1,37 +1,20 @@
-/* ====================================================================================
-   LatexGenius - Static Stylesheet
-   All custom CSS consolidated from template files.
-   ==================================================================================== */
-
-
-/* ====================================================================================
-   Section 1: Base Typography & Material Symbols
-   Source: myapp/templates/base.html (style block)
-   ==================================================================================== */
-
-/* Configure Material Symbols font variation defaults */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     vertical-align: middle;
 }
 
-/* Default body font */
 body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Monospace font override */
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Source Serif 4', serif;
+}
+
 .font-mono {
     font-family: 'JetBrains Mono', monospace;
 }
 
-
-/* ====================================================================================
-   Section 2: Toast Notification Animations
-   Source: myapp/templates/base.html (style block)
-   ==================================================================================== */
-
-/* Slide in from the right */
 @keyframes slideIn {
     from { transform: translateX(100%); }
     to   { transform: translateX(0); }
@@ -41,13 +24,6 @@ body {
     animation: slideIn 0.3s ease-out forwards;
 }
 
-
-/* ====================================================================================
-   Section 3: Button Component Styles
-   Source: myapp/templates/base.html (style block)
-   ==================================================================================== */
-
-/* Base button */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -65,43 +41,25 @@ body {
     cursor: not-allowed;
 }
 
-/* Primary variant */
 .btn-primary {
-    background-color: #8b6f47;
+    background-color: #003527;
     color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background-color: #735a38;
+    background-color: #064e3b;
 }
 
-/* Secondary variant */
 .btn-secondary {
     background-color: transparent;
-    border: 1px solid #e5ddd3;
-    color: #7a6b5d;
+    border: 1px solid #bfc9c3;
+    color: #404944;
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background-color: #faf7f2;
+    background-color: #F4F2E9;
 }
 
-.dark .btn-secondary {
-    border-color: #3d3228;
-    color: #a69581;
-}
-
-.dark .btn-secondary:hover:not(:disabled) {
-    background-color: #2c241b;
-}
-
-
-/* ====================================================================================
-   Section 4: Drawer Overlay & Panel
-   Source: myapp/templates/components/drawer_styles.html
-   ==================================================================================== */
-
-/* Semi-transparent backdrop behind the drawer */
 .drawer-overlay {
     opacity: 0;
     pointer-events: none;
@@ -113,7 +71,6 @@ body {
     pointer-events: auto;
 }
 
-/* Sliding panel that emerges from the left */
 .drawer-panel {
     transform: translateX(-100%);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -123,20 +80,12 @@ body {
     transform: translateX(0);
 }
 
-
-/* ====================================================================================
-   Section 5: LaTeX Editor Styles
-   Source: myapp/templates/pages/editor.html (extra_head style block)
-   ==================================================================================== */
-
-/* Three-column grid layout for the editor: sidebar / code / preview */
 .editor-container {
     display: grid;
     grid-template-columns: 260px 1fr 1fr;
     height: calc(100vh - 64px);
 }
 
-/* Custom thin scrollbar for editor panes */
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
@@ -150,23 +99,20 @@ body {
     border-radius: 10px;
 }
 
-/* Dark theme scrollbar thumb */
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.15);
 }
 
-/* Active file highlight in sidebar */
 .file-active {
-    background-color: rgba(139, 111, 71, 0.1) !important;
-    color: rgb(139, 111, 71) !important;
+    background-color: rgba(0, 53, 39, 0.1) !important;
+    color: rgb(0, 53, 39) !important;
 }
 
 .dark .file-active {
-    background-color: rgba(196, 168, 124, 0.2) !important;
-    color: rgb(196, 168, 124) !important;
+    background-color: rgba(149, 211, 186, 0.2) !important;
+    color: rgb(149, 211, 186) !important;
 }
 
-/* Folder collapsible section styles */
 .folder-collapsible {
     cursor: pointer;
 }
@@ -182,7 +128,67 @@ body {
     max-height: 500px;
 }
 
-/* Responsive: collapse editor to single column on mobile */
+.bento-card {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bento-card:hover {
+    transform: translateY(-4px);
+}
+
+.input-underline {
+    border: none;
+    border-bottom: 1px solid #707974;
+    background-color: #F4F2E9;
+    border-radius: 0;
+    transition: border-color 0.2s ease;
+}
+
+.input-underline:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #003527;
+    border-bottom-width: 2px;
+}
+
+.card-elevation {
+    box-shadow: 0 4px 20px rgba(6, 78, 59, 0.04);
+}
+
+.bg-cream-paper {
+    background-color: #FDFCF6;
+}
+
+.academic-border {
+    border-color: rgba(6, 78, 59, 0.1);
+}
+
+.bg-pattern {
+    background-image: radial-gradient(#064e3b 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.05;
+}
+
+.form-input-academic {
+    background-color: #F4F2E9;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #707974;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+.form-input-academic:focus {
+    outline: none;
+    border-bottom: 2px solid #003527;
+    box-shadow: none;
+    --tw-ring-color: transparent;
+}
+
+.active-nav-link {
+    border-bottom: 2px solid #003527;
+}
+
 @media (max-width: 768px) {
     .editor-container {
         grid-template-columns: 1fr;
@@ -193,4 +199,25 @@ body {
     .editor-container > section {
         min-height: 300px;
     }
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #faf9f3;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dbdad4;
+    border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1a1c18;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #404944;
 }

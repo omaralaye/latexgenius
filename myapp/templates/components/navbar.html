@@ -1,22 +1,22 @@
-<header class="sticky top-0 z-50 bg-white dark:bg-surface-dark border-b border-border dark:border-border-dark">
-    <nav class="flex justify-between items-center w-full px-4 sm:px-6 lg:px-8 py-3 max-w-7xl mx-auto">
-        <a href="{% url 'landing' %}" class="text-xl font-extrabold text-primary">LaTeXGenius</a>
-        <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <a class="{% if request.resolver_match.url_name == 'landing' %}text-primary{% else %}text-secondary dark:text-secondary-dark{% endif %} hover:text-primary transition-colors" href="{% url 'landing' %}">Features</a>
-            <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary{% else %}text-secondary dark:text-secondary-dark{% endif %} hover:text-primary transition-colors" href="{% url 'templates' %}">Templates</a>
-            <a class="{% if request.resolver_match.url_name == 'pricing' %}text-primary{% else %}text-secondary dark:text-secondary-dark{% endif %} hover:text-primary transition-colors" href="{% url 'pricing' %}">Pricing</a>
-            <a class="{% if request.resolver_match.url_name == 'documentation' %}text-primary{% else %}text-secondary dark:text-secondary-dark{% endif %} hover:text-primary transition-colors" href="{% url 'documentation' %}">Documentation</a>
+<header class="fixed top-0 w-full z-50 backdrop-blur-md bg-surface/90 border-b border-outline-variant/30 h-16">
+    <nav class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop h-full">
+        <a href="{% url 'landing' %}" class="text-headline-md font-bold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            LaTeX Genius
+        </a>
+        <div class="hidden md:flex items-center gap-8 font-label-md text-label-md">
+            <a class="{% if request.resolver_match.url_name == 'templates' %}text-primary font-semibold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors duration-200" href="{% url 'templates' %}">Templates</a>
+            <a class="{% if request.resolver_match.url_name == 'features' %}text-primary font-semibold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors duration-200" href="{% url 'features' %}">Features</a>
+            <a class="{% if request.resolver_match.url_name == 'pricing' %}text-primary font-semibold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors duration-200" href="{% url 'pricing' %}">Pricing</a>
+            <a class="{% if request.resolver_match.url_name == 'documentation' %}text-primary font-semibold{% else %}text-on-surface-variant hover:text-primary{% endif %} transition-colors duration-200" href="{% url 'documentation' %}">Docs</a>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="toggleTheme()" class="p-2 text-secondary dark:text-secondary-dark hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors" aria-label="Toggle theme">
-                <span class="material-symbols-outlined dark:hidden">dark_mode</span>
-                <span class="material-symbols-outlined hidden dark:block">light_mode</span>
-            </button>
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="btn btn-primary text-sm">Dashboard</a>
-                <a href="{% url 'logout' %}" class="text-sm text-secondary dark:text-secondary-dark hover:text-primary transition-colors">Logout</a>
+                <a href="{% url 'dashboard' %}" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-full font-label-md text-sm hover:bg-primary transition-all shadow-sm">Dashboard</a>
+                <a href="{% url 'logout' %}" class="text-sm font-label-md text-on-surface-variant hover:text-primary transition-colors">Logout</a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary text-sm">Get Started</a>
+                <a href="{% url 'login' %}" class="hidden md:block text-on-surface-variant font-label-md px-4 py-2 hover:text-primary transition-all">Sign In</a>
+                <a href="{% url 'signup' %}" class="bg-primary text-on-primary px-5 py-2 rounded-full font-label-md text-sm hover:opacity-90 active:scale-95 transition-all shadow-sm">Get Started</a>
             {% endif %}
         </div>
     </nav>

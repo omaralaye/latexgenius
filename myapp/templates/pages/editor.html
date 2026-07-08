@@ -1,568 +1,482 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}{{ project.title }} | LaTeXGenius{% endblock %}
+{% block title %}{{ project.title }} | LaTeX Genius{% endblock %}
 
-{% block extra_head %}
-{% endblock %}
-
-{% block layout %}
-{% include "components/drawer.html" %}
-
-<!-- Main Content Canvas -->
-<main class="min-h-screen flex flex-col bg-background dark:bg-dark-bg transition-colors duration-300">
-
-<!-- Top Utility Toolbar -->
-<header class="h-14 bg-stone-900 dark:bg-dark-bg text-white flex items-center justify-between px-4 z-[60] border-b border-white/10 shrink-0">
-    <div class="flex items-center gap-6">
-        <button onclick="openDrawer()" class="flex items-center gap-1 text-stone-300 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-lg">
-            <span class="material-symbols-outlined text-xl">menu</span>
-        </button>
-        <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-stone-400">Project /</span>
-                <span class="text-xs font-bold text-white uppercase tracking-wide truncate max-w-[200px] rename-display-editor" id="rename-display-editor">{{ project.title }}</span>
-                <button onclick="startRenameEditor('{{ project.id }}', '{{ project.title|escapejs }}')" class="p-1 hover:bg-white/20 rounded transition-colors" title="Rename project">
-                    <span class="material-symbols-outlined text-sm text-stone-300">edit</span>
-                </button>
+{% block content %}
+<div class="h-full flex overflow-hidden bg-academic-surface font-serif" style="height: 100vh;">
+<!-- Stitch Sidebar -->
+<aside class="w-64 border-r border-gray-200 flex flex-col h-full bg-[#faf9f3] shrink-0">
+    <div class="p-6">
+        <a class="flex items-center gap-2 text-academic-primary font-bold text-xl mb-10" href="{% url 'dashboard' %}">
+            <div class="bg-[#064e3b] text-white p-1 rounded">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M9 3v18"></path><path d="M3 9h18"></path><path d="M3 15h18"></path><path d="M15 3v18"></path></svg>
             </div>
-        </div>
-    </div>
-    <div class="flex items-center gap-3">
-        <div id="processing-badge" class="hidden items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 mr-2">
-            <span class="material-symbols-outlined text-sm text-primary-dark animate-pulse">sync</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-primary-dark/80">Compiling...</span>
-        </div>
-        <button onclick="openShareModal()" class="flex items-center gap-2 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 rounded text-xs font-medium transition-colors border border-white/5">
-            <span class="material-symbols-outlined text-sm">share</span>
-            Share
-        </button>
-        <div class="h-6 w-[1px] bg-white/10 mx-1"></div>
-        <button id="compile-button" onclick="compileProject()" class="flex items-center gap-2 px-4 py-1.5 bg-primary hover:bg-primary-variant text-white rounded text-xs font-bold transition-all shadow-lg active:scale-95">
-            <span class="material-symbols-outlined text-sm">bolt</span>
-            Compile
-        </button>
-        <div class="relative" id="profile-dropdown-container">
-            <button onclick="toggleProfileDropdown()" class="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center hover:opacity-90 transition-opacity border border-white/20 ml-2 shrink-0" aria-label="Profile menu">
-                <span class="text-[10px] font-bold text-white">
-                    {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
-                </span>
-            </button>
-            <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-64 bg-white dark:bg-dark-surface rounded-xl shadow-xl border border-stone-200 dark:border-dark-border z-50 overflow-hidden">
-                <div class="px-4 py-4 border-b border-stone-200 dark:border-dark-border">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-variant flex items-center justify-center text-white font-bold shadow-sm shrink-0">
-                            {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
-                        </div>
-                        <div class="min-w-0">
-                            <p class="font-semibold text-stone-900 dark:text-white text-sm truncate">
-                                {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
-                            </p>
-                            <p class="text-xs text-stone-500 dark:text-dark-text-muted truncate">{{ user.email }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="py-2">
-                    <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-stone-700 dark:text-dark-text-dim hover:bg-stone-100 dark:hover:bg-dark-border transition-colors">
-                        <span class="material-symbols-outlined text-primary text-lg">dashboard</span>
-                        Dashboard
-                    </a>
-                    <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-stone-700 dark:text-dark-text-dim hover:bg-stone-100 dark:hover:bg-dark-border transition-colors">
-                        <span class="material-symbols-outlined text-primary text-lg">settings</span>
-                        Settings
-                    </a>
-                </div>
-                <div class="border-t border-stone-200 dark:border-dark-border py-2">
-                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-stone-100 dark:hover:bg-dark-border transition-colors">
-                        <span class="material-symbols-outlined text-lg">logout</span>
-                        Sign Out
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Project Controls Bar -->
-<nav class="h-12 bg-white dark:bg-dark-surface border-b border-outline-variant dark:border-dark-border flex items-center justify-between px-4 shrink-0">
-    <div class="flex items-center gap-1">
-        <form id="uploadForm" action="{% url 'upload_document' %}" method="POST" enctype="multipart/form-data" class="hidden">
-            {% csrf_token %}
-            <input type="file" id="documentInput" name="document" accept=".tex,.md,.markdown,.docx,.odt,.html,.txt" onchange="document.getElementById('uploadForm').submit()">
-        </form>
-        <button onclick="document.getElementById('documentInput').click()" class="flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-md text-xs font-bold hover:bg-primary-variant transition-colors shadow-sm">
-            <span class="material-symbols-outlined text-sm">cloud_upload</span>
-            Upload Document
-        </button>
-        <div class="h-5 w-[1px] bg-stone-200 dark:bg-dark-surface-alt mx-2"></div>
-        <button onclick="showNewFileModal()" class="p-1.5 hover:bg-stone-100 dark:hover:bg-dark-border rounded text-stone-600 dark:text-dark-text-muted transition-colors" title="New File">
-            <span class="material-symbols-outlined text-lg">note_add</span>
-        </button>
-        <button onclick="showNewFolderModal()" class="p-1.5 hover:bg-stone-100 dark:hover:bg-dark-border rounded text-stone-600 dark:text-dark-text-muted transition-colors" title="New Folder">
-            <span class="material-symbols-outlined text-lg">create_new_folder</span>
-        </button>
-        <div class="h-5 w-[1px] bg-stone-200 dark:bg-dark-surface-alt mx-2"></div>
-        <button id="undo-btn" onclick="undoAction()" class="p-1.5 hover:bg-stone-100 dark:hover:bg-dark-border rounded text-stone-600 dark:text-dark-text-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed" title="Undo (Ctrl+Z)" disabled>
-            <span class="material-symbols-outlined text-lg">undo</span>
-        </button>
-        <button id="redo-btn" onclick="redoAction()" class="p-1.5 hover:bg-stone-100 dark:hover:bg-dark-border rounded text-stone-600 dark:text-dark-text-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed" title="Redo (Ctrl+Shift+Z)" disabled>
-            <span class="material-symbols-outlined text-lg">redo</span>
-        </button>
-    </div>
-    <div class="flex items-center gap-2">
-        <div class="flex bg-stone-100 dark:bg-dark-surface-alt p-0.5 rounded-lg border border-stone-200 dark:border-dark-border-strong">
-            <button id="mode-source" onclick="toggleEditorMode('source')" class="px-3 py-1 bg-white dark:bg-dark-border-strong shadow-sm rounded-md text-xs font-bold text-primary dark:text-white">Source</button>
-            <button id="mode-visual" onclick="toggleEditorMode('visual')" class="px-3 py-1 text-xs font-medium text-stone-500 dark:text-dark-text-muted hover:text-stone-700 dark:hover:text-white">Visual</button>
-        </div>
-        <button id="save-button" onclick="saveProject()" class="flex items-center gap-1 px-2 py-1 text-stone-600 dark:text-dark-text-muted hover:bg-stone-100 dark:hover:bg-dark-border rounded text-xs transition-colors">
-            <span class="material-symbols-outlined text-sm">save</span>
-            Save
-        </button>
-        <button onclick="openHistoryModal()" class="flex items-center gap-1 px-2 py-1 text-stone-600 dark:text-dark-text-muted hover:bg-stone-100 dark:hover:bg-dark-border rounded text-xs transition-colors">
-            <span class="material-symbols-outlined text-sm">history</span>
-            History
-        </button>
-    </div>
-</nav>
-
-<!-- Main Editor Body: 3-Column Grid -->
-<div class="editor-container flex-1 overflow-hidden">
-
-    <!-- 1. Left Sidebar: Source Document & File Management -->
-    <aside class="bg-stone-50 dark:bg-dark-surface border-r border-outline-variant dark:border-dark-border flex flex-col overflow-hidden">
-        <div class="p-4 border-b border-outline-variant/10 dark:border-dark-border">
-            <div class="bg-white dark:bg-dark-surface-alt p-3 rounded-lg border border-stone-200 dark:border-dark-border-strong shadow-sm mb-4">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-dark-text-muted">Source Document</span>
-                    <span class="px-1.5 py-0.5 bg-primary-light dark:bg-primary-dark/20 text-primary dark:text-primary-dark text-[10px] font-bold rounded">TEX</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-primary-light dark:bg-primary-dark/20 rounded flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-primary dark:text-primary-dark">article</span>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p class="text-xs font-bold text-stone-700 dark:text-dark-text truncate" id="sidebar-project-title">{{ project.title }}.tex</p>
-                        <p class="text-[10px] text-stone-400 dark:text-dark-text-muted">Active project</p>
-                    </div>
-                </div>
-                <div class="mt-3 flex items-center gap-2">
-                    <button onclick="openReprocessModal()" class="flex-1 py-1.5 bg-stone-900 dark:bg-dark-border-strong text-white dark:text-dark-text text-[10px] font-bold rounded hover:bg-black dark:hover:bg-dark-text-muted transition-colors flex items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-xs">auto_fix</span>
-                        Re-Process
-                    </button>
-                </div>
-                <div class="mt-2 text-[10px] text-stone-400 dark:text-dark-text-muted">
-                    <span class="font-semibold">What is Re-Process?</span> Upload a new document to replace the current content using AI conversion.
-                </div>
-            </div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-dark-text-muted">Project Files</span>
-        </div>
-        <nav class="flex-1 overflow-y-auto py-2 custom-scrollbar" id="project-files-nav">
-            <div class="px-2 space-y-0.5">
-                <button class="file-active w-full flex items-center gap-2 px-2 py-1.5 rounded group" onclick="selectFile('main.tex')">
-                    <span class="material-symbols-outlined text-lg text-primary dark:text-primary-dark">description</span>
-                    <span class="text-xs font-medium truncate">main.tex</span>
-                </button>
-                <div class="folder-collapsible" onclick="toggleFolder(this, event)">
-                    <button class="w-full flex items-center gap-2 px-2 py-1.5 text-stone-600 dark:text-dark-text-muted hover:bg-stone-200/50 dark:hover:bg-dark-border/50 rounded group">
-                        <span class="material-symbols-outlined text-lg text-stone-400 folder-arrow transition-transform">chevron_right</span>
-                        <span class="material-symbols-outlined text-lg text-stone-400">folder</span>
-                        <span class="text-xs font-medium truncate">sections</span>
-                        <span class="ml-auto text-[10px] text-stone-400 bg-stone-100 dark:bg-dark-surface-alt px-1.5 py-0.5 rounded">Coming Soon</span>
-                    </button>
-                </div>
-                <div class="folder-collapsible" onclick="toggleFolder(this, event)">
-                    <button class="w-full flex items-center gap-2 px-2 py-1.5 text-stone-600 dark:text-dark-text-muted hover:bg-stone-200/50 dark:hover:bg-dark-border/50 rounded group">
-                        <span class="material-symbols-outlined text-lg text-stone-400 folder-arrow transition-transform">chevron_right</span>
-                        <span class="material-symbols-outlined text-lg text-stone-400">folder</span>
-                        <span class="text-xs font-medium truncate">images</span>
-                        <span class="ml-auto text-[10px] text-stone-400 bg-stone-100 dark:bg-dark-surface-alt px-1.5 py-0.5 rounded">Coming Soon</span>
-                    </button>
-                </div>
-                <button class="w-full flex items-center gap-2 px-2 py-1.5 text-stone-600 dark:text-dark-text-muted hover:bg-stone-200/50 dark:hover:bg-dark-border/50 rounded group">
-                    <span class="material-symbols-outlined text-lg text-stone-400">menu_book</span>
-                    <span class="text-xs font-medium truncate">references.bib</span>
-                    <span class="ml-auto text-[10px] text-stone-400 bg-stone-100 dark:bg-dark-surface-alt px-1.5 py-0.5 rounded">Coming Soon</span>
-                </button>
-            </div>
+            LaTeX Genius
+        </a>
+        <nav class="space-y-1">
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="{% url 'dashboard' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                Dashboard
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="{% url 'editor' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                Documents
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 bg-[#d1fae5] text-[#064e3b] font-medium rounded-md transition-colors text-sm" href="{% url 'editor' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                AI Generate
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="{% url 'templates' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M4 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Z"></path><path d="M4 13a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2Z"></path><path d="M4 21a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2Z"></path></svg>
+                Templates
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="#">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m2 4 3 12h14l3-12H2Z"></path><line x1="9" x2="9" y1="8" y2="8"></line><line x1="15" x2="15" y1="8" y2="8"></line></svg>
+                Bibliography
+            </a>
         </nav>
-        <div class="mt-auto p-4 border-t border-outline-variant/10 dark:border-dark-border bg-primary-light/30 dark:bg-primary-dark/10">
-            <p class="text-[10px] text-primary dark:text-primary-dark font-bold mb-2">Conversion Stats</p>
-            <div class="flex justify-between text-[10px] text-stone-500 dark:text-dark-text-muted">
-                <span>Confidence Score:</span>
-                <span id="stat-confidence" class="text-emerald-600 dark:text-emerald-400 font-bold">--</span>
-            </div>
-            <div class="flex justify-between text-[10px] text-stone-500 dark:text-dark-text-muted mt-1">
-                <span>Math Symbols:</span>
-                <span id="stat-math" class="font-bold">--</span>
-            </div>
-            <div class="flex justify-between text-[10px] text-stone-500 dark:text-dark-text-muted mt-1">
-                <span>Sections:</span>
-                <span id="stat-sections" class="font-bold">--</span>
-            </div>
-            <div class="flex justify-between text-[10px] text-stone-500 dark:text-dark-text-muted mt-1">
-                <span>Citations:</span>
-                <span id="stat-citations" class="font-bold">--</span>
-            </div>
+        <div class="mt-auto pt-10 space-y-1">
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="{% url 'settings' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Settings
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-[#d1fae5]/30 rounded-md transition-colors text-sm" href="{% url 'notifications' %}">
+                <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+                Notifications
+            </a>
         </div>
-    </aside>
-
-    <!-- 2. Central Pane: LaTeX Code Editor -->
-    <section id="editor-source-pane" class="bg-[#2c241b] dark:bg-[#15100b] flex flex-col overflow-hidden border-r border-black dark:border-dark-surface relative">
-        <div class="h-8 bg-black/40 dark:bg-dark-bg/60 flex items-center px-4 justify-between shrink-0">
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-mono text-stone-400 dark:text-dark-text-muted uppercase tracking-tighter">Generated LaTeX</span>
-                <span id="status-badge" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+    </div>
+    <!-- User Profile -->
+    <div class="mt-auto p-4 border-t border-gray-200 bg-[#f5f4ee]">
+        <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-[#d1fae5] flex items-center justify-center text-[#064e3b] font-bold text-sm">
+                {% if user.first_name %}{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
             </div>
-            <div class="flex gap-2">
-                <button onclick="copyToClipboard()" class="p-1 hover:bg-white/10 rounded transition-colors text-stone-400 dark:text-dark-text-muted">
-                    <span class="material-symbols-outlined text-sm">content_copy</span>
-                </button>
-                <button id="fullscreen-editor-btn" onclick="toggleEditorFullscreen()" class="p-1 hover:bg-white/10 rounded transition-colors text-stone-400 dark:text-dark-text-muted">
-                    <span class="material-symbols-outlined text-sm">fullscreen</span>
-                </button>
-                <span id="cursor-position" class="text-[10px] text-stone-500 dark:text-dark-border-strong font-mono self-center">Ln 1, Col 1</span>
-            </div>
-        </div>
-        <div class="flex-1 p-6 overflow-y-auto custom-scrollbar font-mono text-sm leading-relaxed">
-            <textarea id="latex-editor" class="w-full h-full bg-transparent text-stone-300 dark:text-dark-text-muted font-mono text-sm leading-relaxed focus:ring-0 border-none resize-none outline-none custom-scrollbar" spellcheck="false">{{ project.content }}</textarea>
-        </div>
-        <div class="h-6 bg-stone-800 dark:bg-dark-bg flex items-center px-3 border-t border-white/5 dark:border-dark-surface shrink-0">
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-1.5 w-1.5">
-                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    <p class="text-[10px] text-stone-400 dark:text-dark-text-muted font-medium">Ready</p>
-                </div>
-            </div>
-            <div class="ml-auto flex items-center gap-4">
-                <span class="text-[10px] text-stone-400 dark:text-dark-text-muted">UTF-8</span>
-                <span class="text-[10px] text-stone-400 dark:text-dark-text-muted">LaTeX</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Visual Editor Placeholder -->
-    <section id="editor-visual-pane" class="hidden bg-white dark:bg-dark-text flex flex-col overflow-hidden border-r border-outline-variant dark:border-dark-border">
-        <div class="h-8 bg-stone-100 dark:bg-dark-text flex items-center px-4 justify-between shrink-0 border-b border-outline-variant dark:border-dark-text-dim">
-            <span class="text-[10px] font-mono text-stone-500 uppercase tracking-tighter">Visual Editor</span>
-        </div>
-        <div class="flex-1 flex items-center justify-center">
-            <div class="text-center p-8">
-                <span class="material-symbols-outlined text-6xl text-stone-300 dark:text-dark-text-muted mb-4 block">edit_note</span>
-                <h3 class="text-lg font-bold text-stone-600 dark:text-dark-text-muted mb-2">Visual Editor Coming Soon</h3>
-                <p class="text-sm text-stone-400 dark:text-dark-text-muted max-w-xs">
-                    A WYSIWYG editor for LaTeX is currently in development. Use the Source editor for now.
+            <div class="overflow-hidden">
+                <p class="text-sm font-semibold truncate text-gray-900">
+                    {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
                 </p>
+                <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
             </div>
         </div>
-    </section>
+    </div>
+</aside>
 
-    <!-- 3. Right Pane: Final Compiled PDF Preview -->
-    <section class="bg-stone-200 dark:bg-dark-surface flex flex-col overflow-hidden relative">
-        <div class="h-8 bg-stone-300/50 dark:bg-dark-surface-alt/50 flex items-center px-4 justify-between border-b border-outline-variant/10 dark:border-dark-border-strong shrink-0">
-            <span class="text-[10px] font-bold text-stone-600 dark:text-dark-text-dim uppercase tracking-wider">Final PDF Output</span>
-            <div class="flex gap-2">
-                <button id="download-pdf-btn" onclick="downloadPdf()" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-stone-600 dark:text-dark-text-dim hidden" title="Download PDF">
-                    <span class="material-symbols-outlined text-lg">download</span>
-                </button>
-                <button id="mode-pdf" onclick="togglePreviewMode('pdf')" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-primary dark:text-white" title="PDF View">
-                    <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
-                </button>
-                <button id="mode-log" onclick="togglePreviewMode('log')" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-stone-600 dark:text-dark-text-muted" title="Log View">
-                    <span class="material-symbols-outlined text-lg">description</span>
-                </button>
-                <button id="zoom-in-btn" onclick="zoomPreview(1.1)" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-stone-600 dark:text-dark-text-muted" title="Zoom In">
-                    <span class="material-symbols-outlined text-lg">zoom_in</span>
-                </button>
-                <button id="zoom-out-btn" onclick="zoomPreview(0.9)" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-stone-600 dark:text-dark-text-muted" title="Zoom Out">
-                    <span class="material-symbols-outlined text-lg">zoom_out</span>
-                </button>
-                <button id="fullscreen-preview-btn" onclick="togglePreviewFullscreen()" class="p-1 hover:bg-white/40 dark:hover:bg-dark-border-strong rounded transition-colors text-stone-600 dark:text-dark-text-muted" title="Fullscreen">
-                    <span class="material-symbols-outlined text-lg">fullscreen</span>
-                </button>
-            </div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full bg-white overflow-hidden">
+    <!-- Header -->
+    <header class="h-16 border-b border-gray-200 flex items-center justify-between px-8 bg-white shrink-0">
+        <div class="flex items-center gap-4">
+            <h1 class="text-xl font-bold text-gray-900">{{ project.title }}</h1>
+            <button onclick="startRenameEditor('{{ project.id }}', '{{ project.title|escapejs }}')" class="p-1 hover:bg-gray-100 rounded transition-colors" title="Rename project">
+                <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            </button>
         </div>
-        <div id="preview-container" class="flex-1 p-8 overflow-y-auto custom-scrollbar flex justify-center bg-stone-400/20 dark:bg-dark-bg/40 relative">
-            <div id="preview-placeholder" class="absolute inset-0 flex items-center justify-center p-8 overflow-y-auto z-0">
-                <div class="max-w-md w-full">
-                    <div class="p-12 border-2 border-dashed border-stone-400 dark:border-dark-border-strong rounded-2xl flex flex-col items-center text-center bg-white/60 dark:bg-dark-surface/40 backdrop-blur-sm">
-                        <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4">
-                            <span class="material-symbols-outlined text-3xl text-primary dark:text-white">visibility</span>
+        <div class="flex items-center gap-3">
+            <div id="processing-badge" class="hidden items-center gap-2 bg-[#d1fae5] px-3 py-1.5 rounded-full border border-[#064e3b]/20 mr-2">
+                <span class="material-symbols-outlined text-sm text-[#064e3b] animate-pulse">sync</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[#064e3b]/80">Compiling...</span>
+            </div>
+            <button onclick="openShareModal()" class="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-xs font-medium transition-colors">
+                <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+                Share
+            </button>
+            <div class="h-5 w-px bg-gray-200 mx-1"></div>
+            <button id="compile-button" onclick="compileProject()" class="flex items-center gap-2 px-4 py-1.5 bg-[#064e3b] text-white rounded text-xs font-bold transition-all hover:bg-opacity-90 active:scale-95">
+                <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Compile
+            </button>
+            <div class="relative" id="profile-dropdown-container">
+                <button onclick="toggleProfileDropdown()" class="h-8 w-8 rounded-full bg-[#d1fae5] flex items-center justify-center text-[#064e3b] font-bold text-xs hover:opacity-90 transition-opacity" aria-label="Profile menu">
+                    {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                </button>
+                <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                    <div class="px-4 py-4 border-b border-gray-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-[#d1fae5] flex items-center justify-center text-[#064e3b] font-bold text-sm shrink-0">
+                                {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-semibold text-gray-900 text-sm truncate">
+                                    {% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}
+                                </p>
+                                <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-bold text-stone-700 dark:text-dark-text mb-2">Preview Ready</h3>
-                        <p class="text-sm text-stone-500 dark:text-dark-text-muted">Click "Compile" to generate the document preview.</p>
+                    </div>
+                    <div class="py-2">
+                        <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                            Dashboard
+                        </a>
+                        <a href="{% url 'settings' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            Settings
+                        </a>
+                    </div>
+                    <div class="border-t border-gray-100 py-2">
+                        <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-gray-50 transition-colors">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
+                            Sign Out
+                        </a>
                     </div>
                 </div>
             </div>
-            <iframe id="preview-iframe" class="hidden w-full h-full border-none z-10 relative bg-white shadow-2xl rounded" src="" sandbox="allow-scripts allow-same-origin" style="transform-origin: top center;"></iframe>
-            <div id="preview-log" class="hidden w-full h-full p-6 bg-stone-900 dark:bg-dark-bg text-stone-300 dark:text-dark-text-muted font-mono text-sm overflow-auto whitespace-pre-wrap z-10 relative rounded shadow-2xl"></div>
+        </div>
+    </header>
 
-            <div id="preview-loading" class="hidden absolute inset-0 bg-white/50 dark:bg-dark-bg/50 backdrop-blur-[2px] flex items-center justify-center z-20">
-                <div class="flex flex-col items-center gap-3">
-                    <span class="material-symbols-outlined animate-spin text-4xl text-primary dark:text-white">sync</span>
-                    <p class="text-sm font-bold text-primary dark:text-white">Compiling...</p>
+    <!-- Main Workspace: AI Generate + Editor Hybrid -->
+    <div class="flex-1 flex overflow-hidden bg-[#faf9f3]">
+        <!-- Tab Bar -->
+        <div class="fixed top-16 left-64 right-0 h-10 bg-white border-b border-gray-200 flex items-center px-8 gap-6 z-10" style="margin-left: 16rem;">
+            <button onclick="switchWorkspaceTab('generate')" id="tab-generate" class="text-sm font-semibold text-[#064e3b] border-b-2 border-[#064e3b] pb-1 transition-colors">AI Generate</button>
+            <button onclick="switchWorkspaceTab('editor')" id="tab-editor" class="text-sm font-medium text-gray-500 hover:text-gray-700 pb-1 transition-colors">Source Editor</button>
+            <button onclick="switchWorkspaceTab('preview')" id="tab-preview" class="text-sm font-medium text-gray-500 hover:text-gray-700 pb-1 transition-colors">Preview</button>
+        </div>
+        <div class="flex-1 pt-10">
+            <!-- AI Generate Panel -->
+            <div id="panel-generate" class="flex-1 flex overflow-hidden h-full">
+                <!-- Input Column -->
+                <section class="w-1/2 p-8 overflow-y-auto">
+                    <div class="mb-8">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">AI Assistant</p>
+                        <h2 class="text-3xl font-bold text-gray-900">Generate Document</h2>
+                    </div>
+                    <form id="ai-generate-form" method="POST" action="{% url 'ai_convert' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Describe your document</label>
+                            <div class="relative">
+                                <textarea id="ai-prompt" name="content" class="w-full h-48 p-4 bg-[#f5f4ee] border-0 rounded-lg focus:ring-2 focus:ring-[#064e3b]/20 text-gray-700 resize-none placeholder-gray-400 italic" placeholder="Write a research paper about quantum entanglement in multi-particle systems. Include the theoretical framework, recent experimental advances, and potential applications in quantum computing."></textarea>
+                                <div class="absolute bottom-3 right-4 text-xs text-gray-400"><span id="char-count">0</span>/2000</div>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Document Type</label>
+                            <div class="flex flex-wrap gap-2">
+                                {% for dtype in doc_types|default:"Research Paper,Thesis,Dissertation,Course Notes,Presentation,Literature Review,Technical Report,Grant Proposal"|cut:"" %}
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-[#064e3b] text-white text-sm font-medium hover:bg-opacity-90 transition-colors" data-value="Research Paper">Research Paper</button>
+                                {% endfor %}
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Thesis">Thesis</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Dissertation">Dissertation</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Course Notes">Course Notes</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Presentation">Presentation</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Literature Review">Literature Review</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Technical Report">Technical Report</button>
+                                <button type="button" class="doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors" data-value="Grant Proposal">Grant Proposal</button>
+                            </div>
+                            <input type="hidden" name="doc_type" id="doc-type-input" value="Research Paper">
+                        </div>
+                        <div class="grid grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Citation Style</label>
+                                <select name="citation_style" class="w-full bg-[#f5f4ee] border-0 rounded-lg text-sm text-gray-700 py-2.5 focus:ring-2 focus:ring-[#064e3b]/20">
+                                    <option>APA</option>
+                                    <option>MLA</option>
+                                    <option>Chicago</option>
+                                    <option>IEEE</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-3 tracking-wide">Length</label>
+                                <select name="length" class="w-full bg-[#f5f4ee] border-0 rounded-lg text-sm text-gray-700 py-2.5 focus:ring-2 focus:ring-[#064e3b]/20">
+                                    <option value="medium">Medium (15-25 pages)</option>
+                                    <option value="short">Short (5-10 pages)</option>
+                                    <option value="long">Long (50+ pages)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-3 mb-8">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1 tracking-wide">Options</label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input checked name="include_abstract" class="h-4 w-4 rounded border-gray-300 text-[#064e3b] focus:ring-[#064e3b]" type="checkbox">
+                                <span class="text-sm text-gray-700 font-medium">Include abstract</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input checked name="include_figures" class="h-4 w-4 rounded border-gray-300 text-[#064e3b] focus:ring-[#064e3b]" type="checkbox">
+                                <span class="text-sm text-gray-700 font-medium">Include placeholder figures</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-[#064e3b] text-white rounded-lg font-bold text-lg hover:bg-opacity-90 shadow-lg shadow-[#064e3b]/10 transition-all flex items-center justify-center gap-2">
+                            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                            Generate with AI
+                        </button>
+                    </form>
+                </section>
+                <!-- Preview Column -->
+                <section class="w-1/2 p-8">
+                    <div class="h-full w-full bg-white border border-gray-200 rounded-2xl flex flex-col items-center justify-center p-12 text-center shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-[#d1fae5]/10 rounded-full -mr-16 -mt-16"></div>
+                        <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#d1fae5]/5 rounded-full -ml-24 -mb-24"></div>
+                        <div class="relative">
+                            <div class="bg-[#fdf3d7] h-16 w-16 rounded-2xl flex items-center justify-center mb-6 mx-auto transform rotate-6">
+                                <svg fill="none" height="32" stroke="#d97706" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Ready to generate</h3>
+                        <p class="text-gray-500 max-w-sm">Describe your document and configure options, then hit Generate to see AI magic.</p>
+                        <div class="mt-8 flex gap-2">
+                            <div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+                            <div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+                            <div class="h-1.5 w-8 rounded-full bg-gray-100"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Source Editor Panel (hidden by default) -->
+            <div id="panel-editor" class="flex-1 flex overflow-hidden h-full hidden">
+                <aside class="w-72 bg-[#f5f4ee] border-r border-gray-200 flex flex-col overflow-hidden shrink-0">
+                    <div class="p-4 border-b border-gray-200">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Project Files</span>
+                    </div>
+                    <nav class="flex-1 overflow-y-auto py-2" id="project-files-nav">
+                        <div class="px-2 space-y-0.5">
+                            <button class="w-full flex items-center gap-2 px-2 py-1.5 rounded group hover:bg-gray-200 transition-colors" onclick="selectFile('main.tex')">
+                                <svg fill="none" height="18" stroke="#064e3b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                <span class="text-xs font-medium text-gray-700 truncate">main.tex</span>
+                            </button>
+                        </div>
+                    </nav>
+                    <div class="mt-auto p-4 border-t border-gray-200 bg-[#d1fae5]/20">
+                        <p class="text-[10px] text-[#064e3b] font-bold mb-2">Conversion Stats</p>
+                        <div class="flex justify-between text-[10px] text-gray-600">
+                            <span>Confidence Score:</span>
+                            <span id="stat-confidence" class="text-[#8d4f00] font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-600 mt-1">
+                            <span>Math Symbols:</span>
+                            <span id="stat-math" class="font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-600 mt-1">
+                            <span>Sections:</span>
+                            <span id="stat-sections" class="font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-600 mt-1">
+                            <span>Citations:</span>
+                            <span id="stat-citations" class="font-bold">--</span>
+                        </div>
+                    </div>
+                </aside>
+                <section class="flex-1 flex flex-col overflow-hidden bg-[#2c241b]">
+                    <div class="h-8 bg-black/40 flex items-center px-4 justify-between shrink-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono text-white/50 uppercase tracking-tighter">Generated LaTeX</span>
+                            <span id="status-badge" class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyToClipboard()" class="p-1 hover:bg-white/10 rounded transition-colors text-white/50">
+                                <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                            </button>
+                            <span id="cursor-position" class="text-[10px] text-white/30 font-mono self-center">Ln 1, Col 1</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-6 overflow-y-auto font-mono text-sm leading-relaxed custom-scrollbar">
+                        <textarea id="latex-editor" class="w-full h-full bg-transparent text-white/70 font-mono text-sm leading-relaxed focus:ring-0 border-none resize-none outline-none custom-scrollbar" spellcheck="false">{{ project.content }}</textarea>
+                    </div>
+                    <div class="h-6 bg-black/30 flex items-center px-3 border-t border-white/5 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <span class="relative flex h-1.5 w-1.5">
+                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-500"></span>
+                            </span>
+                            <p class="text-[10px] text-white/50 font-medium">Ready</p>
+                        </div>
+                        <div class="ml-auto flex items-center gap-4">
+                            <span class="text-[10px] text-white/50">UTF-8</span>
+                            <span class="text-[10px] text-white/50">LaTeX</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Preview Panel (hidden by default) -->
+            <div id="panel-preview" class="flex-1 flex flex-col overflow-hidden h-full hidden">
+                <div class="h-8 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
+                    <span class="text-[10px] font-bold text-[#064e3b] uppercase tracking-wider">Final PDF Output</span>
+                    <div class="flex gap-2">
+                        <button id="download-pdf-btn" onclick="downloadPdf()" class="p-1 hover:bg-gray-100 rounded transition-colors text-gray-500 hidden" title="Download PDF">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+                        </button>
+                        <button id="mode-pdf" onclick="togglePreviewMode('pdf')" class="p-1 hover:bg-gray-100 rounded transition-colors text-[#064e3b]" title="PDF View">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        </button>
+                        <button id="mode-log" onclick="togglePreviewMode('log')" class="p-1 hover:bg-gray-100 rounded transition-colors text-gray-500" title="Log View">
+                            <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="preview-container" class="flex-1 p-8 overflow-y-auto flex justify-center bg-gray-100 relative">
+                    <div id="preview-placeholder" class="absolute inset-0 flex items-center justify-center p-8 overflow-y-auto z-0">
+                        <div class="max-w-md w-full">
+                            <div class="p-12 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center text-center bg-white/60 backdrop-blur-sm">
+                                <div class="w-16 h-16 rounded-full bg-[#d1fae5] flex items-center justify-center mb-4">
+                                    <svg fill="none" height="32" stroke="#064e3b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Preview Ready</h3>
+                                <p class="text-sm text-gray-500">Click "Compile" to generate the document preview.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <iframe id="preview-iframe" class="hidden w-full h-full border-none z-10 relative bg-white shadow-2xl rounded" src="" sandbox="allow-scripts allow-same-origin" style="transform-origin: top center;"></iframe>
+                    <div id="preview-log" class="hidden w-full h-full p-6 bg-[#2c241b] text-white/70 font-mono text-sm overflow-auto whitespace-pre-wrap z-10 relative rounded shadow-2xl"></div>
+                    <div id="preview-loading" class="hidden absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-20">
+                        <div class="flex flex-col items-center gap-3">
+                            <svg class="animate-spin h-10 w-10 text-[#064e3b]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <p class="text-sm font-bold text-[#064e3b]">Compiling...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="conversion-bridge" class="hidden absolute bottom-4 left-1/2 -transtone-x-1/2 px-4 py-2 bg-primary dark:bg-primary-hover text-white rounded-full shadow-2xl flex items-center gap-3 border border-white/10">
-            <span class="material-symbols-outlined text-sm text-primary-dark dark:text-white/80">check_circle</span>
-            <span class="text-xs font-medium">Conversion Bridge: Source -> LaTeX -> PDF</span>
-            <div class="h-3 w-[1px] bg-white/20"></div>
-            <button onclick="togglePreviewMode('log')" class="text-[10px] font-bold text-white/70 hover:text-white uppercase tracking-tighter">View Logs</button>
+    <!-- Bottom Bar -->
+    <footer class="h-6 bg-[#064e3b] text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
+        <div class="flex items-center gap-4">
+            <span class="flex items-center gap-1">
+                <svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Pipeline active
+            </span>
+            <span class="opacity-70" id="footer-editing">Editing: {{ project.title }}</span>
         </div>
-    </section>
+        <div class="flex items-center gap-4">
+            <span class="opacity-70">AI Engine: gpt-4o</span>
+            <a href="{% url 'settings' %}" class="hover:underline">Contact Support</a>
+        </div>
+    </footer>
+</main>
 </div>
 
-<!-- Bottom Status Bar -->
-<footer class="h-6 bg-primary dark:bg-primary-variant text-white flex items-center justify-between px-3 text-[10px] font-medium shrink-0">
-    <div class="flex items-center gap-4">
-        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">cloud_done</span> Pipeline active</span>
-        <span class="opacity-70" id="footer-editing">Editing: {{ project.title }}</span>
-    </div>
-    <div class="flex items-center gap-4">
-        <span class="opacity-70">AI Engine: gpt-4o</span>
-        <a href="{% url 'settings' %}" class="hover:underline">Contact Support</a>
-    </div>
-</footer>
-
-</main>
-
 <!-- Modals -->
-
-<!-- Share Modal -->
 <div id="share-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-lg font-serif font-bold dark:text-white">Share Project</h3>
-            <button onclick="closeShareModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-stone-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-bold text-gray-900">Share Project</h3>
+            <button onclick="closeShareModal()" class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors text-gray-500">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
             </button>
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Invite by Email</label>
+                <label class="block text-sm font-medium text-gray-600 mb-2">Invite by Email</label>
                 <div class="flex gap-2">
-                    <input type="email" id="share-email" placeholder="colleague@university.edu" 
-                           class="flex-1 px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
-                    <select id="share-permission" class="px-3 py-2.5 bg-stone-100 dark:bg-dark-bg border-none rounded-lg text-sm focus:ring-1 focus:ring-primary dark:text-white">
+                    <input type="email" id="share-email" placeholder="colleague@university.edu" class="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-[#064e3b]">
+                    <select id="share-permission" class="px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
                         <option value="read">Can Read</option>
                         <option value="write">Can Edit</option>
                     </select>
-                    <button onclick="sendShareInvitation()" class="px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-                        Send
-                    </button>
+                    <button onclick="sendShareInvitation()" class="px-4 py-2.5 bg-[#064e3b] text-white rounded-lg text-sm font-bold hover:bg-opacity-90 transition-colors">Send</button>
                 </div>
             </div>
-            
             <div class="mb-6">
-                <h4 class="text-sm font-medium dark:text-white mb-3">Pending Invitations</h4>
+                <h4 class="text-sm font-medium text-gray-900 mb-3">Pending Invitations</h4>
                 <div id="pending-invitations" class="space-y-2">
-                    <p class="text-sm text-stone-400 dark:text-dark-text-muted text-center py-4">No pending invitations</p>
+                    <p class="text-sm text-gray-500 text-center py-4">No pending invitations</p>
                 </div>
             </div>
-            
             <div>
-                <h4 class="text-sm font-medium dark:text-white mb-3">Collaborators</h4>
+                <h4 class="text-sm font-medium text-gray-900 mb-3">Collaborators</h4>
                 <div id="collaborators-list" class="space-y-2">
-                    <p class="text-sm text-stone-400 dark:text-dark-text-muted text-center py-4">No collaborators yet</p>
+                    <p class="text-sm text-gray-500 text-center py-4">No collaborators yet</p>
                 </div>
             </div>
         </div>
-        <div class="px-6 py-4 border-t border-outline-variant dark:border-dark-border bg-surface/50 dark:bg-dark-bg/50">
-            <p class="text-xs text-stone-400 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined text-sm align-middle">info</span>
-                Project sharing is a Pro feature. Upgrade to collaborate with colleagues.
-            </p>
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <p class="text-xs text-gray-500"><svg class="inline align-middle h-4 w-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg> Project sharing is a Pro feature. Upgrade to collaborate with colleagues.</p>
         </div>
     </div>
 </div>
 
-<!-- History Modal -->
 <div id="history-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border shrink-0">
-            <h3 class="text-lg font-serif font-bold dark:text-white">Version History</h3>
-            <button onclick="closeHistoryModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-stone-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
+            <h3 class="text-lg font-bold text-gray-900">Version History</h3>
+            <button onclick="closeHistoryModal()" class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors text-gray-500">
+                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
             </button>
         </div>
         <div class="flex-1 overflow-y-auto p-6">
             <div id="versions-list" class="space-y-3">
                 <div class="text-center py-8">
-                    <div class="animate-spin inline-block w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full mb-4"></div>
-                    <p class="text-sm text-stone-400 dark:text-dark-text-muted">Loading versions...</p>
+                    <div class="animate-spin inline-block w-8 h-8 border-4 border-[#064e3b]/30 border-t-[#064e3b] rounded-full mb-4"></div>
+                    <p class="text-sm text-gray-500">Loading versions...</p>
                 </div>
             </div>
         </div>
-        <div class="px-6 py-4 border-t border-outline-variant dark:border-dark-border bg-surface/50 dark:bg-dark-bg/50 shrink-0">
-            <p class="text-xs text-stone-400 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined text-sm align-middle">info</span>
-                Version history is a Pro feature. Upgrade to access previous versions.
-            </p>
-        </div>
-    </div>
-</div>
-
-<!-- New File Modal -->
-<div id="new-file-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-lg font-serif font-bold dark:text-white">New File</h3>
-            <button onclick="closeNewFileModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-stone-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">File Name</label>
-                <input type="text" id="new-file-name" placeholder="e.g., introduction.tex" 
-                       class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
-            </div>
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">File Type</label>
-                <select id="new-file-type" class="w-full px-4 py-2.5 bg-stone-100 dark:bg-dark-bg border-none rounded-lg text-sm focus:ring-1 focus:ring-primary dark:text-white">
-                    <option value="tex">LaTeX (.tex)</option>
-                    <option value="bib">Bibliography (.bib)</option>
-                    <option value="sty">Style Package (.sty)</option>
-                    <option value="cls">Class File (.cls)</option>
-                </select>
-            </div>
-            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                <div class="flex gap-3">
-                    <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 flex-shrink-0">construction</span>
-                    <div>
-                        <p class="text-sm font-medium text-amber-800 dark:text-amber-300">Multi-file projects coming soon</p>
-                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">Currently, all content is stored in a single main.tex file. Full multi-file support is in development.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="px-6 py-4 border-t border-outline-variant dark:border-dark-border flex gap-3">
-            <button onclick="closeNewFileModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                Cancel
-            </button>
-            <button onclick="createNewFile()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-                Create File
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- New Folder Modal -->
-<div id="new-folder-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-lg font-serif font-bold dark:text-white">New Folder</h3>
-            <button onclick="closeNewFolderModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-stone-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Folder Name</label>
-                <input type="text" id="new-folder-name" placeholder="e.g., sections, images" 
-                       class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
-            </div>
-            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                <div class="flex gap-3">
-                    <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 flex-shrink-0">construction</span>
-                    <div>
-                        <p class="text-sm font-medium text-amber-800 dark:text-amber-300">Multi-file projects coming soon</p>
-                        <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">Folder organization for multi-file projects is in development.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="px-6 py-4 border-t border-outline-variant dark:border-dark-border flex gap-3">
-            <button onclick="closeNewFolderModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                Cancel
-            </button>
-            <button onclick="createNewFolder()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors">
-                Create Folder
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Re-Process Modal -->
-<div id="reprocess-modal-overlay" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant dark:border-dark-border">
-            <h3 class="text-lg font-serif font-bold dark:text-white">Re-Process with AI</h3>
-            <button onclick="closeReprocessModal()" class="p-1.5 hover:bg-surface-variant dark:hover:bg-dark-border rounded-lg transition-colors text-stone-500 dark:text-dark-text-muted">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="mb-6 p-4 bg-primary/5 dark:bg-primary/10 rounded-lg border border-primary/20 dark:border-primary/30">
-                <h4 class="font-medium text-primary dark:text-white mb-2 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
-                    What does Re-Process do?
-                </h4>
-                <p class="text-sm text-on-surface-variant dark:text-dark-text-muted leading-relaxed">
-                    Upload a new document (Word, PDF, Markdown, text) and Kimi K2.6 will convert it to LaTeX, replacing the current content of this project. 
-                    <strong>A version of your current content will be saved</strong> before the replacement.
-                </p>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Select Document</label>
-                <form id="reprocess-form" class="space-y-4">
-                    {% csrf_token %}
-                    <input type="file" id="reprocess-file" name="document" accept=".docx,.odt,.pdf,.md,.markdown,.txt,.html" 
-                           class="w-full text-sm text-on-surface-variant dark:text-dark-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-variant cursor-pointer">
-                </form>
-            </div>
-            
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface-variant dark:text-dark-text-muted mb-2">Version Note (optional)</label>
-                <input type="text" id="reprocess-note" placeholder="e.g., Updated from revised manuscript" 
-                       class="w-full px-4 py-2.5 bg-white dark:bg-dark-bg border border-outline-variant dark:border-dark-border rounded-lg text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none dark:text-white">
-            </div>
-        </div>
-        <div class="px-6 py-4 border-t border-outline-variant dark:border-dark-border flex gap-3">
-            <button onclick="closeReprocessModal()" class="flex-1 py-2.5 bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white rounded-lg text-sm font-medium hover:bg-surface-variant dark:hover:bg-dark-border transition-colors">
-                Cancel
-            </button>
-            <button onclick="reprocessDocument()" class="flex-1 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-variant transition-colors flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">auto_fix</span>
-                Re-Process
-            </button>
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 shrink-0">
+            <p class="text-xs text-gray-500"><svg class="inline align-middle h-4 w-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg> Version history is a Pro feature. Upgrade to access previous versions.</p>
         </div>
     </div>
 </div>
 
 <!-- Conversion Progress Overlay -->
 <div id="conversion-overlay" class="fixed inset-0 bg-black/50 z-[250] hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-8 text-center">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden p-8 text-center">
         <div id="conv-spinner" class="w-16 h-16 mx-auto relative mb-5">
-            <div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
-            <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-[#d1fae5]"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-[#064e3b] animate-spin"></div>
             <div class="absolute inset-0 flex items-center justify-center">
-                <span class="material-symbols-outlined text-2xl text-primary">sync</span>
+                <svg class="h-6 w-6 text-[#064e3b]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg>
             </div>
         </div>
         <div id="conv-success" class="w-16 h-16 mx-auto mb-5 hidden">
-            <div class="w-full h-full rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                <span class="material-symbols-outlined text-3xl text-emerald-500">check_circle</span>
+            <div class="w-full h-full rounded-full bg-[#d1fae5] flex items-center justify-center">
+                <svg class="h-8 w-8 text-[#064e3b]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
         </div>
         <div id="conv-error" class="w-16 h-16 mx-auto mb-5 hidden">
-            <div class="w-full h-full rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <span class="material-symbols-outlined text-3xl text-error">error</span>
+            <div class="w-full h-full rounded-full bg-red-100 flex items-center justify-center">
+                <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg>
             </div>
         </div>
-        <h3 id="conv-title" class="text-lg font-bold text-on-surface dark:text-white mb-2">Processing with Kimi K2.6</h3>
-        <p id="conv-message" class="text-sm text-on-surface-variant dark:text-dark-text-muted mb-5 min-h-[1.25rem]">Starting conversion...</p>
-        <div class="w-full bg-stone-100 dark:bg-dark-surface-alt rounded-full h-2 overflow-hidden mb-1">
-            <div id="conv-bar" class="h-full bg-primary rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+        <h3 id="conv-title" class="text-lg font-bold text-gray-900 mb-2">Processing with Kimi K2.6</h3>
+        <p id="conv-message" class="text-sm text-gray-500 mb-5 min-h-[1.25rem]">Starting conversion...</p>
+        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden mb-1">
+            <div id="conv-bar" class="h-full bg-[#064e3b] rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
         </div>
-        <p id="conv-pct" class="text-xs font-mono text-stone-400 dark:text-dark-text-muted">0%</p>
+        <p id="conv-pct" class="text-xs font-mono text-gray-500">0%</p>
     </div>
 </div>
 
-<script>window.LG_CONFIG = { projectId: "{{ project.id }}", preferences: {{ preferences_json|safe }} };</script>
-{% comment %} Editor JS moved to static/js/editor.js {% endcomment %}
+<script>
+window.LG_CONFIG = { projectId: "{{ project.id }}", preferences: {{ preferences_json|safe }} };
+
+// Workspace tab switching
+function switchWorkspaceTab(tab) {
+    ['generate','editor','preview'].forEach(t => {
+        document.getElementById(`panel-${t}`).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`tab-${t}`);
+        if (t === tab) {
+            btn.className = 'text-sm font-semibold text-[#064e3b] border-b-2 border-[#064e3b] pb-1 transition-colors';
+        } else {
+            btn.className = 'text-sm font-medium text-gray-500 hover:text-gray-700 pb-1 transition-colors';
+        }
+    });
+}
+
+// Char counter
+document.addEventListener('DOMContentLoaded', () => {
+    const ta = document.getElementById('ai-prompt');
+    if (ta) {
+        ta.addEventListener('input', () => {
+            document.getElementById('char-count').textContent = ta.value.length;
+        });
+    }
+});
+
+// Doc type selectors
+document.querySelectorAll('.doc-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.doc-type-btn').forEach(b => {
+            b.className = 'doc-type-btn px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-300 transition-colors';
+        });
+        btn.className = 'doc-type-btn px-4 py-1.5 rounded-full bg-[#064e3b] text-white text-sm font-medium hover:bg-opacity-90 transition-colors';
+        document.getElementById('doc-type-input').value = btn.dataset.value;
+    });
+});
+</script>
+
+{% include "components/drawer.html" %}
 {% endblock %}

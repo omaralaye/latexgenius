@@ -1,202 +1,157 @@
 {% extends "base.html" %}
 
-{% block title %}Upgrade to Pro | LatexGenius{% endblock %}
+{% block title %}Upgrade to Pro — LaTeX Genius{% endblock %}
 
 {% block content %}
-<section class="relative pt-20 pb-16 bg-background dark:bg-dark-bg">
-    <div class="max-w-7xl mx-auto px-8">
-        <div class="text-center mb-16">
-            <div class="inline-flex items-center gap-2 bg-primary/10 dark:bg-primary/20 px-4 py-2 rounded-full mb-6">
-                <span class="material-symbols-outlined text-primary">workspace_premium</span>
-                <span class="text-sm font-bold text-primary">Upgrade to Pro</span>
-            </div>
-            <h1 class="text-5xl md:text-6xl font-serif font-bold text-on-background dark:text-white mb-6">
-                Unlock Your <span class="text-primary italic">Full Potential</span>
-            </h1>
-            <p class="text-xl text-on-surface-variant dark:text-dark-text-muted max-w-2xl mx-auto mb-10">
-                Get unlimited conversions, more storage, priority support, and advanced features for your academic publishing workflow.
-            </p>
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pt-28">
+    <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 bg-primary-container/30 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-primary">workspace_premium</span>
+            <span class="text-sm font-bold text-primary">Upgrade to Pro</span>
         </div>
+        <h1 class="font-display-lg text-display-lg text-primary mb-6">
+            Unlock Your <span class="text-secondary italic">Full Potential</span>
+        </h1>
+        <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+            Get unlimited conversions, more storage, priority support, and advanced features for your academic publishing workflow.
+        </p>
+    </div>
 
-        {% if user_subscription and user_subscription.is_active and user_subscription.plan_name != 'Free' %}
-        <div class="max-w-3xl mx-auto mb-12">
-            <div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-8 text-center">
-                <span class="material-symbols-outlined text-5xl text-primary mb-4 block">workspace_premium</span>
-                <h2 class="text-2xl font-serif font-bold dark:text-white mb-2">You're on the {{ user_subscription.plan_name }} Plan</h2>
-                <p class="text-on-surface-variant dark:text-dark-text-muted mb-6">
-                    {% if user_subscription.cancel_at_period_end %}
-                    Your subscription will end on {{ user_subscription.current_period_end|date:"M d, Y" }}.
-                    {% else %}
-                    Your subscription is active. Next billing date: {{ user_subscription.current_period_end|date:"M d, Y" }}.
-                    {% endif %}
-                </p>
-                <div class="flex gap-4 justify-center">
-                    <a href="{% url 'customer_portal' %}" class="bg-primary text-white px-8 py-3 rounded-xl font-label font-bold transition-all hover:bg-primary-variant">
-                        Manage Subscription
-                    </a>
-                    <a href="{% url 'dashboard' %}" class="bg-transparent border border-outline-variant dark:border-dark-border text-on-surface dark:text-white px-8 py-3 rounded-xl font-label font-bold transition-all hover:bg-surface-variant">
-                        Go to Dashboard
-                    </a>
+    {% if user_subscription and user_subscription.is_active and user_subscription.plan_name != 'Free' %}
+    <div class="max-w-3xl mx-auto mb-12">
+        <div class="bg-primary-container/10 border border-primary/20 rounded-lg p-8 text-center">
+            <span class="material-symbols-outlined text-5xl text-primary mb-4 block">workspace_premium</span>
+            <h2 class="font-headline-md text-primary mb-2">You're on the {{ user_subscription.plan_name }} Plan</h2>
+            <p class="text-on-surface-variant mb-6">
+                {% if user_subscription.cancel_at_period_end %}
+                Your subscription will end on {{ user_subscription.current_period_end|date:"M d, Y" }}.
+                {% else %}
+                Your subscription is active. Next billing date: {{ user_subscription.current_period_end|date:"M d, Y" }}.
+                {% endif %}
+            </p>
+            <div class="flex gap-4 justify-center">
+                <a href="{% url 'customer_portal' %}" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md hover:opacity-90 transition-all">Manage Subscription</a>
+                <a href="{% url 'dashboard' %}" class="border border-outline-variant/50 text-on-surface-variant px-8 py-3 rounded-full font-label-md hover:bg-parchment-muted transition-colors">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-primary-container/20 px-4 py-2 rounded-bl-lg">
+                <span class="text-xs font-bold text-primary">CURRENT PLAN</span>
+            </div>
+            <div class="mb-8">
+                <span class="material-symbols-outlined text-outline mb-4 block text-4xl">person</span>
+                <h3 class="font-headline-md text-primary mb-2">Free</h3>
+                <p class="text-on-surface-variant">Your current plan</p>
+            </div>
+            <div class="mb-8">
+                <div class="flex items-baseline gap-1">
+                    <span class="text-5xl font-serif font-bold text-primary">$0</span>
+                    <span class="text-on-surface-variant text-sm">/month</span>
                 </div>
             </div>
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-center gap-3 text-sm text-on-surface"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span>5 AI conversions per month</li>
+                <li class="flex items-center gap-3 text-sm text-on-surface"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span>1GB Cloud Storage</li>
+                <li class="flex items-center gap-3 text-sm text-on-surface"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span>Basic templates</li>
+                <li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-sm text-outline">close</span>Priority support</li>
+                <li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-sm text-outline">close</span>API access</li>
+                <li class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-sm text-outline">close</span>Advanced export options</li>
+            </ul>
+        </div>
+
+        {% for plan in plans %}
+        {% if plan.name == 'Pro' %}
+        <div class="bg-primary-container rounded-lg border-2 border-secondary p-8 relative overflow-hidden shadow-xl">
+            <div class="absolute -top-1 left-1/2 -translate-x-1/2">
+                <span class="bg-secondary text-white px-6 py-1.5 rounded-full text-xs font-bold shadow-lg">MOST POPULAR</span>
+            </div>
+            <div class="mb-8 mt-4">
+                <span class="material-symbols-outlined text-secondary mb-4 block text-4xl">workspace_premium</span>
+                <h3 class="font-headline-md text-on-primary-container mb-2">{{ plan.name }}</h3>
+                <p class="text-on-primary-container/70">{{ plan.description }}</p>
+            </div>
+            <div class="mb-8">
+                <div class="flex items-baseline gap-1">
+                    <span class="text-5xl font-serif font-bold text-on-primary-container">${{ plan.monthly_price_dollars }}</span>
+                    <span class="text-on-primary-container/70 text-sm">/month</span>
+                </div>
+                <p class="text-xs text-secondary mt-2">${{ plan.yearly_price_dollars }}/month billed yearly. Cancel anytime.</p>
+            </div>
+            <ul class="space-y-4 mb-8">
+                {% for feature in plan.features %}
+                <li class="flex items-center gap-3 text-sm text-on-primary-container">
+                    <span class="material-symbols-outlined text-sm text-secondary">check_circle</span>
+                    {{ feature.label }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% if user_subscription and user_subscription.is_active and user_subscription.plan_name == 'Pro' %}
+            <a href="{% url 'customer_portal' %}" class="block w-full py-4 bg-secondary text-on-secondary text-center rounded-full font-label-md hover:opacity-90 transition-all">Manage Subscription</a>
+            {% else %}
+            <button onclick="checkout('{{ plan.stripe_price_id_monthly }}', '{{ plan.stripe_price_id_yearly }}')" class="w-full py-4 bg-secondary text-white text-center rounded-full font-label-md hover:opacity-90 transition-all shadow-lg">Upgrade to {{ plan.name }} - ${{ plan.monthly_price_dollars }}/month</button>
+            {% endif %}
+            <p class="text-center text-xs text-on-primary-container/60 mt-4"><span class="material-symbols-outlined text-sm align-middle">lock</span>Secure payment via Stripe.</p>
         </div>
         {% endif %}
+        {% endfor %}
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            <div class="bg-white dark:bg-dark-surface rounded-2xl border border-outline-variant dark:border-dark-border p-8 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-primary/10 dark:bg-primary/20 px-4 py-2 rounded-bl-xl">
-                    <span class="text-xs font-bold text-primary">CURRENT PLAN</span>
+    <div class="mt-16 max-w-5xl mx-auto">
+        <div class="bg-primary-container/10 border border-primary/20 rounded-lg p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-primary-container/30 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-primary text-xl">apartment</span>
                 </div>
-                <div class="mb-8">
-                    <span class="material-symbols-outlined text-slate-400 mb-4 block text-4xl">
-                        person
-                    </span>
-                    <h3 class="text-xl font-serif font-bold dark:text-white mb-2">Free</h3>
-                    <p class="text-on-surface-variant dark:text-dark-text-muted">Your current plan</p>
+                <div>
+                    <h3 class="font-headline-md text-primary mb-1">Need an Enterprise Plan?</h3>
+                    <p class="text-on-surface-variant">Custom solutions for universities, research labs, and institutions.</p>
                 </div>
-                <div class="mb-8">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-5xl font-serif font-bold dark:text-white">$0</span>
-                        <span class="text-on-surface-variant dark:text-dark-text-muted font-label text-sm">/month</span>
-                    </div>
-                </div>
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-center gap-3 text-sm text-on-surface dark:text-dark-text-dim">
-                        <span class="material-symbols-outlined text-sm text-green-600">check_circle</span>
-                        5 AI conversions per month
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-on-surface dark:text-dark-text-dim">
-                        <span class="material-symbols-outlined text-sm text-green-600">check_circle</span>
-                        1GB Cloud Storage
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-on-surface dark:text-dark-text-dim">
-                        <span class="material-symbols-outlined text-sm text-green-600">check_circle</span>
-                        Basic templates
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-on-surface-variant dark:text-dark-text-muted">
-                        <span class="material-symbols-outlined text-sm text-slate-400">close</span>
-                        Priority support
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-on-surface-variant dark:text-dark-text-muted">
-                        <span class="material-symbols-outlined text-sm text-slate-400">close</span>
-                        API access
-                    </li>
-                    <li class="flex items-center gap-3 text-sm text-on-surface-variant dark:text-dark-text-muted">
-                        <span class="material-symbols-outlined text-sm text-slate-400">close</span>
-                        Advanced export options
-                    </li>
-                </ul>
             </div>
+            <a href="mailto:sales@latexgenius.com" class="px-8 py-3 border border-primary/30 text-primary rounded-full font-label-md hover:bg-primary-container/20 transition-colors">Contact Sales</a>
+        </div>
+    </div>
 
-            {% for plan in plans %}
-            {% if plan.name == 'Pro' %}
-            <div class="bg-white dark:bg-dark-surface rounded-2xl border-2 border-primary p-8 relative overflow-hidden shadow-xl">
-                <div class="absolute -top-1 left-1/2 -translate-x-1/2">
-                    <span class="bg-primary text-white px-6 py-1.5 rounded-full text-sm font-bold shadow-lg">
-                        MOST POPULAR
-                    </span>
-                </div>
-                <div class="mb-8 mt-4">
-                    <span class="material-symbols-outlined text-primary mb-4 block text-4xl">
-                        workspace_premium
-                    </span>
-                    <h3 class="text-xl font-serif font-bold dark:text-white mb-2">{{ plan.name }}</h3>
-                    <p class="text-on-surface-variant dark:text-dark-text-muted">{{ plan.description }}</p>
-                </div>
-                <div class="mb-8">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-5xl font-serif font-bold dark:text-white">${{ plan.monthly_price_dollars }}</span>
-                        <span class="text-on-surface-variant dark:text-dark-text-muted font-label text-sm">/month</span>
-                    </div>
-                    <p class="text-xs text-green-600 dark:text-green-400 mt-2">
-                        ${{ plan.yearly_price_dollars }}/month billed yearly. Cancel anytime.
-                    </p>
-                </div>
-                <ul class="space-y-4 mb-8">
-                    {% for feature in plan.features %}
-                    <li class="flex items-center gap-3 text-sm {% if feature.highlighted %}text-on-surface dark:text-dark-text-dim{% else %}text-on-surface-variant dark:text-dark-text-muted{% endif %}">
-                        <span class="material-symbols-outlined text-sm text-primary">
-                            {% if feature.highlighted %}check_circle{% else %}close{% endif %}
-                        </span>
-                        {{ feature.label }}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% if user_subscription and user_subscription.is_active and user_subscription.plan_name == 'Pro' %}
-                <a href="{% url 'customer_portal' %}" class="block w-full py-4 bg-primary text-white text-center rounded-xl font-label font-bold text-lg transition-all hover:bg-primary-variant shadow-lg hover:shadow-xl">
-                    Manage Subscription
-                </a>
-                {% else %}
-                <button onclick="checkout('{{ plan.stripe_price_id_monthly }}', '{{ plan.stripe_price_id_yearly }}')" class="w-full py-4 bg-primary text-white text-center rounded-xl font-label font-bold text-lg transition-all hover:bg-primary-variant shadow-lg hover:shadow-xl">
-                    Upgrade to {{ plan.name }} - ${{ plan.monthly_price_dollars }}/month
+    <div class="mt-20 max-w-4xl mx-auto">
+        <h2 class="font-headline-lg text-headline-lg text-primary text-center mb-12">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg overflow-hidden">
+                <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
+                    <span class="font-medium text-on-surface">Can I cancel anytime?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
                 </button>
-                {% endif %}
-                <p class="text-center text-xs text-slate-400 mt-4">
-                    <span class="material-symbols-outlined text-sm align-middle">lock</span>
-                    Secure payment via Stripe. No credit card stored on our servers.
-                </p>
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-
-        <div class="mt-16 max-w-5xl mx-auto">
-            <div class="bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 rounded-2xl p-8 border border-primary/20">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-primary text-xl">apartment</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-serif font-bold dark:text-white mb-1">Need an Enterprise Plan?</h3>
-                            <p class="text-on-surface-variant dark:text-dark-text-muted">Custom solutions for universities, research labs, and institutions. Get team seats, SSO, dedicated support, and custom branding.</p>
-                        </div>
-                    </div>
-                    <a href="mailto:sales@latexgenius.com" class="px-8 py-3 bg-white dark:bg-dark-surface border border-primary/30 text-primary font-label font-bold rounded-xl hover:bg-primary/5 transition-colors whitespace-nowrap">
-                        Contact Sales
-                    </a>
+                <div class="faq-content-upgrade hidden px-6 pb-6">
+                    <p class="text-on-surface-variant">Yes! You can cancel your Pro subscription at any time from your account settings.</p>
                 </div>
             </div>
-        </div>
-
-        <div class="mt-20 max-w-4xl mx-auto">
-            <h2 class="text-3xl font-serif font-bold text-center dark:text-white mb-12">Frequently Asked Questions</h2>
-            <div class="space-y-4">
-                <div class="bg-white dark:bg-dark-surface rounded-xl border border-outline-variant dark:border-dark-border overflow-hidden">
-                    <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
-                        <span class="font-serif font-semibold dark:text-white">Can I cancel anytime?</span>
-                        <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                    </button>
-                    <div class="faq-content-upgrade hidden px-6 pb-6">
-                        <p class="text-on-surface-variant dark:text-dark-text-muted">Yes! You can cancel your Pro subscription at any time from your account settings. There are no long-term contracts or cancellation fees. Your access will continue until the end of your current billing period.</p>
-                    </div>
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg overflow-hidden">
+                <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
+                    <span class="font-medium text-on-surface">What payment methods do you accept?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content-upgrade hidden px-6 pb-6">
+                    <p class="text-on-surface-variant">We accept all major credit cards (Visa, MasterCard, American Express) via Stripe.</p>
                 </div>
-                <div class="bg-white dark:bg-dark-surface rounded-xl border border-outline-variant dark:border-dark-border overflow-hidden">
-                    <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
-                        <span class="font-serif font-semibold dark:text-white">What payment methods do you accept?</span>
-                        <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                    </button>
-                    <div class="faq-content-upgrade hidden px-6 pb-6">
-                        <p class="text-on-surface-variant dark:text-dark-text-muted">We accept all major credit cards (Visa, MasterCard, American Express), and bank transfers for Enterprise customers. All payments are processed securely through Stripe.</p>
-                    </div>
+            </div>
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg overflow-hidden">
+                <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
+                    <span class="font-medium text-on-surface">Is there a free trial for Pro?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content-upgrade hidden px-6 pb-6">
+                    <p class="text-on-surface-variant">No credit card is required to get started with the Free plan.</p>
                 </div>
-                <div class="bg-white dark:bg-dark-surface rounded-xl border border-outline-variant dark:border-dark-border overflow-hidden">
-                    <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
-                        <span class="font-serif font-semibold dark:text-white">Is there a free trial for Pro?</span>
-                        <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                    </button>
-                    <div class="faq-content-upgrade hidden px-6 pb-6">
-                        <p class="text-on-surface-variant dark:text-dark-text-muted">You'll have full access to all Pro features during your subscription period. No credit card is required to get started with the Free plan.</p>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-dark-surface rounded-xl border border-outline-variant dark:border-dark-border overflow-hidden">
-                    <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
-                        <span class="font-serif font-semibold dark:text-white">What happens to my data if I downgrade?</span>
-                        <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
-                    </button>
-                    <div class="faq-content-upgrade hidden px-6 pb-6">
-                        <p class="text-on-surface-variant dark:text-dark-text-muted">Your data is always yours. If you downgrade from Pro to Free, all your projects and documents remain accessible. You'll just be limited to the Free plan's features (5 conversions/month, 1GB storage).</p>
-                    </div>
+            </div>
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg overflow-hidden">
+                <button class="faq-toggle-upgrade w-full flex items-center justify-between p-6 text-left" onclick="toggleUpgradeFaq(this)">
+                    <span class="font-medium text-on-surface">What happens to my data if I downgrade?</span>
+                    <span class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
+                </button>
+                <div class="faq-content-upgrade hidden px-6 pb-6">
+                    <p class="text-on-surface-variant">Your data is always yours. All projects remain accessible even after downgrade.</p>
                 </div>
             </div>
         </div>
@@ -208,25 +163,16 @@
 <script>
     function checkout(monthlyPriceId, yearlyPriceId) {
         const priceId = yearlyPriceId || monthlyPriceId;
-        if (!priceId) {
-            toast('This plan is not available for subscription yet.', 'info');
-            return;
-        }
+        if (!priceId) { toast('This plan is not available for subscription yet.', 'info'); return; }
         fetch('{% url "create_checkout_session" %}', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
             body: JSON.stringify({ price_id: priceId }),
         })
         .then(r => r.json())
         .then(data => {
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                toast(data.message || 'Failed to start checkout', 'error');
-            }
+            if (data.url) { window.location.href = data.url; }
+            else { toast(data.message || 'Failed to start checkout', 'error'); }
         })
         .catch(() => toast('Network error. Please try again.', 'error'));
     }
@@ -234,25 +180,16 @@
     function toggleUpgradeFaq(button) {
         const content = button.nextElementSibling;
         const icon = button.querySelector('.material-symbols-outlined');
-        if (content.classList.contains('hidden')) {
-            content.classList.remove('hidden');
-            icon.style.transform = 'rotate(180deg)';
-        } else {
-            content.classList.add('hidden');
-            icon.style.transform = 'rotate(0deg)';
-        }
+        if (content.classList.contains('hidden')) { content.classList.remove('hidden'); icon.style.transform = 'rotate(180deg)'; }
+        else { content.classList.add('hidden'); icon.style.transform = 'rotate(0deg)'; }
     }
 
     function toast(message, type) {
         const toast = document.createElement('div');
-        toast.className = `fixed top-24 right-4 px-6 py-3 rounded-xl text-white font-medium z-50 shadow-lg ${type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-error' : 'bg-primary'}`;
+        toast.className = `fixed top-24 right-4 px-6 py-3 rounded-full text-white font-medium z-50 shadow-lg ${type === 'success' ? 'bg-secondary' : type === 'error' ? 'bg-error' : 'bg-primary'}`;
         toast.textContent = message;
         document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.3s';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
     }
 </script>
 {% endblock %}

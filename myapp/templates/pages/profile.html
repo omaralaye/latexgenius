@@ -1,206 +1,49 @@
 {% extends "base.html" %}
 
-{% block title %}Profile | LaTeXGenius{% endblock %}
+{% block title %}Profile — LaTeX Genius{% endblock %}
 
-{% block extra_head %}
-{% include "components/drawer_styles.html" %}
-{% endblock %}
+{% block content %}
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pt-28">
+    <div class="mb-10">
+        <h1 class="font-headline-lg text-headline-lg text-primary">Profile</h1>
+        <p class="text-on-surface-variant">Manage your public profile</p>
+    </div>
 
-{% block layout %}
-{% include "components/drawer.html" %}
-
-<main class="min-h-screen flex flex-col bg-secondary-light dark:bg-surface-dark transition-colors duration-300">
-    <header class="fixed top-0 right-0 left-0 z-40 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md flex justify-between items-center w-full px-4 sm:px-6 py-3 border-b border-border dark:border-border-dark">
-        <div class="flex items-center gap-4">
-            <button onclick="openDrawer()" class="p-1.5 hover:bg-secondary-light dark:hover:bg-surface-dark-hover rounded-lg transition-colors text-secondary dark:text-secondary-dark">
-                <span class="material-symbols-outlined text-xl">menu</span>
-            </button>
-            <h1 class="text-xl font-extrabold text-primary">LaTeXGenius</h1>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{% url 'dashboard' %}" class="text-sm text-secondary dark:text-secondary-dark hover:text-primary transition-colors">Dashboard</a>
-        </div>
-    </header>
-
-    <div class="pt-24 px-4 sm:px-6 lg:px-8 pb-12 w-full max-w-5xl mx-auto flex-1">
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold tracking-tight text-accent dark:text-accent-dark">Profile</h2>
-            <p class="text-secondary dark:text-secondary-dark mt-1">Manage your personal information.</p>
-        </div>
-
-        {% if messages %}
-        <div class="mb-6">
-            {% for message in messages %}
-            <div class="p-4 rounded-xl text-sm {% if message.tags == 'success' %}bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800{% else %}bg-error-container text-error{% endif %}" role="alert">
-                {{ message }}
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-gutter">
+        <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-8 text-center">
+            <div class="w-24 h-24 rounded-full bg-forest-light mx-auto mb-4 flex items-center justify-center">
+                <span class="material-symbols-outlined text-4xl text-on-primary-container">person</span>
             </div>
-            {% endfor %}
+            <h3 class="font-headline-md text-primary">{{ user.get_full_name|default:user.username }}</h3>
+            <p class="text-sm text-on-surface-variant">{{ user.email }}</p>
+            <button class="mt-4 text-label-md text-secondary hover:underline">Change photo</button>
         </div>
-        {% endif %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Profile Card -->
-            <div class="lg:col-span-1">
-                <div class="bg-white dark:bg-dark-surface rounded-2xl border border-outline-variant dark:border-dark-border p-6 text-center shadow-sm sticky top-24">
-                    <!-- Avatar -->
-                    <div class="relative inline-block mb-4">
-                        <div class="w-24 h-24 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center overflow-hidden mx-auto border-4 border-primary/20">
-                            {% if profile.avatar_url %}
-                            <img src="{{ profile.avatar_url }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <span class="material-symbols-outlined text-4xl text-primary hidden" style="display: none;">person</span>
-                            {% else %}
-                            <span class="material-symbols-outlined text-4xl text-primary">person</span>
-                            {% endif %}
-                        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-8">
+            <h2 class="font-headline-md text-primary mb-6">Personal Information</h2>
+            <form method="POST" class="space-y-6 max-w-lg">
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">First Name</label>
+                        <input class="w-full input-underline py-3 px-4 text-on-surface font-body-md" type="text" name="first_name" value="{{ user.first_name }}"/>
                     </div>
-
-                    <h3 class="text-xl font-bold text-on-surface dark:text-white">{{ user.first_name|default:user.username }}</h3>
-                    {% if user.email %}
-                    <p class="text-sm text-slate-500 dark:text-dark-text-muted mt-1">{{ user.email }}</p>
-                    {% endif %}
-                    {% if profile.affiliation %}
-                    <p class="text-xs text-primary font-semibold mt-2">{{ profile.affiliation }}</p>
-                    {% endif %}
-
-                    <div class="mt-6 pt-6 border-t border-outline-variant dark:border-dark-border space-y-3">
-                        {% if profile.website %}
-                        <a href="{{ profile.website }}" target="_blank" class="flex items-center gap-2 text-sm text-slate-600 dark:text-dark-text-muted hover:text-primary dark:hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-sm">language</span>
-                            {{ profile.website|truncatechars:30 }}
-                        </a>
-                        {% endif %}
-                        {% if profile.github %}
-                        <a href="https://github.com/{{ profile.github }}" target="_blank" class="flex items-center gap-2 text-sm text-slate-600 dark:text-dark-text-muted hover:text-primary dark:hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-sm">code</span>
-                            {{ profile.github }}
-                        </a>
-                        {% endif %}
-                        {% if profile.google_scholar %}
-                        <a href="{{ profile.google_scholar }}" target="_blank" class="flex items-center gap-2 text-sm text-slate-600 dark:text-dark-text-muted hover:text-primary dark:hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-sm">school</span>
-                            Scholar Profile
-                        </a>
-                        {% endif %}
-                    </div>
-
-                    <div class="mt-6 pt-6 border-t border-outline-variant dark:border-dark-border">
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-dark-text-muted mb-2">Account Info</p>
-                        <div class="text-xs text-slate-500 dark:text-dark-text-muted space-y-1">
-                            <p>Joined: {{ user.date_joined|date:"M d, Y" }}</p>
-                            <p>Last login: {{ user.last_login|date:"M d, Y"|default:"Never" }}</p>
-                        </div>
+                    <div class="space-y-1">
+                        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Last Name</label>
+                        <input class="w-full input-underline py-3 px-4 text-on-surface font-body-md" type="text" name="last_name" value="{{ user.last_name }}"/>
                     </div>
                 </div>
-            </div>
-
-            <!-- Right Column: Edit Forms -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Personal Information -->
-                <div class="bg-white dark:bg-dark-surface rounded-2xl border border-outline-variant dark:border-dark-border p-6 shadow-sm">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="material-symbols-outlined text-primary">person</span>
-                        <h3 class="text-lg font-bold text-on-surface dark:text-white">Personal Information</h3>
-                    </div>
-                    <form method="POST" class="space-y-4">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="update">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">First Name</label>
-                                <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Last Name</label>
-                                <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Email Address</label>
-                            <input type="email" name="email" value="{{ user.email }}" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Affiliation / Institution</label>
-                            <input type="text" name="affiliation" value="{{ profile.affiliation }}" placeholder="e.g. MIT, Stanford University" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Bio</label>
-                            <textarea name="bio" rows="3" placeholder="Tell us about yourself..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none">{{ profile.bio }}</textarea>
-                        </div>
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-variant transition-all shadow-sm active:scale-95">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
+                <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Institution</label>
+                    <input class="w-full input-underline py-3 px-4 text-on-surface font-body-md" type="text" name="institution" value="{{ user_profile.institution|default:'' }}"/>
                 </div>
-
-                <!-- Links & Social -->
-                <div class="bg-white dark:bg-dark-surface rounded-2xl border border-outline-variant dark:border-dark-border p-6 shadow-sm">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="material-symbols-outlined text-primary">link</span>
-                        <h3 class="text-lg font-bold text-on-surface dark:text-white">Links &amp; Social</h3>
-                    </div>
-                    <form method="POST" class="space-y-4">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="update">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Avatar URL</label>
-                            <input type="url" name="avatar_url" value="{{ profile.avatar_url }}" placeholder="https://example.com/avatar.jpg" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Website</label>
-                            <input type="url" name="website" value="{{ profile.website }}" placeholder="https://yourwebsite.com" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">GitHub Username</label>
-                                <input type="text" name="github" value="{{ profile.github }}" placeholder="yourusername" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Google Scholar URL</label>
-                                <input type="url" name="google_scholar" value="{{ profile.google_scholar }}" placeholder="https://scholar.google.com/..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                        </div>
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-variant transition-all shadow-sm active:scale-95">
-                                Save Links
-                            </button>
-                        </div>
-                    </form>
+                <div class="space-y-1">
+                    <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Department</label>
+                    <input class="w-full input-underline py-3 px-4 text-on-surface font-body-md" type="text" name="department" value="{{ user_profile.department|default:'' }}"/>
                 </div>
-
-                <!-- Change Password -->
-                <div class="bg-white dark:bg-dark-surface rounded-2xl border border-outline-variant dark:border-dark-border p-6 shadow-sm">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="material-symbols-outlined text-primary">lock</span>
-                        <h3 class="text-lg font-bold text-on-surface dark:text-white">Change Password</h3>
-                    </div>
-                    <form method="POST" class="space-y-4">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="change_password">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Current Password</label>
-                            <input type="password" name="current_password" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">New Password</label>
-                                <input type="password" name="new_password" required minlength="8" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-dark-text-muted mb-1.5">Confirm New Password</label>
-                                <input type="password" name="confirm_password" required minlength="8" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none">
-                            </div>
-                        </div>
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="px-6 py-2.5 bg-slate-800 dark:bg-dark-surface-alt text-white text-sm font-semibold rounded-xl hover:bg-slate-700 dark:hover:bg-dark-border-strong transition-all shadow-sm active:scale-95">
-                                Update Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                <button type="submit" class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-label-md hover:bg-primary hover:text-on-primary transition-all active:scale-[0.98]">Save Changes</button>
+            </form>
         </div>
     </div>
-</main>
+</div>
 {% endblock %}

@@ -1,0 +1,381 @@
+<!DOCTYPE html><html class="h-full bg-[#faf9f3]" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Documents - LaTeX Genius</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Source Serif 4 -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'serif'],
+          },
+          colors: {
+            'academic-green': '#064e3b',
+            'surface': '#faf9f3',
+            'surface-dim': '#dbdad4',
+            'surface-container-low': '#f5f4ee',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Source Serif 4', serif;
+    }
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+    .status-completed { background-color: #d1fae5; color: #065f46; }
+    .status-inprogress { background-color: #fef3c7; color: #92400e; }
+    .status-draft { background-color: #f3f4f6; color: #374151; }
+  </style>
+</head>
+<body class="h-full text-slate-900">
+<div class="flex h-full">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 border-r border-gray-200 flex flex-col bg-white h-screen sticky top-0" data-purpose="main-sidebar">
+<div class="p-6">
+<div class="flex items-center gap-2 text-academic-green mb-10">
+<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-2h4v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"></path></svg>
+<span class="text-xl font-bold">LaTeX Genius</span>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Dashboard
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-academic-green/10 text-academic-green font-medium rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Documents
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            AI Generate
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Templates
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Bibliography
+          </a>
+</nav>
+<div class="mt-10 pt-10 border-t border-gray-100">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Settings
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-md" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Notifications
+          </a>
+</div>
+</div>
+<div class="mt-auto p-4 border-t border-gray-100">
+<div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+<div class="w-10 h-10 rounded-full bg-academic-green text-white flex items-center justify-center font-bold">JD</div>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500 truncate">jane@mit.edu</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content -->
+<main class="flex-1 overflow-y-auto" data-purpose="content-area">
+<!-- BEGIN: Header -->
+<header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+<h1 class="text-xl font-bold text-slate-800">Documents</h1>
+<div class="flex items-center gap-4">
+<button class="text-gray-400 hover:text-gray-600">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="flex items-center gap-2">
+<div class="text-right">
+<p class="text-sm font-medium">Dr. Jane Doe</p>
+<p class="text-xs text-gray-500">jane@mit.edu</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-academic-green/20 text-academic-green flex items-center justify-center text-xs font-bold">JD</div>
+</div>
+</div>
+</header>
+<!-- END: Header -->
+<div class="p-8 max-w-7xl mx-auto">
+<!-- BEGIN: Page Title & Actions -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 mb-1">Documents</h2>
+<p class="text-slate-500">15 documents total</p>
+</div>
+<button class="bg-academic-green hover:bg-opacity-90 text-white px-6 py-2.5 rounded-md flex items-center gap-2 transition-colors">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            New Document
+          </button>
+</div>
+<!-- END: Page Title & Actions -->
+<!-- BEGIN: Search & Filter Controls -->
+<div class="flex flex-wrap items-center gap-4 mb-8">
+<div class="relative flex-1 min-w-[300px]">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<input class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:ring-academic-green focus:border-academic-green bg-white" placeholder="Search documents..." type="text">
+</div>
+<select class="border border-gray-200 rounded-md py-2 px-4 bg-white text-slate-600 focus:ring-academic-green focus:border-academic-green">
+<option>Last Updated</option>
+<option>Name (A-Z)</option>
+<option>Size</option>
+</select>
+<div class="flex border border-gray-200 rounded-md overflow-hidden">
+<button class="p-2 bg-white hover:bg-gray-50 text-slate-400 border-r border-gray-200">
+<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+</button>
+<button class="p-2 bg-emerald-50 text-academic-green">
+<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" fill-rule="evenodd"></path></svg>
+</button>
+</div>
+</div>
+<!-- END: Search & Filter Controls -->
+<!-- BEGIN: Category Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8" data-purpose="category-grid">
+<!-- Research Papers -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Research Papers</h3>
+<p class="text-xs text-slate-400">14 docs</p>
+</div>
+<!-- Course Notes -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Course Notes</h3>
+<p class="text-xs text-slate-400">8 docs</p>
+</div>
+<!-- Thesis Drafts -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Thesis Drafts</h3>
+<p class="text-xs text-slate-400">5 docs</p>
+</div>
+<!-- Presentations -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Presentations</h3>
+<p class="text-xs text-slate-400">11 docs</p>
+</div>
+<!-- Assignments -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Assignments</h3>
+<p class="text-xs text-slate-400">22 docs</p>
+</div>
+<!-- Templates -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-slate-50 text-slate-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Templates</h3>
+<p class="text-xs text-slate-400">7 docs</p>
+</div>
+<!-- Archive -->
+<div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:border-academic-green/30 transition-all cursor-pointer text-center">
+<div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-sm font-semibold text-slate-800">Archive</h3>
+<p class="text-xs text-slate-400">31 docs</p>
+</div>
+</div>
+<!-- END: Category Grid -->
+<!-- BEGIN: Status Filters -->
+<div class="flex gap-2 mb-6">
+<button class="px-4 py-1.5 bg-slate-800 text-white rounded-full text-sm font-medium">All 15</button>
+<button class="px-4 py-1.5 bg-white border border-gray-200 text-slate-600 hover:bg-gray-50 rounded-full text-sm font-medium transition-colors">Completed 8</button>
+<button class="px-4 py-1.5 bg-white border border-gray-200 text-slate-600 hover:bg-gray-50 rounded-full text-sm font-medium transition-colors">In Progress 4</button>
+<button class="px-4 py-1.5 bg-white border border-gray-200 text-slate-600 hover:bg-gray-50 rounded-full text-sm font-medium transition-colors">Draft 3</button>
+</div>
+<!-- END: Status Filters -->
+<!-- BEGIN: Documents Table -->
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden" data-purpose="documents-table">
+<table class="w-full text-left border-collapse">
+<thead class="bg-gray-50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4">Document</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Updated</th>
+<th class="px-6 py-4 text-right">Size</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Quantum Entanglement in Many-Body Systems</p>
+<p class="text-xs text-slate-400">Research Papers • 14 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-completed">Completed</span>
+</td>
+<td class="px-6 py-4 text-slate-500">2 hours ago</td>
+<td class="px-6 py-4 text-right text-slate-500">1.2 MB</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Machine Learning Survey 2026</p>
+<p class="text-xs text-slate-400">Research Papers • 32 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-inprogress">In Progress</span>
+</td>
+<td class="px-6 py-4 text-slate-500">Yesterday</td>
+<td class="px-6 py-4 text-right text-slate-500">3.8 MB</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Convex Optimization — Lecture 14</p>
+<p class="text-xs text-slate-400">Course Notes • 8 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-draft">Draft</span>
+</td>
+<td class="px-6 py-4 text-slate-500">3 days ago</td>
+<td class="px-6 py-4 text-right text-slate-500">680 KB</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-blue-50 text-blue-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Neural ODEs Presentation — NeurIPS</p>
+<p class="text-xs text-slate-400">Presentations • 28 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-completed">Completed</span>
+</td>
+<td class="px-6 py-4 text-slate-500">5 days ago</td>
+<td class="px-6 py-4 text-right text-slate-500">5.1 MB</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-amber-50 text-amber-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Graph Theory — Chapter 3: Connectivity</p>
+<p class="text-xs text-slate-400">Thesis Drafts • 67 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-inprogress">In Progress</span>
+</td>
+<td class="px-6 py-4 text-slate-500">1 week ago</td>
+<td class="px-6 py-4 text-right text-slate-500">8.4 MB</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Statistical Methods Review</p>
+<p class="text-xs text-slate-400">Research Papers • 12 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-draft">Draft</span>
+</td>
+<td class="px-6 py-4 text-slate-500">1 week ago</td>
+<td class="px-6 py-4 text-right text-slate-500">1.5 MB</td>
+</tr>
+<!-- Row 7 -->
+<tr class="hover:bg-gray-50 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-academic-green">Topological Data Analysis Intro</p>
+<p class="text-xs text-slate-400">Course Notes • 18 pages</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="status-badge status-completed">Completed</span>
+</td>
+<td class="px-6 py-4 text-slate-500">2 weeks ago</td>
+<td class="px-6 py-4 text-right text-slate-500">2.1 MB</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-slate-500 font-medium">
+<p class="">Showing 1-7 of 15 documents</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors">Next</button>
+</div>
+</div>
+</div>
+<!-- END: Documents Table -->
+</div>
+</main>
+<!-- END: Main Content -->
+</div>
+<!-- Readdy Badge Placeholder -->
+
+
+
+</body></html>

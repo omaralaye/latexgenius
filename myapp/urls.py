@@ -41,6 +41,7 @@ urlpatterns = [
     path('editor/<str:project_id>/save/', views.save_project, name='save_project'),
     path('editor/<str:project_id>/compile/', views.compile_project, name='compile_project'),
     path('templates/', views.templates_page, name='templates'),
+    path('features/', views.features_page, name='features'),
     path('pricing/', views.pricing_page, name='pricing'),
     path('documentation/', views.documentation_page, name='documentation'),
     path('upgrade/', views.upgrade_to_pro_view, name='upgrade'),
